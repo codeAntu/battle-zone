@@ -1,3 +1,4 @@
+import Games from '@/components/games';
 import { getApi, postApi } from '@/services';
 import API from '@/services/api';
 import { createFileRoute } from '@tanstack/react-router';
@@ -20,11 +21,8 @@ function Index() {
   }
 
   return (
-    <div className='bg-red-500 p-2'>
-      <h3>Welcome Home!</h3>
-
-      <button onClick={handleClick}>Click me</button>
-      <button onClick={sendtoken}>Send token</button>
+    <div className='p-5'>
+      <Games />
     </div>
   );
 }

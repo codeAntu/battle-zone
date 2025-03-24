@@ -119,12 +119,14 @@ function SignInPage() {
               {isVerify ? 'Verify' : isSignUp ? 'Sign up' : 'Sign in'} as {isAdmin ? 'Admin' : 'User'}
             </Button>
             {isSignUp ? (
-              <Button variant='link' size='sm' asChild onClick={() => setIsSignUp(false)}>
-                <div>Already have an account? Sign in</div>
+              <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-black'>
+                <span className=''>Already have an account?</span>
+                <span className='underline'>Sign in</span>
               </Button>
             ) : (
-              <Button variant='link' size='sm' asChild onClick={() => setIsSignUp(true)}>
-                <div>Don&apos;t have an account? Sign up</div>
+              <Button variant='link' size='sm' onClick={() => setIsSignUp(true)} className='space-x-2 text-black'>
+                <span className=''>Don't have an account?</span>
+                <span className='underline'>Sign up</span>
               </Button>
             )}
           </div>
