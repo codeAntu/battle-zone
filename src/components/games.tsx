@@ -1,9 +1,10 @@
+import { Link } from '@tanstack/react-router';
 import { Calendar, Clock, Gamepad2, UserRound } from 'lucide-react';
 import { Button } from './ui/button';
 
 export default function Games() {
   return (
-    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 p-5'>
       <Game />
       <Game />
       <Game />
@@ -22,11 +23,15 @@ const game = {
   duration: '2 hours',
   players: '1-100',
   price: '200',
+  id: '1',
 };
 
 function Game() {
   return (
-    <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
+    <Link
+      to={`/games/${game.game}/${game.id}`}
+      className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'
+    >
       <div className='relative'>
         <img className='aspect-[2/1] w-full object-cover' alt='Game' src={game.image} />
         <Tags />
@@ -64,7 +69,7 @@ function Game() {
         </div>
         <Button className='w-full rounded-full font-semibold'>Play</Button>
       </div>
-    </div>
+    </Link>
   );
 }
 

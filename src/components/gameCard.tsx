@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { MoveRight } from 'lucide-react';
 
 const game = {
@@ -7,7 +8,7 @@ const game = {
 
 export default function GameCard() {
   return (
-    <div className='relative overflow-hidden rounded-2xl'>
+    <Link to={`/games/${game.game}`} className='relative overflow-hidden rounded-2xl'>
       <div>
         <img src={game.image} alt='game' />
       </div>
@@ -20,6 +21,6 @@ export default function GameCard() {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

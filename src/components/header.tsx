@@ -70,9 +70,9 @@ export default function Header() {
   return (
     <header className='sticky top-0 left-0 z-40 w-full bg-white/10 backdrop-blur-2xl'>
       <div className='relative flex min-h-16 w-full flex-row items-center gap-4 border'>
-        <div className='hidden items-center gap-4 border px-10 font-semibold whitespace-nowrap lg:flex'>
+        <div className='hidden items-center gap-4 px-5 font-semibold whitespace-nowrap lg:flex'>
           <div className='text-lg font-bold'>
-            <img src={appData.icon} alt='' className='w-24 rounded-full' />
+            <img src={appData.icon} alt='' className='w-36 rounded-full ' />
           </div>
           <p className=''>{appData.name}</p>
         </div>

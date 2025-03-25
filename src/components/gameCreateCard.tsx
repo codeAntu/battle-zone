@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 const game = {
   game: 'PUBG Mobile',
   image: 'https://www.financialexpress.com/wp-content/uploads/2025/03/PUBG-MOBILE1.jpg',
@@ -5,7 +7,7 @@ const game = {
 
 export function GameCreateCard() {
   return (
-    <div className='relative overflow-hidden rounded-2xl'>
+    <Link to={`/admin/games/${game.game}/new`} className='relative overflow-hidden rounded-2xl'>
       <div>
         <img src={game.image} alt='game' />
       </div>
@@ -17,6 +19,6 @@ export function GameCreateCard() {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

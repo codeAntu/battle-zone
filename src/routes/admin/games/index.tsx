@@ -1,9 +1,9 @@
 import { GameCreateCard } from '@/components/gameCreateCard';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/admin/games')({
+export const Route = createFileRoute('/admin/games/')({
   component: RouteComponent,
-});
+})
 
 
 function RouteComponent() {
