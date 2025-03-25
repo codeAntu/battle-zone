@@ -9,6 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
+import { appData } from '@/conts/data';
 import { Link } from '@tanstack/react-router';
 import { Menu, MoveRight, X } from 'lucide-react';
 import { useState } from 'react';
@@ -69,15 +70,17 @@ export default function Header() {
   return (
     <header className='sticky top-0 left-0 z-40 w-full bg-white/10 backdrop-blur-2xl'>
       <div className='relative flex min-h-16 w-full flex-row items-center gap-4 border'>
-        <div className='hidden items-center gap-4 px-10 font-semibold whitespace-nowrap lg:flex'>
-          <div className='text-lg font-bold'>Logo</div>
-          <p className=''>Game name</p>
+        <div className='hidden items-center gap-4 border px-10 font-semibold whitespace-nowrap lg:flex'>
+          <div className='text-lg font-bold'>
+            <img src={appData.icon} alt='' className='w-24 rounded-full' />
+          </div>
+          <p className=''>{appData.name}</p>
         </div>
         <div className='flex items-center justify-center lg:hidden'>
           <Button variant='ghost' onClick={() => setOpen(!isOpen)}>
             {isOpen ? <X className='size-6' /> : <Menu className='size-6' />}
           </Button>
-          <p className='font-semibold whitespace-nowrap'>Game name</p>
+          <p className='font-semibold whitespace-nowrap'>{appData.name}</p>
 
           {isOpen && (
             <div className='bg-background absolute top-20 right-0 container flex w-full flex-col gap-8 border-t p-5 shadow-lg'>

@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 
 export default function Games() {
   return (
-    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 '>
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
       <Game />
       <Game />
       <Game />
@@ -26,19 +26,17 @@ const game = {
 
 function Game() {
   return (
-    <div className='transform overflow-hidden rounded-xl border border-gray-200 shadow-lg transition-transform duration-300 hover:scale-102'>
+    <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
       <div className='relative'>
         <img className='aspect-[2/1] w-full object-cover' alt='Game' src={game.image} />
         <Tags />
       </div>
-      <div className='space-y-3 bg-white px-4 py-2'>
+      <div className='space-y-3 px-4 py-2'>
         <div className='flex items-center justify-between'>
           <div className='space-y-1.5'>
-            <p className='line-clamp-1 text-lg font-bold text-gray-800'>{game.game}</p>
+            <p className='line-clamp-1 text-lg font-bold'>{game.game}</p>
           </div>
-          <div className='rounded-lg bg-green-500 px-3.5 py-1.5 text-sm font-medium text-white'>
-            Price : ₹{game.price}
-          </div>
+          <div className='rounded-lg bg-green-500 px-3.5 py-1.5 text-sm font-medium'>Price : ₹{game.price}</div>
         </div>
         <div className=''>
           <div className='grid grid-cols-2 items-center justify-between gap-2 px-2'>

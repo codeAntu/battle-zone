@@ -34,7 +34,7 @@ function SignInPage() {
   }
 
   return (
-    <div className='grid w-full grow items-center px-4 sm:justify-center'>
+    <div className='grid w-full grow items-center px-4 sm:justify-center '>
       <Card className='w-full sm:w-96'>
         <CardHeader className='flex flex-col items-center gap-y-2'>
           <CardTitle>{appData.name}</CardTitle>

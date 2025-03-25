@@ -5,9 +5,11 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 export const Route = createRootRoute({
   component: () => (
     <>
-      <Header />
-      <Outlet />
-      <TanStackRouterDevtools />
+      <div className='min-h-[100dvh] bg-black text-white'>
+        <Header />
+        <Outlet />
+        <TanStackRouterDevtools />
+      </div>
     </>
   ),
 });

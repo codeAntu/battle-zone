@@ -1,28 +1,17 @@
-import Games from '@/components/games';
-import { getApi, postApi } from '@/services';
-import API from '@/services/api';
+import GameCard from '@/components/gameCard';
 import { createFileRoute } from '@tanstack/react-router';
-import axios from 'axios';
 export const Route = createFileRoute('/')({
   component: Index,
 });
 
 function Index() {
-  async function handleClick() {
-    const data = await postApi(API.hello);
-    console.log(data);
-  }
-
-  // send token in header
-
-  async function sendtoken() {
-    const data = await axios.post(API.hello);
-    console.log(data.data);
-  }
-
   return (
-    <div className='p-5'>
-      <Games />
+    <div className='grid grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+      <GameCard />
+      <GameCard />
+      <GameCard />
+      <GameCard />
+      <GameCard />
     </div>
   );
 }
