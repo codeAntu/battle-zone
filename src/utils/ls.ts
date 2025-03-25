@@ -1,5 +1,5 @@
 export const details = {
-  name: 'ludo-challenges',
+  name: 'battle-zone',
   version: '1.0.0',
 };
 const ls = {
