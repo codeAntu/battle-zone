@@ -7,7 +7,11 @@ const game = {
 
 export function GameCreateCard() {
   return (
-    <Link to={`/admin/games/${game.game}/new`} className='relative overflow-hidden rounded-2xl'>
+    <Link
+      to='/admin/games/$gameName/new'
+      params={{ gameName: game.game }}
+      className='relative overflow-hidden rounded-2xl'
+    >
       <div>
         <img src={game.image} alt='game' />
       </div>

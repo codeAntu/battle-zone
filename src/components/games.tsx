@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 
 export default function Games() {
   return (
-    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 p-5'>
+    <div className='grid grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
       <Game />
       <Game />
       <Game />
@@ -29,7 +29,8 @@ const game = {
 function Game() {
   return (
     <Link
-      to={`/games/${game.game}/${game.id}`}
+      to='/games/$gameName/$gameId'
+      params={{ gameName: game.game, gameId: game.id }}
       className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'
     >
       <div className='relative'>
