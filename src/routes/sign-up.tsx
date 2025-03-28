@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { appData } from '@/conts/data';
+import { signup } from '@/services/auth';
+import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -33,8 +35,19 @@ function SignInPage() {
     setError('');
   }
 
+  const { mutate: signupMutation, isPending: isSignupPending } = useMutation({
+    mutationKey: ['signup'],
+    mutationFn: signup,
+    onError: (error) => {
+      setError(error.message);
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
   return (
-    <div className='grid w-full grow items-center px-4 sm:justify-center '>
+    <div className='grid w-full grow items-center px-4 sm:justify-center'>
       <Card className='w-full sm:w-96'>
         <CardHeader className='flex flex-col items-center gap-y-2'>
           <CardTitle>{appData.name}</CardTitle>
@@ -95,7 +108,13 @@ function SignInPage() {
           <div className='grid w-full gap-y-4'>
             <Button
               className=''
+              disabled={isSignupPending}
               onClick={() => {
+                signupMutation({
+                  email: data.email,
+                  password: data.password,
+                });
+
                 if (isVerify) {
                   console.log('Verify');
                 } else {

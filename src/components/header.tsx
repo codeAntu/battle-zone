@@ -10,7 +10,7 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { appData } from '@/conts/data';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { Menu, MoveRight, X } from 'lucide-react';
 import { useState } from 'react';
 export default function Header() {
@@ -66,13 +66,15 @@ export default function Header() {
     },
   ];
 
+  const navigate = useNavigate();
+
   const [isOpen, setOpen] = useState(false);
   return (
     <header className='sticky top-0 left-0 z-40 w-full bg-white/10 backdrop-blur-2xl'>
       <div className='relative flex min-h-16 w-full flex-row items-center gap-4 border'>
         <div className='hidden items-center gap-4 px-5 font-semibold whitespace-nowrap lg:flex'>
           <div className='text-lg font-bold'>
-            <img src={appData.icon} alt='' className='w-36 rounded-full ' />
+            <img src={appData.icon} alt='' className='w-24 rounded-full' />
           </div>
           <p className=''>{appData.name}</p>
         </div>
@@ -161,7 +163,7 @@ export default function Header() {
             Book a demo
           </Button>
           <div className='hidden border-r md:inline'></div>
-          <Button>Sign in</Button>
+          <Button onClick={() => navigate({ to: '/sign-up' })}>Sign in</Button>
           {/* <Button>Get started</Button> */}
         </div>
       </div>
