@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { MoveRight } from 'lucide-react';
 
 const game = {
@@ -7,7 +8,11 @@ const game = {
 
 export default function GameCard() {
   return (
-    <div className='relative aspect-square overflow-hidden rounded-2xl border md:aspect-auto md:w-full'>
+    <Link
+      to='/games/$gameName'
+      params={{ gameName: game.game }}
+      className='relative aspect-square overflow-hidden rounded-2xl border md:aspect-auto md:w-full'
+    >
       <img src={game.image} alt='game' className='h-full w-full object-cover' />
       <div className='absolute bottom-0 hidden w-full items-center justify-between rounded-t-2xl bg-black/5 p-3 text-white backdrop-blur-2xl md:flex'>
         <p className='px-2 text-lg font-semibold'>{game.game}</p>
@@ -18,6 +23,6 @@ export default function GameCard() {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
