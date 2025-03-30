@@ -136,7 +136,7 @@ function GameDrawer({ children, data }: { children: React.ReactNode; data: typeo
                     </div>
                     <div className='flex items-center gap-2 text-green-500/80'>
                       <BadgeIndianRupee className='size-5' />
-                      <p>{game.perKill}</p>
+                      <p> Per Kill : ₹{game.perKill}</p>
                     </div>
                   </div>
                 </div>

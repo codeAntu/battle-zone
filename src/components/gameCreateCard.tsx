@@ -8,7 +8,7 @@ const game = {
 export function GameCreateCard() {
   return (
     <Link
-      to='/admin/games/$gameName/new'
+      to='/admin/tournaments/$gameName/new'
       params={{ gameName: game.game }}
       className='relative overflow-hidden rounded-2xl'
     >

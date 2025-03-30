@@ -21,12 +21,14 @@ import { Route as UserDepositImport } from './routes/user/deposit'
 import { Route as UserCurrentGamesImport } from './routes/user/currentGames'
 import { Route as UserGamesIndexImport } from './routes/user/games/index'
 import { Route as AdminTournamentsIndexImport } from './routes/admin/tournaments/index'
-import { Route as AdminGamesIndexImport } from './routes/admin/games/index'
 import { Route as UserGamesJoinedGamesImport } from './routes/user/games/joinedGames'
+import { Route as AdminTournamentsFinishedTournamentsImport } from './routes/admin/tournaments/finishedTournaments'
 import { Route as UserGamesGameNameIndexImport } from './routes/user/games/$gameName/index'
-import { Route as AdminGamesGameNameIndexImport } from './routes/admin/games/$gameName/index'
-import { Route as AdminGamesGameNameNewImport } from './routes/admin/games/$gameName/new'
-import { Route as AdminGamesGameNameGameIdImport } from './routes/admin/games/$gameName/$gameId'
+import { Route as AdminTournamentsCurrentTournamentsIndexImport } from './routes/admin/tournaments/currentTournaments/index'
+import { Route as AdminTournamentsGameNameIndexImport } from './routes/admin/tournaments/$gameName/index'
+import { Route as AdminTournamentsCurrentTournamentsTournamentsIdImport } from './routes/admin/tournaments/currentTournaments/$tournamentsId'
+import { Route as AdminTournamentsGameNameNewImport } from './routes/admin/tournaments/$gameName/new'
+import { Route as AdminTournamentsGameNameTournamentsIdImport } from './routes/admin/tournaments/$gameName/$tournamentsId'
 
 // Create/Update Routes
 
@@ -90,17 +92,18 @@ const AdminTournamentsIndexRoute = AdminTournamentsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminGamesIndexRoute = AdminGamesIndexImport.update({
-  id: '/admin/games/',
-  path: '/admin/games/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const UserGamesJoinedGamesRoute = UserGamesJoinedGamesImport.update({
   id: '/user/games/joinedGames',
   path: '/user/games/joinedGames',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AdminTournamentsFinishedTournamentsRoute =
+  AdminTournamentsFinishedTournamentsImport.update({
+    id: '/admin/tournaments/finishedTournaments',
+    path: '/admin/tournaments/finishedTournaments',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const UserGamesGameNameIndexRoute = UserGamesGameNameIndexImport.update({
   id: '/user/games/$gameName/',
@@ -108,23 +111,40 @@ const UserGamesGameNameIndexRoute = UserGamesGameNameIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminGamesGameNameIndexRoute = AdminGamesGameNameIndexImport.update({
-  id: '/admin/games/$gameName/',
-  path: '/admin/games/$gameName/',
-  getParentRoute: () => rootRoute,
-} as any)
+const AdminTournamentsCurrentTournamentsIndexRoute =
+  AdminTournamentsCurrentTournamentsIndexImport.update({
+    id: '/admin/tournaments/currentTournaments/',
+    path: '/admin/tournaments/currentTournaments/',
+    getParentRoute: () => rootRoute,
+  } as any)
 
-const AdminGamesGameNameNewRoute = AdminGamesGameNameNewImport.update({
-  id: '/admin/games/$gameName/new',
-  path: '/admin/games/$gameName/new',
-  getParentRoute: () => rootRoute,
-} as any)
+const AdminTournamentsGameNameIndexRoute =
+  AdminTournamentsGameNameIndexImport.update({
+    id: '/admin/tournaments/$gameName/',
+    path: '/admin/tournaments/$gameName/',
+    getParentRoute: () => rootRoute,
+  } as any)
 
-const AdminGamesGameNameGameIdRoute = AdminGamesGameNameGameIdImport.update({
-  id: '/admin/games/$gameName/$gameId',
-  path: '/admin/games/$gameName/$gameId',
-  getParentRoute: () => rootRoute,
-} as any)
+const AdminTournamentsCurrentTournamentsTournamentsIdRoute =
+  AdminTournamentsCurrentTournamentsTournamentsIdImport.update({
+    id: '/admin/tournaments/currentTournaments/$tournamentsId',
+    path: '/admin/tournaments/currentTournaments/$tournamentsId',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdminTournamentsGameNameNewRoute =
+  AdminTournamentsGameNameNewImport.update({
+    id: '/admin/tournaments/$gameName/new',
+    path: '/admin/tournaments/$gameName/new',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const AdminTournamentsGameNameTournamentsIdRoute =
+  AdminTournamentsGameNameTournamentsIdImport.update({
+    id: '/admin/tournaments/$gameName/$tournamentsId',
+    path: '/admin/tournaments/$gameName/$tournamentsId',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -186,18 +206,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof rootRoute
     }
+    '/admin/tournaments/finishedTournaments': {
+      id: '/admin/tournaments/finishedTournaments'
+      path: '/admin/tournaments/finishedTournaments'
+      fullPath: '/admin/tournaments/finishedTournaments'
+      preLoaderRoute: typeof AdminTournamentsFinishedTournamentsImport
+      parentRoute: typeof rootRoute
+    }
     '/user/games/joinedGames': {
       id: '/user/games/joinedGames'
       path: '/user/games/joinedGames'
       fullPath: '/user/games/joinedGames'
       preLoaderRoute: typeof UserGamesJoinedGamesImport
-      parentRoute: typeof rootRoute
-    }
-    '/admin/games/': {
-      id: '/admin/games/'
-      path: '/admin/games'
-      fullPath: '/admin/games'
-      preLoaderRoute: typeof AdminGamesIndexImport
       parentRoute: typeof rootRoute
     }
     '/admin/tournaments/': {
@@ -214,25 +234,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserGamesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/admin/games/$gameName/$gameId': {
-      id: '/admin/games/$gameName/$gameId'
-      path: '/admin/games/$gameName/$gameId'
-      fullPath: '/admin/games/$gameName/$gameId'
-      preLoaderRoute: typeof AdminGamesGameNameGameIdImport
+    '/admin/tournaments/$gameName/$tournamentsId': {
+      id: '/admin/tournaments/$gameName/$tournamentsId'
+      path: '/admin/tournaments/$gameName/$tournamentsId'
+      fullPath: '/admin/tournaments/$gameName/$tournamentsId'
+      preLoaderRoute: typeof AdminTournamentsGameNameTournamentsIdImport
       parentRoute: typeof rootRoute
     }
-    '/admin/games/$gameName/new': {
-      id: '/admin/games/$gameName/new'
-      path: '/admin/games/$gameName/new'
-      fullPath: '/admin/games/$gameName/new'
-      preLoaderRoute: typeof AdminGamesGameNameNewImport
+    '/admin/tournaments/$gameName/new': {
+      id: '/admin/tournaments/$gameName/new'
+      path: '/admin/tournaments/$gameName/new'
+      fullPath: '/admin/tournaments/$gameName/new'
+      preLoaderRoute: typeof AdminTournamentsGameNameNewImport
       parentRoute: typeof rootRoute
     }
-    '/admin/games/$gameName/': {
-      id: '/admin/games/$gameName/'
-      path: '/admin/games/$gameName'
-      fullPath: '/admin/games/$gameName'
-      preLoaderRoute: typeof AdminGamesGameNameIndexImport
+    '/admin/tournaments/currentTournaments/$tournamentsId': {
+      id: '/admin/tournaments/currentTournaments/$tournamentsId'
+      path: '/admin/tournaments/currentTournaments/$tournamentsId'
+      fullPath: '/admin/tournaments/currentTournaments/$tournamentsId'
+      preLoaderRoute: typeof AdminTournamentsCurrentTournamentsTournamentsIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/tournaments/$gameName/': {
+      id: '/admin/tournaments/$gameName/'
+      path: '/admin/tournaments/$gameName'
+      fullPath: '/admin/tournaments/$gameName'
+      preLoaderRoute: typeof AdminTournamentsGameNameIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/tournaments/currentTournaments/': {
+      id: '/admin/tournaments/currentTournaments/'
+      path: '/admin/tournaments/currentTournaments'
+      fullPath: '/admin/tournaments/currentTournaments'
+      preLoaderRoute: typeof AdminTournamentsCurrentTournamentsIndexImport
       parentRoute: typeof rootRoute
     }
     '/user/games/$gameName/': {
@@ -256,13 +290,15 @@ export interface FileRoutesByFullPath {
   '/user/history': typeof UserHistoryRoute
   '/user/withdraw': typeof UserWithdrawRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/tournaments/finishedTournaments': typeof AdminTournamentsFinishedTournamentsRoute
   '/user/games/joinedGames': typeof UserGamesJoinedGamesRoute
-  '/admin/games': typeof AdminGamesIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
   '/user/games': typeof UserGamesIndexRoute
-  '/admin/games/$gameName/$gameId': typeof AdminGamesGameNameGameIdRoute
-  '/admin/games/$gameName/new': typeof AdminGamesGameNameNewRoute
-  '/admin/games/$gameName': typeof AdminGamesGameNameIndexRoute
+  '/admin/tournaments/$gameName/$tournamentsId': typeof AdminTournamentsGameNameTournamentsIdRoute
+  '/admin/tournaments/$gameName/new': typeof AdminTournamentsGameNameNewRoute
+  '/admin/tournaments/currentTournaments/$tournamentsId': typeof AdminTournamentsCurrentTournamentsTournamentsIdRoute
+  '/admin/tournaments/$gameName': typeof AdminTournamentsGameNameIndexRoute
+  '/admin/tournaments/currentTournaments': typeof AdminTournamentsCurrentTournamentsIndexRoute
   '/user/games/$gameName': typeof UserGamesGameNameIndexRoute
 }
 
@@ -275,13 +311,15 @@ export interface FileRoutesByTo {
   '/user/history': typeof UserHistoryRoute
   '/user/withdraw': typeof UserWithdrawRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/tournaments/finishedTournaments': typeof AdminTournamentsFinishedTournamentsRoute
   '/user/games/joinedGames': typeof UserGamesJoinedGamesRoute
-  '/admin/games': typeof AdminGamesIndexRoute
   '/admin/tournaments': typeof AdminTournamentsIndexRoute
   '/user/games': typeof UserGamesIndexRoute
-  '/admin/games/$gameName/$gameId': typeof AdminGamesGameNameGameIdRoute
-  '/admin/games/$gameName/new': typeof AdminGamesGameNameNewRoute
-  '/admin/games/$gameName': typeof AdminGamesGameNameIndexRoute
+  '/admin/tournaments/$gameName/$tournamentsId': typeof AdminTournamentsGameNameTournamentsIdRoute
+  '/admin/tournaments/$gameName/new': typeof AdminTournamentsGameNameNewRoute
+  '/admin/tournaments/currentTournaments/$tournamentsId': typeof AdminTournamentsCurrentTournamentsTournamentsIdRoute
+  '/admin/tournaments/$gameName': typeof AdminTournamentsGameNameIndexRoute
+  '/admin/tournaments/currentTournaments': typeof AdminTournamentsCurrentTournamentsIndexRoute
   '/user/games/$gameName': typeof UserGamesGameNameIndexRoute
 }
 
@@ -295,13 +333,15 @@ export interface FileRoutesById {
   '/user/history': typeof UserHistoryRoute
   '/user/withdraw': typeof UserWithdrawRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/tournaments/finishedTournaments': typeof AdminTournamentsFinishedTournamentsRoute
   '/user/games/joinedGames': typeof UserGamesJoinedGamesRoute
-  '/admin/games/': typeof AdminGamesIndexRoute
   '/admin/tournaments/': typeof AdminTournamentsIndexRoute
   '/user/games/': typeof UserGamesIndexRoute
-  '/admin/games/$gameName/$gameId': typeof AdminGamesGameNameGameIdRoute
-  '/admin/games/$gameName/new': typeof AdminGamesGameNameNewRoute
-  '/admin/games/$gameName/': typeof AdminGamesGameNameIndexRoute
+  '/admin/tournaments/$gameName/$tournamentsId': typeof AdminTournamentsGameNameTournamentsIdRoute
+  '/admin/tournaments/$gameName/new': typeof AdminTournamentsGameNameNewRoute
+  '/admin/tournaments/currentTournaments/$tournamentsId': typeof AdminTournamentsCurrentTournamentsTournamentsIdRoute
+  '/admin/tournaments/$gameName/': typeof AdminTournamentsGameNameIndexRoute
+  '/admin/tournaments/currentTournaments/': typeof AdminTournamentsCurrentTournamentsIndexRoute
   '/user/games/$gameName/': typeof UserGamesGameNameIndexRoute
 }
 
@@ -316,13 +356,15 @@ export interface FileRouteTypes {
     | '/user/history'
     | '/user/withdraw'
     | '/admin'
+    | '/admin/tournaments/finishedTournaments'
     | '/user/games/joinedGames'
-    | '/admin/games'
     | '/admin/tournaments'
     | '/user/games'
-    | '/admin/games/$gameName/$gameId'
-    | '/admin/games/$gameName/new'
-    | '/admin/games/$gameName'
+    | '/admin/tournaments/$gameName/$tournamentsId'
+    | '/admin/tournaments/$gameName/new'
+    | '/admin/tournaments/currentTournaments/$tournamentsId'
+    | '/admin/tournaments/$gameName'
+    | '/admin/tournaments/currentTournaments'
     | '/user/games/$gameName'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -334,13 +376,15 @@ export interface FileRouteTypes {
     | '/user/history'
     | '/user/withdraw'
     | '/admin'
+    | '/admin/tournaments/finishedTournaments'
     | '/user/games/joinedGames'
-    | '/admin/games'
     | '/admin/tournaments'
     | '/user/games'
-    | '/admin/games/$gameName/$gameId'
-    | '/admin/games/$gameName/new'
-    | '/admin/games/$gameName'
+    | '/admin/tournaments/$gameName/$tournamentsId'
+    | '/admin/tournaments/$gameName/new'
+    | '/admin/tournaments/currentTournaments/$tournamentsId'
+    | '/admin/tournaments/$gameName'
+    | '/admin/tournaments/currentTournaments'
     | '/user/games/$gameName'
   id:
     | '__root__'
@@ -352,13 +396,15 @@ export interface FileRouteTypes {
     | '/user/history'
     | '/user/withdraw'
     | '/admin/'
+    | '/admin/tournaments/finishedTournaments'
     | '/user/games/joinedGames'
-    | '/admin/games/'
     | '/admin/tournaments/'
     | '/user/games/'
-    | '/admin/games/$gameName/$gameId'
-    | '/admin/games/$gameName/new'
-    | '/admin/games/$gameName/'
+    | '/admin/tournaments/$gameName/$tournamentsId'
+    | '/admin/tournaments/$gameName/new'
+    | '/admin/tournaments/currentTournaments/$tournamentsId'
+    | '/admin/tournaments/$gameName/'
+    | '/admin/tournaments/currentTournaments/'
     | '/user/games/$gameName/'
   fileRoutesById: FileRoutesById
 }
@@ -372,13 +418,15 @@ export interface RootRouteChildren {
   UserHistoryRoute: typeof UserHistoryRoute
   UserWithdrawRoute: typeof UserWithdrawRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminTournamentsFinishedTournamentsRoute: typeof AdminTournamentsFinishedTournamentsRoute
   UserGamesJoinedGamesRoute: typeof UserGamesJoinedGamesRoute
-  AdminGamesIndexRoute: typeof AdminGamesIndexRoute
   AdminTournamentsIndexRoute: typeof AdminTournamentsIndexRoute
   UserGamesIndexRoute: typeof UserGamesIndexRoute
-  AdminGamesGameNameGameIdRoute: typeof AdminGamesGameNameGameIdRoute
-  AdminGamesGameNameNewRoute: typeof AdminGamesGameNameNewRoute
-  AdminGamesGameNameIndexRoute: typeof AdminGamesGameNameIndexRoute
+  AdminTournamentsGameNameTournamentsIdRoute: typeof AdminTournamentsGameNameTournamentsIdRoute
+  AdminTournamentsGameNameNewRoute: typeof AdminTournamentsGameNameNewRoute
+  AdminTournamentsCurrentTournamentsTournamentsIdRoute: typeof AdminTournamentsCurrentTournamentsTournamentsIdRoute
+  AdminTournamentsGameNameIndexRoute: typeof AdminTournamentsGameNameIndexRoute
+  AdminTournamentsCurrentTournamentsIndexRoute: typeof AdminTournamentsCurrentTournamentsIndexRoute
   UserGamesGameNameIndexRoute: typeof UserGamesGameNameIndexRoute
 }
 
@@ -391,13 +439,19 @@ const rootRouteChildren: RootRouteChildren = {
   UserHistoryRoute: UserHistoryRoute,
   UserWithdrawRoute: UserWithdrawRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminTournamentsFinishedTournamentsRoute:
+    AdminTournamentsFinishedTournamentsRoute,
   UserGamesJoinedGamesRoute: UserGamesJoinedGamesRoute,
-  AdminGamesIndexRoute: AdminGamesIndexRoute,
   AdminTournamentsIndexRoute: AdminTournamentsIndexRoute,
   UserGamesIndexRoute: UserGamesIndexRoute,
-  AdminGamesGameNameGameIdRoute: AdminGamesGameNameGameIdRoute,
-  AdminGamesGameNameNewRoute: AdminGamesGameNameNewRoute,
-  AdminGamesGameNameIndexRoute: AdminGamesGameNameIndexRoute,
+  AdminTournamentsGameNameTournamentsIdRoute:
+    AdminTournamentsGameNameTournamentsIdRoute,
+  AdminTournamentsGameNameNewRoute: AdminTournamentsGameNameNewRoute,
+  AdminTournamentsCurrentTournamentsTournamentsIdRoute:
+    AdminTournamentsCurrentTournamentsTournamentsIdRoute,
+  AdminTournamentsGameNameIndexRoute: AdminTournamentsGameNameIndexRoute,
+  AdminTournamentsCurrentTournamentsIndexRoute:
+    AdminTournamentsCurrentTournamentsIndexRoute,
   UserGamesGameNameIndexRoute: UserGamesGameNameIndexRoute,
 }
 
@@ -419,13 +473,15 @@ export const routeTree = rootRoute
         "/user/history",
         "/user/withdraw",
         "/admin/",
+        "/admin/tournaments/finishedTournaments",
         "/user/games/joinedGames",
-        "/admin/games/",
         "/admin/tournaments/",
         "/user/games/",
-        "/admin/games/$gameName/$gameId",
-        "/admin/games/$gameName/new",
-        "/admin/games/$gameName/",
+        "/admin/tournaments/$gameName/$tournamentsId",
+        "/admin/tournaments/$gameName/new",
+        "/admin/tournaments/currentTournaments/$tournamentsId",
+        "/admin/tournaments/$gameName/",
+        "/admin/tournaments/currentTournaments/",
         "/user/games/$gameName/"
       ]
     },
@@ -453,11 +509,11 @@ export const routeTree = rootRoute
     "/admin/": {
       "filePath": "admin/index.tsx"
     },
+    "/admin/tournaments/finishedTournaments": {
+      "filePath": "admin/tournaments/finishedTournaments.tsx"
+    },
     "/user/games/joinedGames": {
       "filePath": "user/games/joinedGames.tsx"
-    },
-    "/admin/games/": {
-      "filePath": "admin/games/index.tsx"
     },
     "/admin/tournaments/": {
       "filePath": "admin/tournaments/index.tsx"
@@ -465,14 +521,20 @@ export const routeTree = rootRoute
     "/user/games/": {
       "filePath": "user/games/index.tsx"
     },
-    "/admin/games/$gameName/$gameId": {
-      "filePath": "admin/games/$gameName/$gameId.tsx"
+    "/admin/tournaments/$gameName/$tournamentsId": {
+      "filePath": "admin/tournaments/$gameName/$tournamentsId.tsx"
     },
-    "/admin/games/$gameName/new": {
-      "filePath": "admin/games/$gameName/new.tsx"
+    "/admin/tournaments/$gameName/new": {
+      "filePath": "admin/tournaments/$gameName/new.tsx"
     },
-    "/admin/games/$gameName/": {
-      "filePath": "admin/games/$gameName/index.tsx"
+    "/admin/tournaments/currentTournaments/$tournamentsId": {
+      "filePath": "admin/tournaments/currentTournaments/$tournamentsId.tsx"
+    },
+    "/admin/tournaments/$gameName/": {
+      "filePath": "admin/tournaments/$gameName/index.tsx"
+    },
+    "/admin/tournaments/currentTournaments/": {
+      "filePath": "admin/tournaments/currentTournaments/index.tsx"
     },
     "/user/games/$gameName/": {
       "filePath": "user/games/$gameName/index.tsx"
