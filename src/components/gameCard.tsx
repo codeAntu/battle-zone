@@ -9,7 +9,7 @@ const game = {
 export default function GameCard() {
   return (
     <Link
-      to='/games/$gameName'
+      to='/user/games/$gameName'
       params={{ gameName: game.game }}
       className='relative aspect-square overflow-hidden rounded-2xl border md:aspect-auto md:w-full'
     >
