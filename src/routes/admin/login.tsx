@@ -4,26 +4,19 @@ import { Input } from '@/components/ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { appData } from '@/conts/data';
-import { signup } from '@/services/auth';
+import { userLogin } from '@/services/auth';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/sign-up')({
-  component: RouteComponent,
+
+export const Route = createFileRoute('/admin/login')({
+  component: AdminSignInPage,
 });
 
-function RouteComponent() {
-  return (
-    <div>
-      u
-      <SignInPage />
-    </div>
-  );
-}
-function SignInPage() {
+// Admin sign-in/sign-up component (ready to be moved to another file)
+export function AdminSignInPage() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [data, setData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isVerify, setIsVerify] = useState(false);
@@ -36,8 +29,8 @@ function SignInPage() {
   }
 
   const { mutate: signupMutation, isPending: isSignupPending } = useMutation({
-    mutationKey: ['signup'],
-    mutationFn: signup,
+    mutationKey: ['adminSignup'],
+    mutationFn: userLogin,
     onError: (error) => {
       setError(error.message);
     },
@@ -47,29 +40,19 @@ function SignInPage() {
   });
 
   return (
-    <div className='grid w-full grow items-center px-4 sm:justify-center'>
+    <div className='grid w-full grow items-center p-4 sm:justify-center'>
       <Card className='w-full sm:w-96'>
         <CardHeader className='flex flex-col items-center gap-y-2'>
-          <CardTitle>{appData.name}</CardTitle>
+          <CardTitle>{appData.name} - Admin Panel</CardTitle>
           <CardDescription>{appData.description}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-y-4'>
-          <div className='grid grid-cols-2 gap-x-4'>
-            <Button size='sm' variant={isAdmin ? 'default' : 'outline'} type='button' onClick={() => setIsAdmin(true)}>
-              Admin
-            </Button>
-            <Button size='sm' variant={isAdmin ? 'outline' : 'default'} type='button' onClick={() => setIsAdmin(false)}>
-              user
-            </Button>
-          </div>
-
           <p className='text-muted-foreground before:bg-border after:bg-border flex items-center gap-x-3 text-sm before:h-px before:flex-1 after:h-px after:flex-1'>
-            {isSignUp ? 'Sign up' : 'Sign in'} as {isAdmin ? 'Admin' : 'User'}
+            {isSignUp ? 'Sign up' : 'Sign in'} as Admin
           </p>
 
           <div className='space-y-2'>
             <Label>Email</Label>
-
             <Input
               type='email'
               name='email'
@@ -120,22 +103,14 @@ function SignInPage() {
                 } else {
                   if (isSignUp) {
                     setIsVerify(true);
-                    if (isAdmin) {
-                      console.log('Sign up as Admin');
-                    } else {
-                      console.log('Sign up as User');
-                    }
+                    console.log('Sign up as Admin');
                   } else {
-                    if (isAdmin) {
-                      console.log('Sign in as Admin');
-                    } else {
-                      console.log('Sign in as User');
-                    }
+                    console.log('Sign in as Admin');
                   }
                 }
               }}
             >
-              {isVerify ? 'Verify' : isSignUp ? 'Sign up' : 'Sign in'} as {isAdmin ? 'Admin' : 'User'}
+              {isVerify ? 'Verify' : isSignUp ? 'Sign up' : 'Sign in'} as Admin
             </Button>
             {isSignUp ? (
               <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-black'>
