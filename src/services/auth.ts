@@ -52,6 +52,38 @@ export interface User {
   balance: number;
 }
 
+export interface AdminLoginResponse {
+  message: string;
+  token: string;
+  admin: {
+    id: number;
+    email: string;
+    name?: string;
+  };
+}
+
+export interface AdminRegisterResponse {
+  message: string;
+  title: string;
+  isVerified: boolean;
+  admin: {
+    id: number;
+    email: string;
+    name?: string;
+  };
+}
+
+export interface AdminVerifyResponse {
+  message: string;
+  isVerified: boolean;
+  token: string;
+  admin: {
+    id: number;
+    email: string;
+    name?: string;
+  };
+}
+
 export const userLogin = async (formdata: { email: string; password: string }) => {
   console.log(formdata);
   return postApi<UserLoginResponse>(API.userLogin, formdata);
@@ -63,4 +95,19 @@ export const userRegister = async (formdata: { email: string; password: string }
 
 export const verifyUser = async (formdata: { email: string; verificationCode: string }) => {
   return postApi<UserVerifyResponse>(API.userVerify, formdata);
+};
+
+export const adminLogin = async (formdata: { email: string; password: string }) => {
+  console.log('Admin login:', formdata);
+  return postApi<AdminLoginResponse>(API.adminLogin, formdata);
+};
+
+export const adminRegister = async (formdata: { email: string; password: string }) => {
+  console.log('Admin register:', formdata);
+  return postApi<AdminRegisterResponse>(API.adminRegister, formdata);
+};
+
+export const verifyAdmin = async (formdata: { email: string; verificationCode: string }) => {
+  console.log('Admin verify:', formdata);
+  return postApi<AdminVerifyResponse>(API.adminVerify, formdata);
 };

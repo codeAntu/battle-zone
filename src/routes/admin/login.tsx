@@ -4,11 +4,12 @@ import { Input } from '@/components/ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { appData } from '@/conts/data';
-import { userLogin } from '@/services/auth';
+import { adminLogin, adminRegister, verifyAdmin } from '@/services/auth';
+import { useTokenStore } from '@/store/store';
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 export const Route = createFileRoute('/admin/login')({
   component: AdminSignInPage,
@@ -21,6 +22,9 @@ export function AdminSignInPage() {
   const [error, setError] = useState('');
   const [isVerify, setIsVerify] = useState(false);
   const [otp, setOtp] = useState('');
+  const navigate = useNavigate();
+  const setToken = useTokenStore((state) => state.setToken);
+  const setRole = useTokenStore((state) => state.setRole);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -28,19 +32,134 @@ export function AdminSignInPage() {
     setError('');
   }
 
-  const { mutate: signupMutation, isPending: isSignupPending } = useMutation({
-    mutationKey: ['adminSignup'],
-    mutationFn: userLogin,
+  const { mutate: loginMutation, isPending: isLoginPending } = useMutation({
+    mutationKey: ['adminLogin'],
+    mutationFn: adminLogin,
     onError: (error) => {
       setError(error.message);
+      toast.error('Login failed: ' + error.message);
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: (response) => {
+      if (response.isAlert) {
+        toast.error(response.message || 'Something went wrong!');
+        return;
+      }
+      if (response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      if (response.token) {
+        setRole('admin');
+        setToken(response.token);
+        toast.success('Admin login successful!');
+        navigate({ to: '/admin' });
+      } else {
+        setError('Invalid response from server');
+        toast.error('Invalid response from server');
+      }
     },
   });
 
+  const { mutate: registerMutation, isPending: isRegisterPending } = useMutation({
+    mutationKey: ['adminRegister'],
+    mutationFn: adminRegister,
+    onError: (error) => {
+      setError(error.message);
+      toast.error('Registration failed: ' + error.message);
+    },
+    onSuccess: (response) => {
+      console.log(response);
+
+      if (response.isAlert) {
+        toast.error(response.message || 'Something went wrong!');
+        return;
+      }
+      if (response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      setIsVerify(true);
+      setData({ ...data, email: response.admin.email });
+      setError('');
+      toast.success('Admin registration successful! Please verify your email.');
+      setTimeout(() => {
+        toast('Verification code sent to your email, please check your inbox.');
+      }, 2000);
+    },
+  });
+
+  const { mutate: verifyMutation, isPending: isVerifyPending } = useMutation({
+    mutationKey: ['adminVerify'],
+    mutationFn: verifyAdmin,
+    onError: (error) => {
+      setError(error.message);
+      toast.error('Verification failed: ' + error.message);
+    },
+    onSuccess: (response) => {
+      if (response.isAlert) {
+        toast.error(response.message || 'Something went wrong!');
+        return;
+      }
+      if (response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      if (response.token) {
+        setRole('admin');
+        setToken(response.token);
+        toast.success('Verification successful! You are now logged in as admin.');
+        navigate({ to: '/admin' });
+      } else {
+        setError('Invalid response from server');
+        toast.error('Invalid response from server');
+      }
+    },
+  });
+
+  const handleSubmit = () => {
+    // if (!data.email || (!isVerify && !data.password)) {
+    //   setError('Email and password are required');
+    //   toast.error('Email and password are required');
+    //   return;
+    // }
+
+    if (isVerify) {
+      if (!otp || otp.length < 6) {
+        setError('Please enter the complete verification code');
+        toast.error('Please enter the complete verification code');
+        return;
+      }
+
+      verifyMutation({
+        email: data.email,
+        verificationCode: otp,
+      });
+    } else if (isSignUp) {
+      registerMutation({
+        email: data.email,
+        password: data.password,
+      });
+    } else {
+      loginMutation({
+        email: data.email,
+        password: data.password,
+      });
+    }
+  };
+
   return (
     <div className='grid w-full grow items-center p-4 sm:justify-center'>
+      <Toaster
+        position='top-right'
+        reverseOrder={false}
+        containerStyle={{
+          zIndex: 1000,
+          marginTop: '50px',
+        }}
+      />
       <Card className='w-full sm:w-96'>
         <CardHeader className='flex flex-col items-center gap-y-2'>
           <CardTitle>{appData.name} - Admin Panel</CardTitle>
@@ -48,7 +167,7 @@ export function AdminSignInPage() {
         </CardHeader>
         <CardContent className='grid gap-y-4'>
           <p className='text-muted-foreground before:bg-border after:bg-border flex items-center gap-x-3 text-sm before:h-px before:flex-1 after:h-px after:flex-1'>
-            {isSignUp ? 'Sign up' : 'Sign in'} as Admin
+            {isVerify ? 'Verify Account' : isSignUp ? 'Create Admin Account' : 'Login as Admin'}
           </p>
 
           <div className='space-y-2'>
@@ -66,7 +185,12 @@ export function AdminSignInPage() {
           {isVerify ? (
             <div className='w-full space-y-2'>
               <Label>Verification code</Label>
-              <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)} className='w-full'>
+              <InputOTP
+                maxLength={6}
+                value={otp}
+                onChange={(value) => setOtp(value.replace(/[^0-9]/g, ''))}
+                className='w-full'
+              >
                 <InputOTPGroup className='flex w-full grow items-center'>
                   <InputOTPSlot index={0} className='w-full' />
                   <InputOTPSlot index={1} className='w-full' />
@@ -91,38 +215,23 @@ export function AdminSignInPage() {
           <div className='grid w-full gap-y-4'>
             <Button
               className=''
-              disabled={isSignupPending}
-              onClick={() => {
-                signupMutation({
-                  email: data.email,
-                  password: data.password,
-                });
-
-                if (isVerify) {
-                  console.log('Verify');
-                } else {
-                  if (isSignUp) {
-                    setIsVerify(true);
-                    console.log('Sign up as Admin');
-                  } else {
-                    console.log('Sign in as Admin');
-                  }
-                }
-              }}
+              disabled={isLoginPending || isRegisterPending || isVerifyPending}
+              onClick={handleSubmit}
             >
-              {isVerify ? 'Verify' : isSignUp ? 'Sign up' : 'Sign in'} as Admin
+              {isVerify ? 'Verify' : isSignUp ? 'Create Admin Account' : 'Login as Admin'}
             </Button>
-            {isSignUp ? (
-              <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-black'>
-                <span className=''>Already have an account?</span>
-                <span className='underline'>Sign in</span>
-              </Button>
-            ) : (
-              <Button variant='link' size='sm' onClick={() => setIsSignUp(true)} className='space-x-2 text-black'>
-                <span className=''>Don't have an account?</span>
-                <span className='underline'>Sign up</span>
-              </Button>
-            )}
+            {!isVerify &&
+              (isSignUp ? (
+                <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-white'>
+                  <span className=''>Already have an account?</span>
+                  <span className='underline'>Login</span>
+                </Button>
+              ) : (
+                <Button variant='link' size='sm' onClick={() => setIsSignUp(true)} className='space-x-2 text-white'>
+                  <span className=''>Don't have an account?</span>
+                  <span className='underline'>Create Admin Account</span>
+                </Button>
+              ))}
           </div>
         </CardFooter>
       </Card>

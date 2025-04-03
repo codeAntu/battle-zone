@@ -7,6 +7,11 @@ const API = {
   userLogin: `${BASE_URL}/user/auth/login`,
   userRegister: `${BASE_URL}/user/auth/signup`,
   userVerify: `${BASE_URL}/user/auth/verify-otp`,
+  
+  // admin auth
+  adminLogin: `${BASE_URL}/admin/auth/login`,
+  adminRegister: `${BASE_URL}/admin/auth/signup`,
+  adminVerify: `${BASE_URL}/admin/auth/verify-otp`,
 };
 
 export default API;
