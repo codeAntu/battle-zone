@@ -1,6 +1,6 @@
 import { getApi, postApi } from '.';
 import API from './api';
-import { adminTournamentData, TournamentData, TournamentResponse } from './types';
+import { adminTournamentData, TournamentData, TournamentResponse, TournamentsResponse } from './types';
 
 export const createTournament = async (data: TournamentData) => {
   console.log('Sending tournament data to API:', data);
@@ -19,7 +19,10 @@ export const updateTournament = async (id: string, roomId: string) => {
   return postApi<TournamentResponse>(API.updateTournament(id), { roomId });
 };
 
-
 export const endTournament = async (id: string) => {
   return postApi<TournamentResponse>(API.endTournament(id), {});
+};
+
+export const getUserTournamentByName = async (gameName: string) => {
+  return getApi<TournamentsResponse>(API.getUserTournamentByName(gameName));
 };

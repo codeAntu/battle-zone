@@ -22,6 +22,9 @@ const API = {
   getAdminTournamentsById: (id: string) => `${BASE_URL}/admin/tournaments/${id}`,
   updateTournament: (id: string) => `${BASE_URL}/admin/tournaments/update/${id}`,
   endTournament: (id: string) => `${BASE_URL}/admin/tournaments/end/${id}`,
+
+  // user tournaments
+  getUserTournamentByName: (name: string) => `${BASE_URL}/user/tournaments/game/${name}`,
 };
 
 export default API;

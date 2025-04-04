@@ -36,3 +36,7 @@ export interface adminTournamentData {
   message: string;
   tournament: Tournament;
 }
+export interface TournamentsResponse {
+  message: string;
+  tournaments: Tournament[];
+}
