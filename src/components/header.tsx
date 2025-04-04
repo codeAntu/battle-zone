@@ -163,7 +163,7 @@ export default function Header() {
             Book a demo
           </Button>
           <div className='hidden border-r md:inline'></div>
-          <Button onClick={() => navigate({ to: '/sign-up' })}>Sign in</Button>
+          <Button onClick={() => navigate({ to: '/user/login' })}>Sign in</Button>
           {/* <Button>Get started</Button> */}
         </div>
       </div>
