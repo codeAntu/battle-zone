@@ -14,3 +14,12 @@ export const getAdminTournaments = async () => {
 export const getAdminTournamentsById = async (id: string) => {
   return getApi<adminTournamentData>(API.getAdminTournamentsById(id));
 };
+
+export const updateTournament = async (id: string, roomId: string) => {
+  return postApi<TournamentResponse>(API.updateTournament(id), { roomId });
+};
+
+
+export const endTournament = async (id: string) => {
+  return postApi<TournamentResponse>(API.endTournament(id), {});
+};

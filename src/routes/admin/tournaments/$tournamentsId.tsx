@@ -1,8 +1,20 @@
-import { getAdminTournamentsById } from '@/services/tournament';
-import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { getAdminTournamentsById, updateTournament } from '@/services/tournament';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useParams } from '@tanstack/react-router';
 import { format } from 'date-fns';
-import { CalendarIcon, Clock, DollarSign, ShieldAlert, Trophy, Users } from 'lucide-react';
+import { CalendarIcon, Clock, Copy, DollarSign, PencilIcon, ShieldAlert, Trophy, Users } from 'lucide-react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/admin/tournaments/$tournamentsId')({
   component: RouteComponent,
@@ -10,10 +22,24 @@ export const Route = createFileRoute('/admin/tournaments/$tournamentsId')({
 
 function RouteComponent() {
   const { tournamentsId } = useParams({ from: '/admin/tournaments/$tournamentsId' });
+  const queryClient = useQueryClient();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['tournaments', tournamentsId],
     queryFn: () => getAdminTournamentsById(tournamentsId),
+  });
+
+  const { mutate: updateTournamentMutation, isPending: isUpdating } = useMutation({
+    mutationKey: ['tournaments', tournamentsId],
+    mutationFn: (roomId: string) => {
+      return updateTournament(tournamentsId, roomId);
+    },
+    onSuccess: () => {
+      toast.success('Tournament updated successfully');
+      setDialogOpen(false); // Close dialog on success
+      queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] }); // Refresh data
+    },
   });
 
   if (isLoading) {
@@ -51,32 +77,102 @@ function RouteComponent() {
   const tournamentStatus = tournament.isEnded ? 'COMPLETED' : 'ONGOING';
 
   return (
-    <div className='mx-auto max-w-4xl p-5'>
-      <div className='mb-8'>
+    <div className='mx-auto max-w-4xl p-3 sm:p-5'>
+      <div className='mb-4 sm:mb-8'>
         <div className='mb-2 flex items-center space-x-2'>
-          <span className='rounded-full bg-blue-900 px-3 py-1 text-xs tracking-wider uppercase'>{tournament.game}</span>
+          <span className='rounded-full bg-blue-500 px-4 py-0.5 text-sm tracking-wider uppercase'>
+            {tournament.game}
+          </span>
           <span
-            className={`rounded-full px-3 py-1 text-xs tracking-wider uppercase ${
-              tournamentStatus === 'ONGOING' ? 'bg-green-800 text-green-300' : 'bg-gray-700 text-gray-300'
+            className={`rounded-full px-4 py-0.5 text-sm tracking-wider uppercase ${
+              tournamentStatus === 'ONGOING' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
             }`}
           >
             {tournamentStatus}
           </span>
         </div>
-        <h1 className='mb-2 text-3xl font-bold'>{tournament.name}</h1>
-        {tournament.description && <p className='mb-4 text-gray-300'>{tournament.description}</p>}
+        <h1 className='mb-1 text-2xl font-bold sm:mb-2 sm:text-3xl'>{tournament.name}</h1>
+        {tournament.description && (
+          <p className='mb-2 text-base text-gray-300 sm:mb-4 sm:text-base'>{tournament.description}</p>
+        )}
+      </div>
+      <div className='mb-4 rounded-lg bg-gray-950 p-3 shadow-sm sm:mb-8 sm:p-5'>
+        <div className='flex items-start justify-between'>
+          <h2 className='mb-2 text-xl font-semibold sm:mb-4 sm:text-xl'>Room Id</h2>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger>
+              <Button className='h-9 border px-3 text-sm sm:h-auto sm:px-3'>
+                <PencilIcon className='mr-1 h-4 w-4 sm:mr-2 sm:h-4 sm:w-4' />
+                {tournament.roomId ? <span>Edit</span> : <span>Add</span>}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className='dark bg-gray-950'>
+              <DialogHeader>
+                <DialogTitle>{tournament.roomId ? 'Update Room ID' : 'Add Room ID'}</DialogTitle>
+                <DialogDescription>
+                  Enter the {tournament.roomId ? 'new' : ''} Room ID for the tournament.
+                </DialogDescription>
+              </DialogHeader>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const newRoomId = formData.get('roomId') as string;
+
+                  // Send the roomId as a string
+                  updateTournamentMutation(newRoomId);
+                }}
+              >
+                <div className='space-y-4'>
+                  <Input
+                    type='number'
+                    name='roomId'
+                    placeholder='Enter new Room ID'
+                    className='w-full bg-gray-800 px-3 py-3 text-gray-200 focus:border-none focus:outline-none sm:py-5'
+                    required
+                  />
+                  <Button type='submit' className='w-full py-3 sm:py-5' disabled={isUpdating}>
+                    {isUpdating ? 'Updating...' : 'Update Room ID'}
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div className='space-y-3 sm:space-y-4'>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center'>
+              <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>#</div>
+              <div>
+                <div className='text-sm text-gray-400 sm:text-base'>Room ID</div>
+                <div className='text-base sm:text-lg'>{tournament.roomId || 'No Room ID assigned yet'}</div>
+              </div>
+            </div>
+            {tournament.roomId && (
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(String(tournament.roomId || ''));
+                  toast.success('Room ID copied to clipboard');
+                }}
+                className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
+              >
+                <Copy className='size-4' />
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className='mb-8 grid grid-cols-1 gap-6 md:grid-cols-2'>
-        <div className='rounded-lg bg-gray-950 p-5 shadow-sm'>
-          <h2 className='mb-4 text-xl font-semibold'>Tournament Details</h2>
+      <div className='mb-4 grid grid-cols-1 gap-3 sm:mb-8 sm:gap-6 md:grid-cols-2'>
+        <div className='rounded-lg bg-gray-950 p-3 shadow-sm sm:p-5'>
+          <h2 className='mb-2 text-xl font-semibold sm:mb-4'>Tournament Details</h2>
 
-          <div className='space-y-4'>
+          <div className='space-y-3 sm:space-y-4'>
             <div className='flex items-center'>
-              <Users className='mr-3 h-5 w-5 text-blue-400' />
+              <Users className='mr-2 h-5 w-5 text-blue-400 sm:mr-3' />
               <div>
-                <div className='text-sm text-gray-400'>Participants</div>
-                <div>
+                <div className='text-sm text-gray-400 sm:text-base'>Participants</div>
+                <div className='text-base sm:text-lg'>
                   {tournament.maxParticipants || 0} / {tournament.maxParticipants}
                 </div>
               </div>
@@ -85,18 +181,18 @@ function RouteComponent() {
             {scheduledDate && (
               <>
                 <div className='flex items-center'>
-                  <CalendarIcon className='mr-3 h-5 w-5 text-green-400' />
+                  <CalendarIcon className='mr-2 h-5 w-5 text-green-400 sm:mr-3' />
                   <div>
-                    <div className='text-sm text-gray-400'>Date</div>
-                    <div>{format(scheduledDate, 'MMMM d, yyyy')}</div>
+                    <div className='text-sm text-gray-400 sm:text-base'>Date</div>
+                    <div className='text-base sm:text-lg'>{format(scheduledDate, 'MMMM d, yyyy')}</div>
                   </div>
                 </div>
 
                 <div className='flex items-center'>
-                  <Clock className='mr-3 h-5 w-5 text-purple-400' />
+                  <Clock className='mr-2 h-5 w-5 text-purple-400 sm:mr-3' />
                   <div>
-                    <div className='text-sm text-gray-400'>Time</div>
-                    <div>{format(scheduledDate, 'h:mm a')}</div>
+                    <div className='text-sm text-gray-400 sm:text-base'>Time</div>
+                    <div className='text-base sm:text-lg'>{format(scheduledDate, 'h:mm a')}</div>
                   </div>
                 </div>
               </>
@@ -104,62 +200,63 @@ function RouteComponent() {
 
             {tournament.roomId && (
               <div className='flex items-center'>
-                <div className='mr-3 flex h-5 w-5 items-center justify-center font-bold text-yellow-400'>#</div>
+                <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>#</div>
                 <div>
-                  <div className='text-sm text-gray-400'>Room ID</div>
-                  <div>{tournament.roomId}</div>
+                  <div className='text-sm text-gray-400 sm:text-base'>Room ID</div>
+                  <div className='text-base sm:text-lg'>{tournament.roomId}</div>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        <div className='rounded-lg bg-gray-950 p-5 shadow-sm'>
-          <h2 className='mb-4 text-xl font-semibold'>Prize & Fee Details</h2>
+        <div className='rounded-lg bg-gray-950 p-3 shadow-sm sm:p-5'>
+          <h2 className='mb-2 text-xl font-semibold sm:mb-4'>Prize & Fee Details</h2>
 
-          <div className='space-y-4'>
+          <div className='space-y-3 sm:space-y-4'>
             <div className='flex items-center'>
-              <DollarSign className='mr-3 h-5 w-5 text-green-400' />
+              <DollarSign className='mr-2 h-5 w-5 text-green-400 sm:mr-3' />
               <div>
-                <div className='text-sm text-gray-400'>Entry Fee</div>
-                <div>{tournament.entryFee || 0} coins</div>
+                <div className='text-sm text-gray-400 sm:text-base'>Entry Fee</div>
+                <div className='text-base sm:text-lg'>{tournament.entryFee || 0} coins</div>
               </div>
             </div>
 
             <div className='flex items-center'>
-              <Trophy className='mr-3 h-5 w-5 text-yellow-400' />
+              <Trophy className='mr-2 h-5 w-5 text-yellow-400 sm:mr-3' />
               <div>
-                <div className='text-sm text-gray-400'>Total Prize Pool</div>
-                <div>{tournament.prize || 0} coins</div>
+                <div className='text-sm text-gray-400 sm:text-base'>Total Prize Pool</div>
+                <div className='text-base sm:text-lg'>{tournament.prize || 0} coins</div>
               </div>
             </div>
 
             <div className='flex items-center'>
-              <div className='mr-3 flex h-5 w-5 items-center justify-center font-bold text-red-400'>K</div>
+              <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-red-400 sm:mr-3'>K</div>
               <div>
-                <div className='text-sm text-gray-400'>Per Kill Prize</div>
-                <div>{tournament.perKillPrize || 0} coins</div>
+                <div className='text-sm text-gray-400 sm:text-base'>Per Kill Prize</div>
+                <div className='text-base sm:text-lg'>{tournament.perKillPrize || 0} coins</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className='rounded-lg bg-gray-950 p-5 shadow-sm'>
-        <h2 className='mb-4 text-xl font-semibold'>Tournament Management</h2>
-        <div className='space-y-4'>
-          <div className='flex flex-wrap gap-3'>
-            <button className='rounded-md bg-blue-700 px-4 py-2 text-white transition-colors hover:bg-blue-600'>
-              Edit Tournament
-            </button>
-            <button className='rounded-md bg-green-700 px-4 py-2 text-white transition-colors hover:bg-green-600'>
-              View Participants
-            </button>
+      <div className='rounded-lg bg-gray-950 p-3 shadow-sm sm:p-5'>
+        <h2 className='mb-2 text-xl font-semibold sm:mb-4'>Tournament Management</h2>
+        <div className='space-y-3 sm:space-y-4'>
+          <div className='flex flex-wrap gap-2 sm:gap-3'>
             {!tournament.isEnded && (
-              <button className='rounded-md bg-yellow-700 px-4 py-2 text-white transition-colors hover:bg-yellow-600'>
-                End Tournament
-              </button>
+              <Button 
+                className='bg-yellow-500 hover:bg-yellow-400 text-white'
+              >
+                End Tournament (Todo)
+              </Button>
             )}
+            <Button 
+              className='bg-green-500 hover:bg-green-400 text-white'
+            >
+              View Participants
+            </Button>
           </div>
         </div>
       </div>

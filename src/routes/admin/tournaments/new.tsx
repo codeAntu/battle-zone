@@ -20,11 +20,7 @@ export const tournamentSchema = z
     }),
     name: z.string().min(1, 'Tournament name is required').max(50, 'Name must be less than 50 characters'),
     description: z.string().max(250, 'Description must be less than 250 characters').optional(),
-    roomId: z.coerce
-      .number()
-      .int('Room ID must be a valid integer')
-      .nonnegative('Room ID must be non-negative')
-      .optional(),
+    roomId: z.string().regex(/^\d*$/, 'Room ID must contain only numeric characters').optional(),
     entryFee: z.coerce.number().int('Entry fee must be a valid integer').nonnegative('Entry fee must be non-negative'),
     prize: z.coerce.number().int('Prize must be a valid integer').nonnegative('Prize must be non-negative'),
     perKillPrize: z.coerce
@@ -134,7 +130,7 @@ function RouteComponent() {
         game: validated.game,
         name: validated.name,
         description: validated.description,
-        roomId: validated.roomId,
+        roomId: validated.roomId?.toString(),
         entryFee: validated.entryFee,
         prize: validated.prize,
         perKillPrize: validated.perKillPrize,
@@ -305,13 +301,12 @@ function RouteComponent() {
 
           <div className='flex flex-col gap-1'>
             <label htmlFor='roomId' className='text-sm font-medium'>
-              Room ID
+              Room ID (can be added later)
             </label>
             <Input
               type='number'
               id='roomId'
               name='roomId'
-              placeholder='...'
               value={tournamentData.roomId}
               onChange={handleChange}
               className={errors.roomId ? 'border-red-500' : ''}

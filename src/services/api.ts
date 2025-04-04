@@ -7,23 +7,21 @@ const API = {
   userLogin: `${BASE_URL}/user/auth/login`,
   userRegister: `${BASE_URL}/user/auth/signup`,
   userVerify: `${BASE_URL}/user/auth/verify-otp`,
-  
+
   // admin auth
   adminLogin: `${BASE_URL}/admin/auth/login`,
   adminRegister: `${BASE_URL}/admin/auth/signup`,
   adminVerify: `${BASE_URL}/admin/auth/verify-otp`,
 
-  // game 
+  // game
   gameList: `${BASE_URL}/game/list`,
 
   // tournament
   createTournament: `${BASE_URL}/admin/tournaments/create`,
   getAdminTournaments: `${BASE_URL}/admin/tournaments`,
   getAdminTournamentsById: (id: string) => `${BASE_URL}/admin/tournaments/${id}`,
-  
-
-  
-
+  updateTournament: (id: string) => `${BASE_URL}/admin/tournaments/update/${id}`,
+  endTournament: (id: string) => `${BASE_URL}/admin/tournaments/end/${id}`,
 };
 
 export default API;

@@ -2,7 +2,7 @@ export type TournamentData = {
   game: 'PUBG' | 'FREEFIRE';
   name: string;
   description?: string;
-  roomId?: number;
+  roomId?: string;
   entryFee: number;
   prize: number;
   perKillPrize: number;
