@@ -18,6 +18,10 @@ const API = {
 
   // tournament
   createTournament: `${BASE_URL}/admin/tournaments/create`,
+  getAdminTournaments: `${BASE_URL}/admin/tournaments`,
+  getAdminTournamentsById: (id: string) => `${BASE_URL}/admin/tournaments/${id}`,
+  
+
   
 
 };

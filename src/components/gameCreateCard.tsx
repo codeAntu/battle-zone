@@ -3,16 +3,9 @@ import { Link } from '@tanstack/react-router';
 
 export function GameCreateCard(game: GameType) {
   // Determine if game name matches one of our allowed enum values
-  const validGameName = ["PUBG", "FREEFIRE"].includes(game.name.toUpperCase()) 
-    ? game.name.toUpperCase() 
-    : "PUBG";
 
   return (
-    <Link
-      to='/admin/tournaments/$gameName/new'
-      params={{ gameName: validGameName }}
-      className='relative overflow-hidden rounded-2xl'
-    >
+    <Link to='/admin/tournaments/new' className='relative overflow-hidden rounded-2xl'>
       <div>
         <img src={game.image} alt={game.name} />
       </div>

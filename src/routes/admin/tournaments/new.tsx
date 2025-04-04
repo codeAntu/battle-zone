@@ -51,17 +51,16 @@ export const tournamentSchema = z
     },
   );
 
-export const Route = createFileRoute('/admin/tournaments/$gameName/new')({
+export const Route = createFileRoute('/admin/tournaments/new')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { gameName } = Route.useParams();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const [tournamentData, setTournamentData] = useState({
-    game: gameName || 'PUBG',
+    game: 'PUBG',
     name: 'test name ',
     description: 'something',
     roomId: '',
@@ -91,10 +90,8 @@ function RouteComponent() {
       // /admin/tournaments/$gameName/$tournamentsId'
       // Redirect to the tournament details page
       const tournamentId = data.tournament.id;
-      const gameName = tournamentData.game.toLowerCase();
       navigate({
-        to: `/admin/tournaments/${gameName}/${tournamentId}`,
-        search: { gameName },
+        to: `/admin/tournaments/${tournamentId}`,
       });
 
       console.log();
