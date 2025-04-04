@@ -12,6 +12,11 @@ const API = {
   adminLogin: `${BASE_URL}/admin/auth/login`,
   adminRegister: `${BASE_URL}/admin/auth/signup`,
   adminVerify: `${BASE_URL}/admin/auth/verify-otp`,
+
+
+  // game 
+  gameList: `${BASE_URL}/game/list`,
+
 };
 
 export default API;
