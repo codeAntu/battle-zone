@@ -37,10 +37,12 @@ function RouteComponent() {
     },
     onSuccess: () => {
       toast.success('Tournament updated successfully');
-      setDialogOpen(false); // Close dialog on success
-      queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] }); // Refresh data
+      setDialogOpen(false); 
+      queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] }); 
     },
   });
+
+  console.log(data);
 
   if (isLoading) {
     return (
@@ -72,8 +74,6 @@ function RouteComponent() {
 
   const tournament = data.tournament;
   const scheduledDate = tournament.scheduledAt ? new Date(tournament.scheduledAt) : null;
-
-  // Determine status based on isEnded property
   const tournamentStatus = tournament.isEnded ? 'COMPLETED' : 'ONGOING';
 
   return (
@@ -118,8 +118,6 @@ function RouteComponent() {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
                   const newRoomId = formData.get('roomId') as string;
-
-                  // Send the roomId as a string
                   updateTournamentMutation(newRoomId);
                 }}
               >
@@ -173,7 +171,7 @@ function RouteComponent() {
               <div>
                 <div className='text-sm text-gray-400 sm:text-base'>Participants</div>
                 <div className='text-base sm:text-lg'>
-                  {tournament.maxParticipants || 0} / {tournament.maxParticipants}
+                  {tournament.currentParticipants || 0} / {tournament.maxParticipants}
                 </div>
               </div>
             </div>
@@ -246,17 +244,9 @@ function RouteComponent() {
         <div className='space-y-3 sm:space-y-4'>
           <div className='flex flex-wrap gap-2 sm:gap-3'>
             {!tournament.isEnded && (
-              <Button 
-                className='bg-yellow-500 hover:bg-yellow-400 text-white'
-              >
-                End Tournament (Todo)
-              </Button>
+              <Button className='bg-yellow-500 text-white hover:bg-yellow-400'>End Tournament (Todo)</Button>
             )}
-            <Button 
-              className='bg-green-500 hover:bg-green-400 text-white'
-            >
-              View Participants
-            </Button>
+            <Button className='bg-green-500 text-white hover:bg-green-400'>View Participants</Button>
           </div>
         </div>
       </div>

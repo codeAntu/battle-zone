@@ -26,6 +26,7 @@ export interface Tournament {
   prize: number;
   perKillPrize: number;
   maxParticipants: number;
+  currentParticipants: number;
   scheduledAt: Date;
   isEnded: boolean;
   createdAt: Date;
@@ -43,4 +44,13 @@ export interface TournamentsResponse {
 export interface isParticipatedResponse {
   message: string;
   participation: boolean;
+}
+
+export interface TournamentByNameResponse {
+  message: string;
+  tournaments: TournamentElement[];
+}
+
+export interface TournamentElement {
+  tournament: Tournament;
 }

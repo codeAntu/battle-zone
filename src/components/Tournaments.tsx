@@ -84,12 +84,9 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
               </div>
             </div>
             <div className='flex flex-col gap-1 text-sm font-semibold text-blue-500/80'>
-              <div className='flex items-center gap-2'>
-                <Trophy className='size-5 text-yellow-400' />
-                <div>
-                  <div className='text-xs text-gray-400'>Prize Pool</div>
-                  <div className='text-sm text-yellow-400'>₹{tournament.prize}</div>
-                </div>
+              <div className='flex items-center gap-2 text-green-500/90'>
+                <Trophy className='size-5' />
+                <div className='text-sm'>₹{tournament.prize}</div>
               </div>
               <div className='flex items-center gap-2'>
                 <Gamepad2 className='size-5' />
@@ -106,9 +103,7 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
           <Button className='w-full rounded-full font-semibold'>Participate ( ₹{tournament.entryFee} )</Button>
         </TournamentDrawer>
       </div>
-      <div>
-        
-      </div>
+      <div></div>
     </div>
   );
 }
@@ -148,7 +143,7 @@ function TournamentDrawer({ children, data: tournament }: { children: React.Reac
       </DrawerTrigger>
       <DrawerContent className='m-auto max-w-[800px] border border-gray-800 bg-gray-950'>
         <div className='max-w-7xl px-4 pb-6 text-white'>
-          <DialogTitle>
+          <DialogTitle className='flex items-center justify-center py-1.5'>
             <span className='py-3 text-center text-xl font-semibold'>{tournament.name}</span>
           </DialogTitle>
           <div className='rounded-lg border border-gray-800 bg-white/5 p-4 text-white shadow-lg sm:p-6'>

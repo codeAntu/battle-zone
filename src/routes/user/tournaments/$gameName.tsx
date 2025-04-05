@@ -24,13 +24,12 @@ function RouteComponent() {
     return <div className='p-4 text-red-500'>Error loading tournaments for {gameName}.</div>;
   }
 
-  console.log(data?.tournaments);
+  console.log(data);
 
   return (
     <div className='p-4'>
       <h1 className='mb-4 text-2xl font-bold'>{gameName} Tournaments</h1>
-      {/* Use data?.tournament which matches the TournamentResponse interface */}
-      <Tournaments tournaments={data?.tournaments || []} />
+      <Tournaments tournaments={data?.tournaments?.map((item) => item.tournament) || []} />
     </div>
   );
 }
