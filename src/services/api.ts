@@ -26,6 +26,7 @@ const API = {
   // user tournaments
   getUserTournamentByName: (name: string) => `${BASE_URL}/user/tournaments/game/${name}`,
   participateInTournament: (id: string) => `${BASE_URL}/user/tournaments/participate/${id}`,
+  isParticipated: (id: string) => `${BASE_URL}/user/tournaments/isParticipated/${id}`,
 };
 
 export default API;

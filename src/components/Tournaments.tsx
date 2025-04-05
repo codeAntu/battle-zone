@@ -1,15 +1,43 @@
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { format } from 'date-fns';
-import { BadgeIndianRupee, Calendar, Clock, Copy, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
-import { Button } from './ui/button';
+import { isParticipated, participateInTournament } from '@/services/tournament';
 import { Tournament as TournamentType } from '@/services/types';
-import toast from 'react-hot-toast';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import {
+  ArrowLeft,
+  BadgeIndianRupee,
+  Calendar,
+  Clock,
+  Copy,
+  Gamepad2,
+  IndianRupee,
+  Trophy,
+  UserRound,
+} from 'lucide-react';
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { participateInTournament } from '@/services/tournament';
+import toast from 'react-hot-toast';
+import { Button } from './ui/button';
+import { DialogTitle } from './ui/dialog';
 
 export default function Tournaments({ tournaments }: { tournaments: TournamentType[] }) {
   console.log(tournaments);
+  if (tournaments.length === 0) {
+    return (
+      <div className='flex h-[50dvh] flex-col items-center justify-center text-center text-gray-500'>
+        <div className='mb-4 flex items-center gap-2 text-yellow-500/60'>
+          <Trophy className='h-6 w-6' />
+          <span className='text-lg font-semibold'>No tournaments available</span>
+        </div>
+        <Button
+          onClick={() => window.history.back()}
+          className='flex items-center gap-2 rounded-full px-6 py-2 text-gray-800'
+        >
+          <ArrowLeft className='h-4 w-4' />
+          Go Back
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
@@ -78,13 +106,16 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
           <Button className='w-full rounded-full font-semibold'>Participate ( ₹{tournament.entryFee} )</Button>
         </TournamentDrawer>
       </div>
+      <div>
+        
+      </div>
     </div>
   );
 }
 
-function TournamentDrawer({ children, data }: { children: React.ReactNode; data: TournamentType }) {
-  const date = format(new Date(data.scheduledAt), 'dd MMM yyyy');
-  const time = format(new Date(data.scheduledAt), 'hh:mm a');
+function TournamentDrawer({ children, data: tournament }: { children: React.ReactNode; data: TournamentType }) {
+  const date = format(new Date(tournament.scheduledAt), 'dd MMM yyyy');
+  const time = format(new Date(tournament.scheduledAt), 'hh:mm a');
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutate, isPending } = useMutation({
@@ -103,6 +134,13 @@ function TournamentDrawer({ children, data }: { children: React.ReactNode; data:
     },
   });
 
+  const { data } = useQuery({
+    queryKey: ['isParticipated', tournament.id],
+    queryFn: () => isParticipated(tournament.id.toLocaleString()),
+  });
+
+  console.log('isParticipated', data?.participation);
+
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger className='w-full' onClick={() => setIsOpen(true)}>
@@ -110,15 +148,17 @@ function TournamentDrawer({ children, data }: { children: React.ReactNode; data:
       </DrawerTrigger>
       <DrawerContent className='m-auto max-w-[800px] border border-gray-800 bg-gray-950'>
         <div className='max-w-7xl px-4 pb-6 text-white'>
-          <h1 className='py-3 text-center text-xl font-semibold'>{data.name}</h1>
+          <DialogTitle>
+            <span className='py-3 text-center text-xl font-semibold'>{tournament.name}</span>
+          </DialogTitle>
           <div className='rounded-lg border border-gray-800 bg-white/5 p-4 text-white shadow-lg sm:p-6'>
             <div className='flex items-center'>
               <Trophy className='mr-3 h-6 w-6 text-yellow-400' />
               <div>
                 <div className='text-sm text-gray-400'>Total Prize Pool</div>
-                <div className='text-lg font-semibold text-yellow-400'>₹{data.prize}</div>
+                <div className='text-lg font-semibold text-yellow-400'>₹{tournament.prize}</div>
                 <div className='text-xs text-gray-400'>
-                  Entry Fee: ₹{data.entryFee} • Per Kill: ₹{data.perKillPrize}
+                  Entry Fee: ₹{tournament.entryFee} • Per Kill: ₹{tournament.perKillPrize}
                 </div>
               </div>
             </div>
@@ -131,13 +171,13 @@ function TournamentDrawer({ children, data }: { children: React.ReactNode; data:
                   </div>
                   <div>
                     <div className='text-sm text-gray-400 sm:text-base'>Room ID</div>
-                    <div className='text-base sm:text-lg'>{data.roomId || 'No Room ID assigned yet'}</div>
+                    <div className='text-base sm:text-lg'>{tournament.roomId || 'No Room ID assigned yet'}</div>
                   </div>
                 </div>
-                {data.roomId && (
+                {tournament.roomId && (
                   <Button
                     onClick={() => {
-                      navigator.clipboard.writeText(String(data.roomId || ''));
+                      navigator.clipboard.writeText(String(tournament.roomId || ''));
                       toast.success('Room ID copied to clipboard');
                     }}
                     className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
@@ -150,7 +190,7 @@ function TournamentDrawer({ children, data }: { children: React.ReactNode; data:
             </div>
 
             <p className='line-clamp-3 p-2'>
-              <span className='font-medium'>Description:</span> {data.description || 'No description available'}
+              <span className='font-medium'>Description:</span> {tournament.description || 'No description available'}
             </p>
 
             <div className='grid grid-cols-2 items-center justify-between gap-2 px-2'>
@@ -165,43 +205,51 @@ function TournamentDrawer({ children, data }: { children: React.ReactNode; data:
                 </div>
                 <div className='flex items-center gap-2 text-sm text-green-500/80'>
                   <IndianRupee className='size-5' />
-                  <p className=''>Price: ₹{data.entryFee}</p>
+                  <p className=''>Price: ₹{tournament.entryFee}</p>
                 </div>
               </div>
               <div className='flex flex-col gap-1 text-sm font-semibold text-blue-500/80'>
                 <div className='flex items-center gap-2'>
                   <Gamepad2 className='size-5' />
-                  <p>{data.game}</p>
+                  <p>{tournament.game}</p>
                 </div>
                 <div className='flex items-center gap-2'>
                   <UserRound className='size-5' />
-                  <p>{data.maxParticipants} Players</p>
+                  <p>{tournament.maxParticipants} Players</p>
                 </div>
                 <div className='flex items-center gap-2 text-green-500/80'>
                   <BadgeIndianRupee className='size-5' />
-                  <p>Per Kill: ₹{data.perKillPrize}</p>
+                  <p>Per Kill: ₹{tournament.perKillPrize}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className='w-full space-y-2 py-2'>
-            <div className='text-center text-gray-300'>Do you want to participate in this tournament?</div>
-            <div className='flex w-full justify-center gap-4'>
-              <Button
-                onClick={() => setIsOpen(false)}
-                className='grow rounded-full bg-gray-500 font-semibold text-white'
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => mutate(data.id.toLocaleString())}
-                disabled={isPending}
-                className='grow rounded-full font-semibold'
-              >
-                {isPending ? 'Processing...' : 'Participate'}
-              </Button>
+
+          {data?.participation ? (
+            <div className='mt-4 flex items-center justify-center rounded-full bg-green-500 py-2 text-sm font-semibold text-white'>
+              You have already participated in this tournament
             </div>
-          </div>
+          ) : (
+            <div className='w-full space-y-2 py-2'>
+              <div className='text-center text-gray-300'>Do you want to participate in this tournament?</div>
+
+              <div className='flex w-full justify-center gap-4'>
+                <Button
+                  onClick={() => setIsOpen(false)}
+                  className='grow rounded-full bg-gray-500 font-semibold text-white'
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => mutate(tournament.id.toLocaleString())}
+                  disabled={isPending}
+                  className='grow rounded-full font-semibold'
+                >
+                  {isPending ? 'Processing...' : 'Participate'}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </DrawerContent>
     </Drawer>

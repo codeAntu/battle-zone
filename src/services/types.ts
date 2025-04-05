@@ -40,3 +40,7 @@ export interface TournamentsResponse {
   message: string;
   tournaments: Tournament[];
 }
+export interface isParticipatedResponse {
+  message: string;
+  participation: boolean;
+}
