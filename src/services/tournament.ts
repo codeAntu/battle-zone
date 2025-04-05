@@ -26,3 +26,7 @@ export const endTournament = async (id: string) => {
 export const getUserTournamentByName = async (gameName: string) => {
   return getApi<TournamentsResponse>(API.getUserTournamentByName(gameName));
 };
+
+export const participateInTournament = async (id: string) => {
+  return postApi(API.participateInTournament(id));
+};

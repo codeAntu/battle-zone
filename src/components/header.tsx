@@ -13,6 +13,7 @@ import { appData } from '@/conts/data';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { Menu, MoveRight, X } from 'lucide-react';
 import { useState } from 'react';
+import { LogoutButton } from './LogoutButton';
 export default function Header() {
   const navigationItems = [
     {
@@ -164,7 +165,7 @@ export default function Header() {
           </Button>
           <div className='hidden border-r md:inline'></div>
           <Button onClick={() => navigate({ to: '/user/login' })}>Sign in</Button>
-          {/* <Button>Get started</Button> */}
+          <LogoutButton className='' />
         </div>
       </div>
     </header>

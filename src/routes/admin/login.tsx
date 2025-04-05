@@ -9,7 +9,7 @@ import { useTokenStore } from '@/store/store';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/admin/login')({
   component: AdminSignInPage,
@@ -81,7 +81,6 @@ export function AdminSignInPage() {
       }
 
       setIsVerify(true);
-      setData({ ...data, email: response.admin.email });
       setError('');
       toast.success('Admin registration successful! Please verify your email.');
       setTimeout(() => {
@@ -133,6 +132,7 @@ export function AdminSignInPage() {
         return;
       }
 
+
       verifyMutation({
         email: data.email,
         verificationCode: otp,
@@ -152,14 +152,6 @@ export function AdminSignInPage() {
 
   return (
     <div className='grid w-full grow items-center p-4 sm:justify-center'>
-      <Toaster
-        position='top-right'
-        reverseOrder={false}
-        containerStyle={{
-          zIndex: 1000,
-          marginTop: '50px',
-        }}
-      />
       <Card className='w-full sm:w-96'>
         <CardHeader className='flex flex-col items-center gap-y-2'>
           <CardTitle>{appData.name} - Admin Panel</CardTitle>

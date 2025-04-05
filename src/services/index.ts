@@ -67,7 +67,7 @@ function handleError(error: any) {
       return { message: error.response.data.message, statusCode: 400, isAlert: true };
     default:
       return {
-        message: error.response.data.message || DEFAULT_ERR,
+        message: error.response.data.message || error.response.data.error || DEFAULT_ERR,
         statusCode: error.response.status || 500,
         isAlert: true,
         error: error.response.data.error,

@@ -1,4 +1,4 @@
-import Games from '@/components/games';
+import Tournaments from '@/components/Tournaments';
 import { getUserTournamentByName } from '@/services/tournament';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useParams } from '@tanstack/react-router';
@@ -30,7 +30,7 @@ function RouteComponent() {
     <div className='p-4'>
       <h1 className='mb-4 text-2xl font-bold'>{gameName} Tournaments</h1>
       {/* Use data?.tournament which matches the TournamentResponse interface */}
-      <Games tournaments={data?.tournaments || []} />
+      <Tournaments tournaments={data?.tournaments || []} />
     </div>
   );
 }
