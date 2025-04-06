@@ -22,11 +22,16 @@ const API = {
   getAdminTournamentsById: (id: string) => `${BASE_URL}/admin/tournaments/${id}`,
   updateTournament: (id: string) => `${BASE_URL}/admin/tournaments/update/${id}`,
   endTournament: (id: string) => `${BASE_URL}/admin/tournaments/end/${id}`,
+  getAdminTournamentHistory: `${BASE_URL}/admin/tournaments/history`,
+  getAdminCurrentTournaments: `${BASE_URL}/admin/tournaments/current`,
+// participants/:id"
+  getTournamentParticipants: (id: string) => `${BASE_URL}/admin/tournaments/participants/${id}`,  
 
   // user tournaments
   getUserTournamentByName: (name: string) => `${BASE_URL}/user/tournaments/game/${name}`,
   participateInTournament: (id: string) => `${BASE_URL}/user/tournaments/participate/${id}`,
   isParticipated: (id: string) => `${BASE_URL}/user/tournaments/isParticipated/${id}`,
+  getParticipatedTournaments: `${BASE_URL}/user/tournaments/test`,
 };
 
 export default API;

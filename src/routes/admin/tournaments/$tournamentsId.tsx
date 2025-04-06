@@ -1,3 +1,4 @@
+import TournamentNotFound from '@/components/TournamentNotFound';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { getAdminTournamentsById, updateTournament } from '@/services/tournament';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, useParams } from '@tanstack/react-router';
+import { createFileRoute, useParams, useRouter } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import { CalendarIcon, Clock, Copy, DollarSign, PencilIcon, ShieldAlert, Trophy, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -24,6 +25,7 @@ function RouteComponent() {
   const { tournamentsId } = useParams({ from: '/admin/tournaments/$tournamentsId' });
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const router = useRouter();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['tournaments', tournamentsId],
@@ -37,11 +39,11 @@ function RouteComponent() {
     },
     onSuccess: () => {
       toast.success('Tournament updated successfully');
-      setDialogOpen(false); 
-      queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] }); 
+      setDialogOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] });
     },
   });
-
+;
   console.log(data);
 
   if (isLoading) {
@@ -63,13 +65,7 @@ function RouteComponent() {
   }
 
   if (!data?.tournament) {
-    return (
-      <div className='p-5 text-center'>
-        <ShieldAlert className='mx-auto mb-4 h-12 w-12 text-yellow-500' />
-        <h2 className='text-xl font-bold'>Tournament Not Found</h2>
-        <p className='text-gray-400'>The requested tournament could not be found</p>
-      </div>
-    );
+    return <TournamentNotFound />;
   }
 
   const tournament = data.tournament;
@@ -244,7 +240,17 @@ function RouteComponent() {
         <div className='space-y-3 sm:space-y-4'>
           <div className='flex flex-wrap gap-2 sm:gap-3'>
             {!tournament.isEnded && (
-              <Button className='bg-yellow-500 text-white hover:bg-yellow-400'>End Tournament (Todo)</Button>
+              <Button 
+                className='bg-yellow-500 text-white hover:bg-yellow-400'
+                onClick={() => {
+                  router.navigate({
+                    to: '/admin/tournaments/end/$tournamentsId',
+                    params: { tournamentsId: tournamentsId },
+                  });
+                }}
+              >
+                End Tournament
+              </Button>
             )}
             <Button className='bg-green-500 text-white hover:bg-green-400'>View Participants</Button>
           </div>

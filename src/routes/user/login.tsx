@@ -78,7 +78,7 @@ function Login() {
         return;
       }
       setIsVerify(true);
-      setData({ ...data, email: response.user.email });
+      // setData({ ...data, email: response.user.email });
       setError('');
       toast.success('Registration successful! Please verify your email.');
       setTimeout(() => {

@@ -1,11 +1,12 @@
 import { getApi, postApi } from '.';
 import API from './api';
 import {
-  adminTournamentData,
   isParticipatedResponse,
+  participantResponse,
   TournamentByNameResponse,
   TournamentData,
   TournamentResponse,
+  TournamentsResponse,
 } from './types';
 
 export const createTournament = async (data: TournamentData) => {
@@ -18,15 +19,15 @@ export const getAdminTournaments = async () => {
 };
 
 export const getAdminTournamentsById = async (id: string) => {
-  return getApi<adminTournamentData>(API.getAdminTournamentsById(id));
+  return getApi<TournamentResponse>(API.getAdminTournamentsById(id));
 };
 
 export const updateTournament = async (id: string, roomId: string) => {
   return postApi<TournamentResponse>(API.updateTournament(id), { roomId });
 };
 
-export const endTournament = async (id: string) => {
-  return postApi<TournamentResponse>(API.endTournament(id), {});
+export const endTournament = async (id: string, winnerId?: string) => {
+  return postApi<TournamentResponse>(API.endTournament(id), winnerId ? { winnerId } : {});
 };
 
 export const getUserTournamentByName = async (gameName: string) => {
@@ -39,4 +40,20 @@ export const participateInTournament = async (id: string) => {
 
 export const isParticipated = async (id: string) => {
   return getApi<isParticipatedResponse>(API.isParticipated(id));
+};
+
+export const getParticipatedTournaments = async () => {
+  return getApi(API.getParticipatedTournaments);
+};
+
+export const getAdminTournamentHistory = async () => {
+  return getApi<TournamentsResponse>(API.getAdminTournamentHistory);
+};
+
+export const getAdminCurrentTournaments = async () => {
+  return getApi<TournamentsResponse>(API.getAdminCurrentTournaments);
+};
+
+export const getTournamentParticipants = async (id: string) => {
+  return getApi<participantResponse>(API.getTournamentParticipants(id));
 };

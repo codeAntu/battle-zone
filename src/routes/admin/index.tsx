@@ -13,12 +13,12 @@ const pages = [
   },
   {
     name: 'View Tournaments',
-    path: '/admin/tournaments/currentTournaments',
+    path: '/admin/tournaments/current',
     color: 'bg-green-500',
   },
   {
     name: 'View Finished Tournaments',
-    path: '/admin/tournaments/finishedTournaments',
+    path: '/admin/tournaments/history',
     color: 'bg-gray-500',
   },
 ];
@@ -30,12 +30,7 @@ function RouteComponent() {
         <div className='p text-2xl font-semibold'>Pages</div>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {pages.map((page) => (
-            <NavCard
-              key={page.name}
-              name={page.name}
-              path={page.path}
-              color={page.color}
-            />
+            <NavCard key={page.name} name={page.name} path={page.path} color={page.color} />
           ))}
         </div>
       </div>

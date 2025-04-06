@@ -123,13 +123,14 @@ function TournamentDrawer({ children, data: tournament }: { children: React.Reac
       }
       toast.success('Successfully participated in the tournament');
       setIsOpen(false);
+      refetch();
     },
     onError: () => {
       toast.error('Failed to participate in the tournament');
     },
   });
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['isParticipated', tournament.id],
     queryFn: () => isParticipated(tournament.id.toLocaleString()),
   });

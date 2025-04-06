@@ -1,3 +1,5 @@
+import { getParticipatedTournaments } from '@/services/tournament';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/user/participated-tournaments')({
@@ -5,6 +7,13 @@ export const Route = createFileRoute('/user/participated-tournaments')({
 });
 
 function RouteComponent() {
+  const { data } = useQuery({
+    queryKey: ['participated-tournaments'],
+    queryFn: getParticipatedTournaments,
+  });
+
+  console.log(data);
+
   return (
     <div className='p-4'>
       <div className='space-y-2.5'>

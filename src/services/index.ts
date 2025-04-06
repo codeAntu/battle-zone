@@ -22,8 +22,8 @@ export function exe() {
     const token = useTokenStore.getState().token;
     const userRole = useTokenStore.getState().role;
 
-    console.log('userRole', userRole);
-    console.log('token', token);
+    // console.log('userRole', userRole);
+    // console.log('token', token);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

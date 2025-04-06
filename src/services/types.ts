@@ -33,10 +33,6 @@ export interface Tournament {
   updatedAt: Date;
 }
 
-export interface adminTournamentData {
-  message: string;
-  tournament: Tournament;
-}
 export interface TournamentsResponse {
   message: string;
   tournaments: Tournament[];
@@ -53,4 +49,16 @@ export interface TournamentByNameResponse {
 
 export interface TournamentElement {
   tournament: Tournament;
+}
+export interface participantResponse {
+  message: string;
+  participants: Participant[];
+}
+
+export interface Participant {
+  id: number;
+  joinedAt: Date;
+  name: string;
+  email: string;
+  userId: number;
 }
