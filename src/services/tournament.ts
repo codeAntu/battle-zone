@@ -62,3 +62,7 @@ export const getTournamentParticipants = async (id: string) => {
 export const getUserWinnings = async () => {
   return getApi<WinningResponse>(API.getUserWinnings);
 };
+
+export const getUserTournamentHistory = async () => {
+  return getApi<TournamentsResponse>(API.getUserTournamentHistory);
+};

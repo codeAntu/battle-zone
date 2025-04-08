@@ -1,4 +1,3 @@
-
 export type TournamentData = {
   game: 'PUBG' | 'FREEFIRE';
   name: string;
@@ -70,7 +69,7 @@ export interface WinningResponse {
 
 export interface Datum {
   tournament: Tournament;
-  winning: Winning;
+  winnings: Winning;
 }
 
 export interface Winning {

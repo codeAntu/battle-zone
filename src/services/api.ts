@@ -24,8 +24,8 @@ const API = {
   endTournament: (id: string) => `${BASE_URL}/admin/tournaments/end/${id}`,
   getAdminTournamentHistory: `${BASE_URL}/admin/tournaments/history`,
   getAdminCurrentTournaments: `${BASE_URL}/admin/tournaments/current`,
-// participants/:id"
-  getTournamentParticipants: (id: string) => `${BASE_URL}/admin/tournaments/participants/${id}`,  
+  getTournamentParticipants: (id: string) => `${BASE_URL}/admin/tournaments/participants/${id}`,
+  getUserTournamentHistory: `${BASE_URL}/admin/tournaments/history`,  
 
   // user tournaments
   getUserTournamentByName: (name: string) => `${BASE_URL}/user/tournaments/game/${name}`,

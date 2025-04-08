@@ -56,8 +56,8 @@ function RouteComponent() {
               <Game
                 key={index}
                 tournament={item.tournament}
-                amount={item.winning.amount}
-                date={item.winning.createdAt}
+                amount={item.winnings.amount}
+                date={item.winnings.createdAt}
               />
             ))}
           </div>
