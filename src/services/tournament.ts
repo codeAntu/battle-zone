@@ -7,6 +7,7 @@ import {
   TournamentData,
   TournamentResponse,
   TournamentsResponse,
+  WinningResponse,
 } from './types';
 
 export const createTournament = async (data: TournamentData) => {
@@ -43,7 +44,7 @@ export const isParticipated = async (id: string) => {
 };
 
 export const getParticipatedTournaments = async () => {
-  return getApi(API.getParticipatedTournaments);
+  return getApi<TournamentsResponse>(API.getParticipatedTournaments);
 };
 
 export const getAdminTournamentHistory = async () => {
@@ -56,4 +57,8 @@ export const getAdminCurrentTournaments = async () => {
 
 export const getTournamentParticipants = async (id: string) => {
   return getApi<participantResponse>(API.getTournamentParticipants(id));
+};
+
+export const getUserWinnings = async () => {
+  return getApi<WinningResponse>(API.getUserWinnings);
 };

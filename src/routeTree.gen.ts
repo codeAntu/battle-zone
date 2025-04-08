@@ -16,9 +16,10 @@ import { Route as IndexImport } from './routes/index'
 import { Route as UserIndexImport } from './routes/user/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as UserWithdrawImport } from './routes/user/withdraw'
+import { Route as UserWinningsImport } from './routes/user/winnings'
+import { Route as UserProfileImport } from './routes/user/profile'
 import { Route as UserParticipatedTournamentsImport } from './routes/user/participated-tournaments'
 import { Route as UserLoginImport } from './routes/user/login'
-import { Route as UserHistoryImport } from './routes/user/history'
 import { Route as UserDepositImport } from './routes/user/deposit'
 import { Route as AdminLoginImport } from './routes/admin/login'
 import { Route as UserTournamentsIndexImport } from './routes/user/tournaments/index'
@@ -63,6 +64,18 @@ const UserWithdrawRoute = UserWithdrawImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const UserWinningsRoute = UserWinningsImport.update({
+  id: '/user/winnings',
+  path: '/user/winnings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserProfileRoute = UserProfileImport.update({
+  id: '/user/profile',
+  path: '/user/profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const UserParticipatedTournamentsRoute =
   UserParticipatedTournamentsImport.update({
     id: '/user/participated-tournaments',
@@ -73,12 +86,6 @@ const UserParticipatedTournamentsRoute =
 const UserLoginRoute = UserLoginImport.update({
   id: '/user/login',
   path: '/user/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const UserHistoryRoute = UserHistoryImport.update({
-  id: '/user/history',
-  path: '/user/history',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -183,13 +190,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserDepositImport
       parentRoute: typeof rootRoute
     }
-    '/user/history': {
-      id: '/user/history'
-      path: '/user/history'
-      fullPath: '/user/history'
-      preLoaderRoute: typeof UserHistoryImport
-      parentRoute: typeof rootRoute
-    }
     '/user/login': {
       id: '/user/login'
       path: '/user/login'
@@ -202,6 +202,20 @@ declare module '@tanstack/react-router' {
       path: '/user/participated-tournaments'
       fullPath: '/user/participated-tournaments'
       preLoaderRoute: typeof UserParticipatedTournamentsImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/profile': {
+      id: '/user/profile'
+      path: '/user/profile'
+      fullPath: '/user/profile'
+      preLoaderRoute: typeof UserProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/winnings': {
+      id: '/user/winnings'
+      path: '/user/winnings'
+      fullPath: '/user/winnings'
+      preLoaderRoute: typeof UserWinningsImport
       parentRoute: typeof rootRoute
     }
     '/user/withdraw': {
@@ -298,9 +312,10 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin/login': typeof AdminLoginRoute
   '/user/deposit': typeof UserDepositRoute
-  '/user/history': typeof UserHistoryRoute
   '/user/login': typeof UserLoginRoute
   '/user/participated-tournaments': typeof UserParticipatedTournamentsRoute
+  '/user/profile': typeof UserProfileRoute
+  '/user/winnings': typeof UserWinningsRoute
   '/user/withdraw': typeof UserWithdrawRoute
   '/admin': typeof AdminIndexRoute
   '/user': typeof UserIndexRoute
@@ -320,9 +335,10 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin/login': typeof AdminLoginRoute
   '/user/deposit': typeof UserDepositRoute
-  '/user/history': typeof UserHistoryRoute
   '/user/login': typeof UserLoginRoute
   '/user/participated-tournaments': typeof UserParticipatedTournamentsRoute
+  '/user/profile': typeof UserProfileRoute
+  '/user/winnings': typeof UserWinningsRoute
   '/user/withdraw': typeof UserWithdrawRoute
   '/admin': typeof AdminIndexRoute
   '/user': typeof UserIndexRoute
@@ -343,9 +359,10 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin/login': typeof AdminLoginRoute
   '/user/deposit': typeof UserDepositRoute
-  '/user/history': typeof UserHistoryRoute
   '/user/login': typeof UserLoginRoute
   '/user/participated-tournaments': typeof UserParticipatedTournamentsRoute
+  '/user/profile': typeof UserProfileRoute
+  '/user/winnings': typeof UserWinningsRoute
   '/user/withdraw': typeof UserWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/user/': typeof UserIndexRoute
@@ -367,9 +384,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin/login'
     | '/user/deposit'
-    | '/user/history'
     | '/user/login'
     | '/user/participated-tournaments'
+    | '/user/profile'
+    | '/user/winnings'
     | '/user/withdraw'
     | '/admin'
     | '/user'
@@ -388,9 +406,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin/login'
     | '/user/deposit'
-    | '/user/history'
     | '/user/login'
     | '/user/participated-tournaments'
+    | '/user/profile'
+    | '/user/winnings'
     | '/user/withdraw'
     | '/admin'
     | '/user'
@@ -409,9 +428,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin/login'
     | '/user/deposit'
-    | '/user/history'
     | '/user/login'
     | '/user/participated-tournaments'
+    | '/user/profile'
+    | '/user/winnings'
     | '/user/withdraw'
     | '/admin/'
     | '/user/'
@@ -432,9 +452,10 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminLoginRoute: typeof AdminLoginRoute
   UserDepositRoute: typeof UserDepositRoute
-  UserHistoryRoute: typeof UserHistoryRoute
   UserLoginRoute: typeof UserLoginRoute
   UserParticipatedTournamentsRoute: typeof UserParticipatedTournamentsRoute
+  UserProfileRoute: typeof UserProfileRoute
+  UserWinningsRoute: typeof UserWinningsRoute
   UserWithdrawRoute: typeof UserWithdrawRoute
   AdminIndexRoute: typeof AdminIndexRoute
   UserIndexRoute: typeof UserIndexRoute
@@ -454,9 +475,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminLoginRoute: AdminLoginRoute,
   UserDepositRoute: UserDepositRoute,
-  UserHistoryRoute: UserHistoryRoute,
   UserLoginRoute: UserLoginRoute,
   UserParticipatedTournamentsRoute: UserParticipatedTournamentsRoute,
+  UserProfileRoute: UserProfileRoute,
+  UserWinningsRoute: UserWinningsRoute,
   UserWithdrawRoute: UserWithdrawRoute,
   AdminIndexRoute: AdminIndexRoute,
   UserIndexRoute: UserIndexRoute,
@@ -485,9 +507,10 @@ export const routeTree = rootRoute
         "/about",
         "/admin/login",
         "/user/deposit",
-        "/user/history",
         "/user/login",
         "/user/participated-tournaments",
+        "/user/profile",
+        "/user/winnings",
         "/user/withdraw",
         "/admin/",
         "/user/",
@@ -514,14 +537,17 @@ export const routeTree = rootRoute
     "/user/deposit": {
       "filePath": "user/deposit.tsx"
     },
-    "/user/history": {
-      "filePath": "user/history.tsx"
-    },
     "/user/login": {
       "filePath": "user/login.tsx"
     },
     "/user/participated-tournaments": {
       "filePath": "user/participated-tournaments.tsx"
+    },
+    "/user/profile": {
+      "filePath": "user/profile.tsx"
+    },
+    "/user/winnings": {
+      "filePath": "user/winnings.tsx"
     },
     "/user/withdraw": {
       "filePath": "user/withdraw.tsx"

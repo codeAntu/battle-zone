@@ -1,4 +1,5 @@
 import Tournaments from '@/components/Tournaments';
+import TournamentNotFound from '@/components/TournamentNotFound';
 import { getUserTournamentByName } from '@/services/tournament';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useParams } from '@tanstack/react-router';
@@ -25,11 +26,19 @@ function RouteComponent() {
   }
 
   console.log(data);
-
+  
+  const tournaments = data?.tournaments?.map((item) => item.tournament) || [];
+  
   return (
     <div className='p-4'>
-      <h1 className='mb-4 text-2xl font-bold'>{gameName} Tournaments</h1>
-      <Tournaments tournaments={data?.tournaments?.map((item) => item.tournament) || []} />
+      {tournaments.length === 0 ? (
+        <TournamentNotFound />
+      ) : (
+        <>
+          <h1 className='mb-4 text-2xl font-bold'>{gameName} Tournaments</h1>
+          <Tournaments tournaments={tournaments} />
+        </>
+      )}
     </div>
   );
 }

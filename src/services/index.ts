@@ -20,11 +20,6 @@ export interface ServerResponse {
 export function exe() {
   axios.interceptors.request.use((config) => {
     const token = useTokenStore.getState().token;
-    const userRole = useTokenStore.getState().role;
-
-    // console.log('userRole', userRole);
-    // console.log('token', token);
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

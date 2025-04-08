@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import NavCard from '@/components/NavCard';
-import { Trophy, Gamepad2, UserRound, History } from 'lucide-react';
+import { Trophy, Gamepad2, UserRound, Award } from 'lucide-react';
 
 export const Route = createFileRoute('/user/')({
   component: RouteComponent,
@@ -26,10 +26,10 @@ const userPages = [
     icon: <UserRound className='h-10 w-10' />,
   },
   {
-    name: 'Match History',
-    path: '/user/history',
+    name: 'Your Winnings',
+    path: '/user/winnings',
     color: 'bg-amber-500',
-    icon: <History className='h-10 w-10' />,
+    icon: <Award className='h-10 w-10' />,
   },
 ];
 

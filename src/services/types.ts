@@ -1,3 +1,4 @@
+
 export type TournamentData = {
   game: 'PUBG' | 'FREEFIRE';
   name: string;
@@ -61,4 +62,21 @@ export interface Participant {
   name: string;
   email: string;
   userId: number;
+}
+export interface WinningResponse {
+  message: string;
+  data: Datum[];
+}
+
+export interface Datum {
+  tournament: Tournament;
+  winning: Winning;
+}
+
+export interface Winning {
+  id: number;
+  userId: number;
+  tournamentId: number;
+  amount: number;
+  createdAt: Date;
 }
