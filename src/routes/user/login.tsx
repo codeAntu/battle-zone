@@ -53,7 +53,7 @@ function Login() {
         setRole('user');
         setToken(response.token);
         toast.success('Login successful!');
-        navigate({ to: '/' });
+        navigate({ to: '/user/tournaments' }); // Redirecting to tournaments to ensure layout is applied
       } else {
         setError('Invalid response from server');
       }
@@ -107,7 +107,7 @@ function Login() {
         setRole('user');
         setToken(response.token);
         toast.success('Verification successful! You are now logged in.');
-        navigate({ to: '/' });
+        navigate({ to: '/user/tournaments' }); // Redirecting to tournaments to ensure layout is applied
       }
     },
   });

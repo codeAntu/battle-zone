@@ -1,4 +1,3 @@
-
 import { ls } from '@/utils/ls';
 import { create } from 'zustand';
 
@@ -10,9 +9,10 @@ interface Store {
   setToken(token: string): void;
   setRole(role: UserRole): void;
   logout(): void;
+  isLoggedIn(): boolean;
 }
 
-export const useTokenStore = create<Store>((set) => ({
+export const useTokenStore = create<Store>((set, get) => ({
   token: JSON.parse(ls.get('token') || 'null'),
   role: JSON.parse(ls.get('userRole') || 'null'),
   setToken: (token) => {
@@ -26,5 +26,8 @@ export const useTokenStore = create<Store>((set) => ({
   logout: () => {
     ls.clear();
     set({ token: null, role: null });
+  },
+  isLoggedIn: () => {
+    return get().token !== null;
   },
 }));

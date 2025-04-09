@@ -43,7 +43,6 @@ function RouteComponent() {
       queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] });
     },
   });
-;
   console.log(data);
 
   if (isLoading) {
@@ -240,7 +239,7 @@ function RouteComponent() {
         <div className='space-y-3 sm:space-y-4'>
           <div className='flex flex-wrap gap-2 sm:gap-3'>
             {!tournament.isEnded && (
-              <Button 
+              <Button
                 className='bg-yellow-500 text-white hover:bg-yellow-400'
                 onClick={() => {
                   router.navigate({
@@ -252,7 +251,17 @@ function RouteComponent() {
                 End Tournament
               </Button>
             )}
-            <Button className='bg-green-500 text-white hover:bg-green-400'>View Participants</Button>
+            <Button
+              className='bg-green-500 text-white hover:bg-green-400'
+              onClick={() => {
+                router.navigate({
+                  to: '/admin/tournaments/end/$tournamentsId',
+                  params: { tournamentsId: tournamentsId },
+                });
+              }}
+            >
+              View Participants
+            </Button>
           </div>
         </div>
       </div>

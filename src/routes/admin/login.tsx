@@ -53,7 +53,7 @@ export function AdminSignInPage() {
         setRole('admin');
         setToken(response.token);
         toast.success('Admin login successful!');
-        navigate({ to: '/admin' });
+        navigate({ to: '/admin/tournaments' }); // Redirecting to tournaments to ensure layout is applied
       } else {
         setError('Invalid response from server');
         toast.error('Invalid response from server');
@@ -110,7 +110,7 @@ export function AdminSignInPage() {
         setRole('admin');
         setToken(response.token);
         toast.success('Verification successful! You are now logged in as admin.');
-        navigate({ to: '/admin' });
+        navigate({ to: '/admin/tournaments' }); // Redirecting to tournaments to ensure layout is applied
       } else {
         setError('Invalid response from server');
         toast.error('Invalid response from server');

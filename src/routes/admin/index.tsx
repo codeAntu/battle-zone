@@ -27,7 +27,7 @@ function RouteComponent() {
   return (
     <div className='space-y-5 p-5'>
       <div className='space-y-5'>
-        <div className='p text-2xl font-semibold'>Pages</div>
+        <div className='p text-2xl font-semibold'>Admin Dashboard</div>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {pages.map((page) => (
             <NavCard key={page.name} name={page.name} path={page.path} color={page.color} />

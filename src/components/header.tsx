@@ -10,11 +10,18 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { appData } from '@/conts/data';
+import { useTokenStore } from '@/store/store';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { Menu, MoveRight, X } from 'lucide-react';
-import { useState } from 'react';
-import { LogoutButton } from './LogoutButton';
+import { ChevronDown, LogOut, Menu, MoveRight, X } from 'lucide-react';
+import { useRef, useState } from 'react';
+
 export default function Header() {
+  const { isLoggedIn, logout, role } = useTokenStore();
+  const navigate = useNavigate();
+  const [isOpen, setOpen] = useState(false);
+  const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   const navigationItems = [
     {
       title: 'Home',
@@ -67,9 +74,6 @@ export default function Header() {
     },
   ];
 
-  const navigate = useNavigate();
-
-  const [isOpen, setOpen] = useState(false);
   return (
     <header className='sticky top-0 left-0 z-40 w-full bg-white/10 backdrop-blur-2xl'>
       <div className='relative flex min-h-16 w-full flex-row items-center gap-4 border'>
@@ -93,7 +97,6 @@ export default function Header() {
                     {item.href ? (
                       <Link to={item.href} className='flex items-center justify-between'>
                         <span className='text-lg'>{item.title}</span>
-                        {/* <MoveRight className='text-muted-foreground h-4 w-4 stroke-1' /> */}
                       </Link>
                     ) : (
                       <p className='text-lg'>{item.title}</p>
@@ -102,7 +105,6 @@ export default function Header() {
                       item.items.map((subItem) => (
                         <Link key={subItem.title} to={subItem.href} className='flex items-center justify-between'>
                           <span className='text-muted-foreground'>{subItem.title}</span>
-                          {/* <MoveRight className='h-4 w-4 stroke-1' /> */}
                         </Link>
                       ))}
                   </div>
@@ -160,12 +162,62 @@ export default function Header() {
         </div>
 
         <div className='flex w-full justify-end gap-4 px-3 text-sm sm:text-base'>
-          <Button variant='ghost' className='hidden md:inline'>
-            Book a demo
-          </Button>
-          <div className='hidden border-r md:inline'></div>
-          <Button onClick={() => navigate({ to: '/user/login' })}>Sign in</Button>
-          <LogoutButton className='' />
+          {isLoggedIn() ? (
+            <>
+              <Button
+                variant='ghost'
+                className='hidden md:inline'
+                onClick={() => navigate({ to: role === 'admin' ? '/admin/tournaments' : '/user/tournaments' })}
+              >
+                Dashboard
+              </Button>
+              <div className='hidden border-r md:inline'></div>
+              <Button
+                variant='ghost'
+                className='hidden md:inline'
+                onClick={() => {
+                  logout();
+                  navigate({ to: '/' });
+                }}
+              >
+                <div className='flex items-center gap-2'>
+                  <LogOut className='mr-2 h-4 w-4' />
+                  <span>Logout</span>
+                </div>
+              </Button>
+            </>
+          ) : (
+            <div className='relative' ref={dropdownRef}>
+              <Button onClick={() => setLoginDropdownOpen(!loginDropdownOpen)} className='flex items-center gap-2'>
+                Sign in <ChevronDown className='h-4 w-4' />
+              </Button>
+
+              {loginDropdownOpen && (
+                <div className='bg-card border-border absolute right-0 z-50 mt-2 w-40 rounded-md border shadow-lg'>
+                  <Button
+                    variant='ghost'
+                    className='w-full justify-start'
+                    onClick={() => {
+                      navigate({ to: '/user/login' });
+                      setLoginDropdownOpen(false);
+                    }}
+                  >
+                    Player Login
+                  </Button>
+                  <Button
+                    variant='ghost'
+                    className='w-full justify-start'
+                    onClick={() => {
+                      navigate({ to: '/admin/login' });
+                      setLoginDropdownOpen(false);
+                    }}
+                  >
+                    Admin Login
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </header>
