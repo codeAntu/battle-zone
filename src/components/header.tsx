@@ -79,7 +79,7 @@ export default function Header() {
       <div className='relative flex min-h-16 w-full flex-row items-center gap-4 border'>
         <div className='hidden items-center gap-4 px-5 font-semibold whitespace-nowrap lg:flex'>
           <div className='text-lg font-bold'>
-            <img src={appData.icon} alt='' className='w-24 rounded-full' />
+            <img src={appData.icon} alt='' className='w-16 rounded-full' />
           </div>
           <p className=''>{appData.name}</p>
         </div>
@@ -90,7 +90,7 @@ export default function Header() {
           <p className='font-semibold whitespace-nowrap'>{appData.name}</p>
 
           {isOpen && (
-            <div className='bg-background absolute top-20 right-0 container flex w-full flex-col gap-8 border-t p-5 shadow-lg'>
+            <div className='bg-background absolute top-20 right-0 container  w-full flex-col gap-8 border-t p-5 shadow-lg hidden'>
               {navigationItems.map((item) => (
                 <div key={item.title}>
                   <div className='flex flex-col gap-2'>
@@ -114,7 +114,7 @@ export default function Header() {
           )}
         </div>
 
-        <div className='hidden flex-row items-center justify-start gap-4 lg:flex'>
+        <div className='hidden flex-row items-center justify-start gap-4'>
           <NavigationMenu className='flex items-start justify-start'>
             <NavigationMenuList className='flex flex-row justify-start gap-4'>
               {navigationItems.map((item) => (
