@@ -49,14 +49,26 @@ export const tournamentSchema = z
 
 export const Route = createFileRoute('/admin/tournaments/new')({
   component: RouteComponent,
+  validateSearch: (search) => {
+    return {
+      game: search.game,
+    };
+  },
 });
 
 function RouteComponent() {
+  const { game: gameParam } = Route.useSearch();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+  
+  // If URL has a valid game parameter, use it; otherwise leave it empty for user to select
+  const initialGame = gameParam && ['PUBG', 'FREEFIRE'].includes(gameParam.toString().toUpperCase())
+    ? gameParam.toString().toUpperCase() as 'PUBG' | 'FREEFIRE'
+    : '';
+  
   const [tournamentData, setTournamentData] = useState({
-    game: 'PUBG',
+    game: initialGame,
     name: 'test name ',
     description: 'something',
     roomId: '',
@@ -67,8 +79,6 @@ function RouteComponent() {
     date: '',
     time: '',
   });
-
-  // use mutate
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['createTournament'],

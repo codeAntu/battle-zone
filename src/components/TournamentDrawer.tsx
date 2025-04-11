@@ -94,7 +94,11 @@ export default function TournamentDrawer({
                   </div>
                   <div>
                     <div className='text-sm text-gray-400 sm:text-base'>Room ID</div>
-                    <div className='text-base sm:text-lg'>{tournament.roomId || 'No Room ID assigned yet'}</div>
+                    <div className='text-base sm:text-lg'>
+                      {viewOnly || data?.participation 
+                        ? tournament.roomId || 'No Room ID assigned yet'
+                        : 'Participate to view room ID'}
+                    </div>
                   </div>
                 </div>
                 {tournament.roomId && (

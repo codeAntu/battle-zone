@@ -8,7 +8,7 @@ export function UserNavigation() {
       icon: <Trophy className='h-5 w-5' />, 
       label: 'Tournaments', 
       path: '/user/tournaments',
-      activeWhen: (path: string) => path === '/user/tournaments' 
+      activeWhen: (path: string) => path === '/user/tournaments' || path.startsWith('/user/tournaments/') 
     },
     { 
       icon: <Gamepad2 className='h-5 w-5' />, 
