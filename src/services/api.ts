@@ -15,6 +15,13 @@ const API = {
 
   // game
   gameList: `${BASE_URL}/game/list`,
+  
+  // admin games
+  adminGamesList: `${BASE_URL}/admin/games`,
+  adminGameById: (id: string) => `${BASE_URL}/admin/games/${id}`,
+  adminCreateGame: `${BASE_URL}/admin/games`,
+  adminUpdateGame: (id: string) => `${BASE_URL}/admin/games/${id}`,
+  adminDeleteGame: (id: string) => `${BASE_URL}/admin/games/${id}`,
 
   // tournament
   createTournament: `${BASE_URL}/admin/tournaments/create`,
