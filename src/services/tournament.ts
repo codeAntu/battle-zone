@@ -10,6 +10,7 @@ import {
   WinningResponse,
 } from './types';
 
+
 export const createTournament = async (data: TournamentData) => {
   console.log('Sending tournament data to API:', data);
   return postApi<TournamentResponse>(API.createTournament, data);
@@ -23,8 +24,8 @@ export const getAdminTournamentsById = async (id: string) => {
   return getApi<TournamentResponse>(API.getAdminTournamentsById(id));
 };
 
-export const updateTournament = async (id: string, roomId: string) => {
-  return postApi<TournamentResponse>(API.updateTournament(id), { roomId });
+export const updateTournament = async (id: string, roomId: string, roomPassword: string) => {
+  return postApi<TournamentResponse>(API.updateTournament(id), { roomId, roomPassword });
 };
 
 export const endTournament = async (id: string, winnerId?: string) => {
@@ -35,8 +36,16 @@ export const getUserTournamentByName = async (gameName: string) => {
   return getApi<TournamentByNameResponse>(API.getUserTournamentByName(gameName));
 };
 
-export const participateInTournament = async (id: string) => {
-  return postApi(API.participateInTournament(id));
+// Updated to accept player data
+export const participateInTournament = async (
+  id: string,
+  playerData?: {
+    playerUsername: string;
+    playerUserId: string;
+    playerLevel: number;
+  }
+) => {
+  return postApi(API.participateInTournament(id), playerData || {});
 };
 
 export const isParticipated = async (id: string) => {

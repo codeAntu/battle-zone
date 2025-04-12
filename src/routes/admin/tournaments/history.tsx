@@ -62,8 +62,8 @@ function RouteComponent() {
         </TableHeader>
         <TableBody>
           {tournaments.map((tournament, index) => {
-            const gameImage = tournament.game === 'PUBG' 
-              ? 'https://www.financialexpress.com/wp-content/uploads/2025/03/PUBG-MOBILE1.jpg'
+            const gameImage = tournament.game === 'BGMI' 
+              ? 'https://www.financialexpress.com/wp-content/uploads/2025/03/BGMI-MOBILE1.jpg'
               : 'https://img.gurugamer.com/resize/740x-/2020/07/23/free-fire-battlegrounds-pc-laptop-version-download-5cb5.jpg';
             
             return (

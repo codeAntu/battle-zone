@@ -34,8 +34,8 @@ function RouteComponent() {
 
   const { mutate: updateTournamentMutation, isPending: isUpdating } = useMutation({
     mutationKey: ['tournaments', tournamentsId],
-    mutationFn: (roomId: string) => {
-      return updateTournament(tournamentsId, roomId);
+    mutationFn: (data: { roomId: string, roomPassword: string }) => {
+      return updateTournament(tournamentsId, data.roomId, data.roomPassword);
     },
     onSuccess: () => {
       toast.success('Tournament updated successfully');
@@ -105,7 +105,7 @@ function RouteComponent() {
               <DialogHeader>
                 <DialogTitle>{tournament.roomId ? 'Update Room ID' : 'Add Room ID'}</DialogTitle>
                 <DialogDescription>
-                  Enter the {tournament.roomId ? 'new' : ''} Room ID for the tournament.
+                  Enter the {tournament.roomId ? 'new' : ''} Room ID and Password for the tournament.
                 </DialogDescription>
               </DialogHeader>
               <form
@@ -113,19 +113,40 @@ function RouteComponent() {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
                   const newRoomId = formData.get('roomId') as string;
-                  updateTournamentMutation(newRoomId);
+                  const newRoomPassword = formData.get('roomPassword') as string;
+                  updateTournamentMutation({ roomId: newRoomId, roomPassword: newRoomPassword });
                 }}
               >
                 <div className='space-y-4'>
-                  <Input
-                    type='number'
-                    name='roomId'
-                    placeholder='Enter new Room ID'
-                    className='w-full bg-gray-800 px-3 py-3 text-gray-200 focus:border-none focus:outline-none sm:py-5'
-                    required
-                  />
-                  <Button type='submit' className='w-full py-3 sm:py-5' disabled={isUpdating}>
-                    {isUpdating ? 'Updating...' : 'Update Room ID'}
+                  <div>
+                    <label htmlFor="roomId" className="text-sm font-medium mb-2 block">Room ID</label>
+                    <Input
+                      type='text'
+                      id='roomId'
+                      name='roomId'
+                      defaultValue={tournament.roomId || ''}
+                      placeholder='Enter Room ID'
+                      pattern="[0-9]*"
+                      inputMode="numeric"
+                      required
+                      className='text-white'
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="roomPassword" className="text-sm font-medium mb-2 block">Room Password</label>
+                    <Input
+                      type='text'
+                      id='roomPassword'
+                      name='roomPassword'
+                      defaultValue={tournament.roomPassword || ''}
+                      placeholder='Enter Room Password'
+                      className='text-white'
+                    />
+                  </div>
+                  
+                  <Button type='submit' className='w-full' disabled={isUpdating}>
+                    {isUpdating ? 'Updating...' : 'Update Room Details'}
                   </Button>
                 </div>
               </form>
@@ -146,6 +167,27 @@ function RouteComponent() {
                 onClick={() => {
                   navigator.clipboard.writeText(String(tournament.roomId || ''));
                   toast.success('Room ID copied to clipboard');
+                }}
+                className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
+              >
+                <Copy className='size-4' />
+              </Button>
+            )}
+          </div>
+          
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center'>
+              <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>🔑</div>
+              <div>
+                <div className='text-sm text-gray-400 sm:text-base'>Room Password</div>
+                <div className='text-base sm:text-lg'>{tournament.roomPassword || 'No password set'}</div>
+              </div>
+            </div>
+            {tournament.roomPassword && (
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(String(tournament.roomPassword || ''));
+                  toast.success('Room Password copied to clipboard');
                 }}
                 className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
               >
@@ -197,6 +239,16 @@ function RouteComponent() {
                 <div>
                   <div className='text-sm text-gray-400 sm:text-base'>Room ID</div>
                   <div className='text-base sm:text-lg'>{tournament.roomId}</div>
+                </div>
+              </div>
+            )}
+            
+            {tournament.roomPassword && (
+              <div className='flex items-center'>
+                <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>🔑</div>
+                <div>
+                  <div className='text-sm text-gray-400 sm:text-base'>Room Password</div>
+                  <div className='text-base sm:text-lg'>{tournament.roomPassword}</div>
                 </div>
               </div>
             )}

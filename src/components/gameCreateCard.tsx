@@ -2,7 +2,7 @@ import { GameType } from '@/services/game';
 import { Link } from '@tanstack/react-router';
 
 export function GameCreateCard(game: GameType) {
-  // Format the game name to match our enum values (PUBG or FREEFIRE)
+  // Format the game name to match our enum values (BGMI or FREEFIRE)
   const formattedGameName = game.name.toUpperCase();
 
   return (

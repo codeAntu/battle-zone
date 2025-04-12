@@ -68,26 +68,27 @@ function RouteComponent() {
 }
 
 function Game({ tournament, amount, date }: { tournament: Tournament; amount: number; date: string | Date }) {
-  const gameImage =
-    tournament.game === 'PUBG'
-      ? 'https://www.financialexpress.com/wp-content/uploads/2025/03/PUBG-MOBILE1.jpg'
-      : 'https://img.gurugamer.com/resize/740x-/2020/07/23/free-fire-battlegrounds-pc-laptop-version-download-5cb5.jpg';
+  const gameImage = '/games/' + tournament.game.toUpperCase() + '/icon.png';
 
   return (
     <div className='flex flex-col gap-2'>
       <div className='flex flex-row items-center justify-between rounded-lg border border-yellow-600/30 bg-gradient-to-r from-gray-900 to-gray-950 p-3 shadow-md'>
         <div className='flex items-center'>
           <div className='relative mr-3'>
-            <img src={gameImage} alt={tournament.game} className='h-12 w-12 rounded-lg object-cover ring-2 ring-yellow-500/50' />
-            <div className='absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500 text-xs font-bold text-black'>
+            <img
+              src={gameImage}
+              alt={tournament.game}
+              className='h-12 w-12 rounded-lg object-cover ring-2 ring-yellow-500/50'
+            />
+            <div className='absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500 text-xs font-bold text-black'>
               <Trophy className='h-3 w-3' />
             </div>
           </div>
-          
+
           <div className='flex flex-col'>
             <div className='flex items-center gap-2'>
               <p className='font-semibold text-white'>{tournament.name}</p>
-              <span className='rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-bold uppercase text-green-400'>
+              <span className='rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-bold text-green-400 uppercase'>
                 Victory
               </span>
             </div>
@@ -99,7 +100,7 @@ function Game({ tournament, amount, date }: { tournament: Tournament; amount: nu
         </div>
 
         <TournamentDrawer data={tournament} viewOnly={true} showCurrency='coins'>
-          <Button className='border-yellow-500/70 text-yellow-500 hover:bg-yellow-500 rounded-lg border bg-transparent px-3 py-1 text-xs font-semibold transition-colors hover:text-black'>
+          <Button className='rounded-lg border border-yellow-500/70 bg-transparent px-3 py-1 text-xs font-semibold text-yellow-500 transition-colors hover:bg-yellow-500 hover:text-black'>
             Details
           </Button>
         </TournamentDrawer>

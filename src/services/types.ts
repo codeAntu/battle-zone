@@ -1,5 +1,5 @@
 export type TournamentData = {
-  game: 'PUBG' | 'FREEFIRE';
+  game: 'BGMI' | 'FREEFIRE';
   name: string;
   description?: string;
   roomId?: string;
@@ -22,6 +22,7 @@ export interface Tournament {
   name: string;
   description: string;
   roomId: number;
+  roomPassword: string;
   entryFee: number;
   prize: number;
   perKillPrize: number;

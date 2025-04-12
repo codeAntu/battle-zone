@@ -37,7 +37,7 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
   const date = format(new Date(tournament.scheduledAt), 'dd MMM yyyy');
   const time = format(new Date(tournament.scheduledAt), 'hh:mm a');
 
-  const imageUrl = `https://placehold.co/600x300/222/ddd?text=${tournament.game}`;
+  const imageUrl = `/games/${tournament.game.toUpperCase()}/image.png`;
 
   return (
     <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
@@ -48,7 +48,12 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
       <div className='space-y-3 px-4 py-2'>
         <div className='flex items-center justify-between'>
           <p className='line-clamp-1 text-lg font-bold'>{tournament.name}</p>
-          <div className='rounded-lg bg-blue-500 px-3.5 py-1.5 text-sm font-medium'>{tournament.game}</div>
+          <div className='flex items-center gap-2'>
+            <div className='rounded-lg bg-blue-500 px-3.5 py-1.5 text-sm font-medium'>{tournament.game}</div>
+            {tournament.isEnded && (
+              <div className='rounded bg-red-500 px-2 py-1 text-xs font-bold text-white'>Ended</div>
+            )}
+          </div>
         </div>
 
         <div className=''>
@@ -84,8 +89,11 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
             </div>
           </div>
         </div>
+
         <TournamentDrawer data={tournament}>
-          <Button className='w-full rounded-full font-semibold'>Participate ( ₹{tournament.entryFee} )</Button>
+          <Button className='w-full rounded-full font-semibold'>
+            {tournament.isEnded ? 'View Details' : `Participate ( ₹${tournament.entryFee} )`}
+          </Button>
         </TournamentDrawer>
       </div>
       <div></div>

@@ -3,11 +3,14 @@ import { isParticipated, participateInTournament } from '@/services/tournament';
 import { Tournament as TournamentType } from '@/services/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { BadgeIndianRupee, Calendar, Clock, Copy, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
+import { BadgeIndianRupee, Calendar, Copy, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { z } from 'zod';
 import { Button } from './ui/button';
 import { DialogTitle } from './ui/dialog';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
 interface TournamentDrawerProps {
   children: React.ReactNode;
@@ -15,6 +18,14 @@ interface TournamentDrawerProps {
   viewOnly?: boolean;
   showCurrency?: 'coins' | 'rupees';
 }
+
+export const participationValidator = z.object({
+  playerUsername: z.string().min(1, 'Player username is required'),
+  playerUserId: z.string().min(1, 'Player ID is required'),
+  playerLevel: z.number().int().min(30, 'Player level must be at least 30'),
+});
+
+type FormValues = z.infer<typeof participationValidator>;
 
 export default function TournamentDrawer({
   children,
@@ -26,20 +37,38 @@ export default function TournamentDrawer({
   const time = format(new Date(tournament.scheduledAt), 'hh:mm a');
   const [isOpen, setIsOpen] = useState(false);
 
+  // Form state for participation
+  const [playerUsername, setPlayerUsername] = useState('');
+  const [playerUserId, setPlayerUserId] = useState('');
+  const [playerLevel, setPlayerLevel] = useState(30);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const currencySymbol = showCurrency === 'rupees' ? '₹' : '';
   const currencyLabel = showCurrency === 'rupees' ? '' : ' coins';
 
-  // Only run participation queries if not in view-only mode
+  // Query to check if user has participated
+  const {
+    data: participationData,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['isParticipated', tournament.id],
+    queryFn: () => isParticipated(tournament.id.toLocaleString()),
+    enabled: !viewOnly,
+  });
+
+  // Participate mutation
   const { mutate, isPending } = useMutation({
     mutationKey: ['participateInTournament'],
-    mutationFn: participateInTournament,
+    mutationFn: ({ id, playerData }: { id: string; playerData: FormValues }) => participateInTournament(id, playerData),
     onSuccess: (data) => {
       if (data.isAlert) {
         toast.error(data.message || data.error || 'Failed to participate in the tournament');
         return;
       }
       toast.success('Successfully participated in the tournament');
-      setIsOpen(false);
+      resetForm();
+      setIsOpen(false); // Close the drawer after successful participation
       refetch();
     },
     onError: () => {
@@ -47,148 +76,318 @@ export default function TournamentDrawer({
     },
   });
 
-  const { data, refetch } = useQuery({
-    queryKey: ['isParticipated', tournament.id],
-    queryFn: () => isParticipated(tournament.id.toLocaleString()),
-    enabled: !viewOnly,
-  });
+  const resetForm = () => {
+    setPlayerUsername('');
+    setPlayerUserId('');
+    setPlayerLevel(30);
+    setErrors({});
+  };
+
+  const validateForm = () => {
+    const formData = {
+      playerUsername,
+      playerUserId,
+      playerLevel,
+    };
+
+    try {
+      participationValidator.parse(formData);
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            newErrors[err.path[0].toString()] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      mutate({
+        id: tournament.id.toString(),
+        playerData: {
+          playerUsername,
+          playerUserId,
+          playerLevel,
+        },
+      });
+    }
+  };
+
+  const hasParticipated = !isLoading && participationData?.participation;
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger className={viewOnly ? '' : 'w-full'} onClick={() => setIsOpen(true)}>
         {children}
       </DrawerTrigger>
-      <DrawerContent className='m-auto max-w-[800px] border border-gray-800 bg-gray-950'>
-        <div className='max-w-7xl px-4 pb-6 text-white'>
-          <DialogTitle className='flex items-center justify-center py-1.5'>
-            <span className='py-3 text-center text-xl font-semibold'>
+      <DrawerContent className='m-auto w-full max-w-[800px] border border-gray-800 bg-gray-950 p-0'>
+        <div className='max-w-7xl px-3 pt-2 pb-3 text-white'>
+          <DialogTitle className='flex items-center justify-center'>
+            <span className='line-clamp-2 py-1 text-center text-base font-semibold sm:text-xl'>
               {tournament.name}
               {tournament.isEnded && <span className='ml-2 text-xs text-red-400'>(Ended)</span>}
             </span>
           </DialogTitle>
-          <div className='rounded-lg border border-gray-800 bg-white/5 p-4 text-white shadow-lg sm:p-6'>
-            <div className='flex items-center'>
-              <Trophy className='mr-3 h-6 w-6 text-yellow-400' />
-              <div>
-                <div className='text-sm text-gray-400'>Total Prize Pool</div>
-                <div className='text-lg font-semibold text-yellow-400'>
-                  {currencySymbol}
-                  {tournament.prize}
-                  {currencyLabel}
-                </div>
-                <div className='text-xs text-gray-400'>
-                  Entry Fee: {currencySymbol}
-                  {tournament.entryFee}
-                  {currencyLabel} • Per Kill: {currencySymbol}
-                  {tournament.perKillPrize}
-                  {currencyLabel}
-                </div>
-              </div>
-            </div>
 
-            <div className='mt-2.5 border-y border-gray-800 py-2.5'>
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center'>
-                  <div className='mr-2 flex h-5 w-5 items-center justify-center text-3xl font-bold text-yellow-400 sm:mr-3'>
-                    #
-                  </div>
-                  <div>
-                    <div className='text-sm text-gray-400 sm:text-base'>Room ID</div>
-                    <div className='text-base sm:text-lg'>
-                      {viewOnly || data?.participation 
-                        ? tournament.roomId || 'No Room ID assigned yet'
-                        : 'Participate to view room ID'}
+          {/* Show different content based on participation status */}
+          {hasParticipated || viewOnly ? (
+            <>
+              {/* Tournament details UI for participants */}
+              <div className='rounded-lg border border-gray-800 bg-white/5 p-3 text-white shadow-lg sm:p-6'>
+                {/* Tournament info with better mobile layout */}
+                <div className='border-b border-gray-800 pb-2'>
+                  <div className='grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-y-3'>
+                    {/* Game information */}
+                    <div className='flex items-center gap-2 sm:gap-2'>
+                      <Gamepad2 className='size-5 text-yellow-500' />
+                      <div className='-mt-0.5'>
+                        <div className='text-[13px] text-gray-400 sm:text-sm'>Game</div>
+                        <div className='text-[15px] font-medium sm:text-base'>{tournament.game}</div>
+                      </div>
+                    </div>
+
+                    {/* Status information */}
+                    <div className='flex items-center gap-2'>
+                        {tournament.isEnded ? (
+                        <Trophy className='size-5 text-red-500' />
+                        ) : (
+                        <Trophy className='size-5 text-green-500' />
+                        )}
+                      <div className='-mt-0.5'>
+                        <div className='text-[13px] text-gray-400 sm:text-sm'>Status</div>
+                        <div className='text-[15px] font-medium sm:text-base'>
+                          {tournament.isEnded ? 'Ended' : 'Active'}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Participants information */}
+                    <div className='flex items-center gap-2'>
+                      <UserRound className='size-5 text-blue-500' />
+                      <div className='-mt-0.5'>
+                        <div className='text-[13px] text-gray-400 sm:text-sm'>Participants</div>
+                        <div className='text-[15px] font-medium sm:text-base'>
+                          {tournament.currentParticipants}/{tournament.maxParticipants}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Schedule information - date and time in same section but on two lines for mobile */}
+                    <div className='flex items-center gap-2'>
+                      <Calendar className='size-5 text-rose-500' />
+                      <div className='-mt-0.5 overflow-hidden'>
+                        <div className='text-[13px] text-gray-400 sm:text-sm'>Scheduled For</div>
+                        <div className='text-[15px] font-medium sm:text-base'>{date}</div>
+                        <div className='text-[13px] font-medium text-gray-300 sm:text-sm'>{time}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                {tournament.roomId && (
-                  <Button
-                    onClick={() => {
-                      navigator.clipboard.writeText(String(tournament.roomId || ''));
-                      toast.success('Room ID copied to clipboard');
-                    }}
-                    className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
-                  >
-                    <Copy className='size-4' />
-                    <span className='ml-2 hidden sm:inline'>Copy</span>
-                  </Button>
-                )}
-              </div>
-            </div>
 
-            <p className='line-clamp-3 p-2'>
-              <span className='font-medium'>Description:</span> {tournament.description || 'No description available'}
-            </p>
+                {/* Room information section - mobile optimized */}
+                <div className='mt-2 border-b border-gray-800 py-1 sm:py-1.5'>
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center'>
+                      <div className='mr-2 flex h-5 w-5 items-center justify-center text-3xl font-bold text-yellow-400 sm:mr-3'>
+                        #
+                      </div>
+                      <div>
+                        <div className='text-xs text-gray-400 sm:text-base'>Room ID</div>
+                        <div className='text-sm sm:text-lg'>{tournament.roomId || 'No Room ID assigned yet'}</div>
+                      </div>
+                    </div>
+                    {tournament.roomId && (
+                      <Button
+                        onClick={() => {
+                          navigator.clipboard.writeText(String(tournament.roomId || ''));
+                          toast.success('Room ID copied to clipboard');
+                        }}
+                        className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
+                      >
+                        <Copy className='size-4' />
+                        <span className='ml-2 hidden sm:inline'>Copy</span>
+                      </Button>
+                    )}
+                  </div>
 
-            <div className='grid grid-cols-2 items-center justify-between gap-2 px-2'>
-              <div className='flex flex-col gap-2 text-sm font-semibold text-rose-500/80'>
-                <div className='flex items-center gap-2'>
-                  <Calendar className='size-5' />
-                  <p className=''>{date}</p>
+                  {/* Room Password Section */}
+                  {tournament.roomId ? (
+                    tournament.roomPassword ? (
+                      <div className='mt-1 flex items-center justify-between sm:mt-1.5'>
+                        <div className='flex items-center'>
+                          <div className='mr-2 flex h-5 w-5 items-center justify-center text-3xl font-bold text-yellow-400 sm:mr-3'>
+                            *
+                          </div>
+                          <div>
+                            <div className='text-xs text-gray-400 sm:text-base'>Password</div>
+                            <div className='text-sm sm:text-lg'>{tournament.roomPassword}</div>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            navigator.clipboard.writeText(String(tournament.roomPassword));
+                            toast.success('Room password copied to clipboard');
+                          }}
+                          className='h-8 w-8 border border-yellow-500 bg-transparent px-0 text-yellow-500 hover:bg-yellow-500 hover:text-white sm:h-9 sm:w-auto sm:px-3'
+                        >
+                          <Copy className='size-4' />
+                          <span className='ml-2 hidden sm:inline'>Copy</span>
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className='mt-1 flex items-center sm:mt-1.5'>
+                        <div className='mr-2 flex h-5 w-5 items-center justify-center text-3xl font-bold text-yellow-400 sm:mr-3'>
+                          *
+                        </div>
+                        <div>
+                          <div className='text-xs text-gray-400 sm:text-base'>Password</div>
+                          <div className='text-sm text-gray-500 sm:text-lg'>No game room password yet</div>
+                        </div>
+                      </div>
+                    )
+                  ) : null}
                 </div>
-                <div className='flex items-center gap-2'>
-                  <Clock className='size-5' />
-                  <p className=''>{time}</p>
+
+                {/* Prize information section - restructured for mobile */}
+                <div className='mt-2 mb-1 sm:mt-2.5'>
+                  {/* Total Prize in its own row */}
+                  <div className='mb-1 rounded-md bg-yellow-900/20 p-1 sm:p-2'>
+                    <div className='flex flex-col items-center'>
+                      <div className='text-xs text-gray-400'>Total Prize Pool</div>
+                      <div className='flex items-center gap-1'>
+                        <Trophy className='size-4 text-yellow-400' />
+                        <span className='text-base font-bold text-yellow-400 sm:text-lg'>
+                          {currencySymbol}
+                          {tournament.prize}
+                          {currencyLabel}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Entry Fee and Per Kill in single row */}
+                  <div className='grid grid-cols-2 gap-1'>
+                    <div className='rounded-md bg-gray-800/30 p-1 sm:p-2'>
+                      <div className='flex flex-col items-center'>
+                        <div className='text-xs text-gray-400'>Entry Fee</div>
+                        <div className='flex items-center gap-0.5'>
+                          <IndianRupee className='size-3 text-gray-300 sm:size-4' />
+                          <span className='text-sm font-bold text-white sm:text-base'>
+                            {tournament.entryFee}
+                            {currencyLabel}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='rounded-md bg-gray-800/30 p-1 sm:p-2'>
+                      <div className='flex flex-col items-center'>
+                        <div className='text-xs text-gray-400'>Per Kill</div>
+                        <div className='flex items-center gap-0.5'>
+                          <BadgeIndianRupee className='size-3 text-gray-300 sm:size-4' />
+                          <span className='text-sm font-bold text-white sm:text-base'>
+                            {tournament.perKillPrize}
+                            {currencyLabel}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className='flex items-center gap-2'>
-                  <UserRound className='size-5' />
-                  <p>
-                    {tournament.currentParticipants}/{tournament.maxParticipants} Players
+
+                {/* Description section */}
+                <div className='mt-1 sm:mt-1.5'>
+                  <div className='text-sm text-gray-400'>Description</div>
+                  <p className='mt-1 max-h-24 overflow-y-auto rounded-md bg-gray-800/20 p-1 text-sm sm:p-2'>
+                    {tournament.description || 'No description available'}
                   </p>
                 </div>
               </div>
-              <div className='flex flex-col gap-1 text-sm font-semibold text-blue-500/80'>
-                <div className='flex items-center gap-2'>
-                  <Gamepad2 className='size-5' />
-                  <p>{tournament.game}</p>
+
+              {!viewOnly && hasParticipated && (
+                <div className='mt-2 flex items-center justify-center rounded-full bg-green-500 py-1 text-sm font-semibold text-white sm:mt-3 sm:py-2'>
+                  You have already participated in this tournament
                 </div>
-                <div className='flex items-center gap-2 text-green-500/80'>
-                  {showCurrency === 'rupees' ? <IndianRupee className='size-5' /> : <Trophy className='size-5' />}
-                  <p>
-                    Entry Fee: {currencySymbol}
+              )}
+            </>
+          ) : (
+            <>
+              {/* Participation form UI */}
+              <div className='mb-4 rounded-lg border border-gray-900 bg-black p-3 text-white shadow-lg sm:mb-6 sm:p-4'>
+                <div className='flex items-center justify-between'>
+                  <div className='text-lg font-medium'>{tournament.game}</div>
+                  <div className='text-xl font-bold text-green-500'>
+                    {currencySymbol}
                     {tournament.entryFee}
                     {currencyLabel}
-                  </p>
-                </div>
-                <div className='flex items-center gap-2 text-green-500/80'>
-                  <BadgeIndianRupee className='size-5' />
-                  <p>
-                    Per Kill: {currencySymbol}
-                    {tournament.perKillPrize}
-                    {currencyLabel}
-                  </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {!viewOnly ? (
-            data?.participation ? (
-              <div className='mt-4 flex items-center justify-center rounded-full bg-green-500 py-2 text-sm font-semibold text-white'>
-                You have already participated in this tournament
-              </div>
-            ) : (
-              <div className='w-full space-y-2 py-2'>
-                <div className='text-center text-gray-300'>Do you want to participate in this tournament?</div>
-                <div className='flex w-full justify-center gap-4'>
-                  <Button
-                    onClick={() => setIsOpen(false)}
-                    className='grow rounded-full bg-gray-500 font-semibold text-white'
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => mutate(tournament.id.toLocaleString())}
-                    disabled={isPending}
-                    className='grow rounded-full font-semibold'
-                  >
-                    {isPending ? 'Processing...' : 'Participate'}
-                  </Button>
+              <form onSubmit={handleSubmit} className='space-y-3 sm:space-y-4'>
+                <div className='space-y-1 sm:space-y-2'>
+                  <Label htmlFor='playerUsername' className='text-white'>
+                    Player Username
+                  </Label>
+                  <Input
+                    id='playerUsername'
+                    value={playerUsername}
+                    onChange={(e) => setPlayerUsername(e.target.value)}
+                    placeholder='Enter your in-game username'
+                    className='border-gray-800 bg-black text-white placeholder:text-gray-500'
+                  />
+                  {errors.playerUsername && <p className='text-sm text-red-500'>{errors.playerUsername}</p>}
                 </div>
-              </div>
-            )
-          ) : (
-            <div className='mt-4'>
+
+                <div className='space-y-1 sm:space-y-2'>
+                  <Label htmlFor='playerUserId' className='text-white'>
+                    Player ID
+                  </Label>
+                  <Input
+                    id='playerUserId'
+                    value={playerUserId}
+                    onChange={(e) => setPlayerUserId(e.target.value)}
+                    placeholder='Enter your player ID'
+                    className='border-gray-800 bg-black text-white placeholder:text-gray-500'
+                  />
+                  {errors.playerUserId && <p className='text-sm text-red-500'>{errors.playerUserId}</p>}
+                </div>
+
+                <div className='space-y-1 sm:space-y-2'>
+                  <Label htmlFor='playerLevel' className='text-white'>
+                    Player Level (min 30)
+                  </Label>
+                  <Input
+                    id='playerLevel'
+                    type='number'
+                    value={playerLevel}
+                    onChange={(e) => setPlayerLevel(e.target.valueAsNumber || 30)}
+                    placeholder='Enter your player level'
+                    className='border-gray-800 bg-black text-white placeholder:text-gray-500'
+                  />
+                  {errors.playerLevel && <p className='text-sm text-red-500'>{errors.playerLevel}</p>}
+                </div>
+
+                <Button type='submit' className='mt-3 w-full sm:mt-4' disabled={isPending}>
+                  {isPending
+                    ? 'Processing...'
+                    : `Participate ( ${currencySymbol}${tournament.entryFee}${currencyLabel} )`}
+                </Button>
+              </form>
+            </>
+          )}
+
+          {(viewOnly || hasParticipated) && (
+            <div className='mt-2 sm:mt-3'>
               <Button
                 onClick={() => setIsOpen(false)}
                 className='w-full rounded-full bg-gray-500 font-semibold text-white hover:bg-gray-600'

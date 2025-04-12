@@ -67,10 +67,8 @@ function RouteComponent() {
 function Game({ tournament }: { tournament: Tournament }) {
   const scheduledDate = tournament.scheduledAt ? new Date(tournament.scheduledAt) : new Date(tournament.createdAt);
   
-  // Choose image based on game type
-  const gameImage = tournament.game === 'PUBG'
-    ? 'https://www.financialexpress.com/wp-content/uploads/2025/03/PUBG-MOBILE1.jpg'
-    : 'https://img.gurugamer.com/resize/740x-/2020/07/23/free-fire-battlegrounds-pc-laptop-version-download-5cb5.jpg';
+  const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
+
 
   return (
     <div className='flex flex-col gap-2'>
