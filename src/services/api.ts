@@ -7,7 +7,6 @@ const API = {
   userLogin: `${BASE_URL}/user/auth/login`,
   userRegister: `${BASE_URL}/user/auth/signup`,
   userVerify: `${BASE_URL}/user/auth/verify-otp`,
-
   getProfile: `${BASE_URL}/user/profile`,
 
   // admin auth
@@ -43,6 +42,8 @@ const API = {
   isParticipated: (id: string) => `${BASE_URL}/user/tournaments/isParticipated/${id}`,
   getParticipatedTournaments: `${BASE_URL}/user/tournaments/participated`,
   getUserWinnings: `${BASE_URL}/user/tournaments/winnings`,
+  deleteTournament: (id: string) => `${BASE_URL}/admin/tournaments/delete/${id}`,
+  editTournament: (id: string) => `${BASE_URL}/admin/tournaments/edit/${id}`,
 
   // transactions
   depositTransaction: `${BASE_URL}/user/transaction/deposit`,

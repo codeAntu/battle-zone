@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, Gamepad2, Trophy, UserRound } from 'lucide-react';
+import { Gamepad2, Trophy, UserRound, Wallet } from 'lucide-react';
 import { JSX } from 'react';
 
 export function UserNavigation() {
@@ -17,10 +17,10 @@ export function UserNavigation() {
       activeWhen: (path: string) => path === '/user/participated-tournaments' 
     },
     { 
-      icon: <Award className='h-5 w-5' />, 
-      label: 'Winnings', 
-      path: '/user/winnings',
-      activeWhen: (path: string) => path === '/user/winnings' 
+      icon: <Wallet className='h-5 w-5' />, 
+      label: 'Wallet', 
+      path: '/user/wallet',
+      activeWhen: (path: string) => path === '/user/wallet' || path === '/user/deposit' || path === '/user/withdraw'
     },
     { 
       icon: <UserRound className='h-5 w-5' />, 

@@ -4,16 +4,27 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { getAdminTournamentsById, updateTournament } from '@/services/tournament';
+import { deleteTournament, getAdminTournamentsById, updateTournament } from '@/services/tournament';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router';
 import { format } from 'date-fns';
-import { CalendarIcon, Clock, Copy, DollarSign, PencilIcon, ShieldAlert, Trophy, Users } from 'lucide-react';
+import {
+  CalendarIcon,
+  Clock,
+  Copy,
+  DollarSign,
+  PencilIcon,
+  ShieldAlert,
+  Trash2,
+  Trophy,
+  Users
+} from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -25,6 +36,7 @@ function RouteComponent() {
   const { tournamentsId } = useParams({ from: '/admin/tournaments/$tournamentsId' });
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const router = useRouter();
 
   const { data, isLoading, error } = useQuery({
@@ -34,16 +46,39 @@ function RouteComponent() {
 
   const { mutate: updateTournamentMutation, isPending: isUpdating } = useMutation({
     mutationKey: ['tournaments', tournamentsId],
-    mutationFn: (data: { roomId: string, roomPassword: string }) => {
+    mutationFn: (data: { roomId: string; roomPassword: string }) => {
       return updateTournament(tournamentsId, data.roomId, data.roomPassword);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.isAlert) {
+        toast.error('Room ID or Password already exists');
+        return;
+      }
+
       toast.success('Tournament updated successfully');
       setDialogOpen(false);
       queryClient.invalidateQueries({ queryKey: ['tournaments', tournamentsId] });
     },
   });
-  console.log(data);
+
+  const { mutate: deleteTournamentMutation, isPending: isDeleting } = useMutation({
+    mutationFn: () => deleteTournament(tournamentsId),
+    onSuccess: (data) => {
+      console.log(data);
+
+      if (data.isAlert) {
+        toast.error(data.error || data.message || 'Failed to delete tournament');
+        return;
+      }
+
+      toast.success('Tournament deleted successfully');
+      setDeleteDialogOpen(false);
+      router.navigate({ to: '/admin/tournaments' });
+    },
+    onError: (error) => {
+      toast.error((error as Error).message || 'Failed to delete tournament');
+    },
+  });
 
   if (isLoading) {
     return (
@@ -119,22 +154,26 @@ function RouteComponent() {
               >
                 <div className='space-y-4'>
                   <div>
-                    <label htmlFor="roomId" className="text-sm font-medium mb-2 block">Room ID</label>
+                    <label htmlFor='roomId' className='mb-2 block text-sm font-medium'>
+                      Room ID
+                    </label>
                     <Input
                       type='text'
                       id='roomId'
                       name='roomId'
                       defaultValue={tournament.roomId || ''}
                       placeholder='Enter Room ID'
-                      pattern="[0-9]*"
-                      inputMode="numeric"
+                      pattern='[0-9]*'
+                      inputMode='numeric'
                       required
                       className='text-white'
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="roomPassword" className="text-sm font-medium mb-2 block">Room Password</label>
+                    <label htmlFor='roomPassword' className='mb-2 block text-sm font-medium'>
+                      Room Password
+                    </label>
                     <Input
                       type='text'
                       id='roomPassword'
@@ -144,7 +183,7 @@ function RouteComponent() {
                       className='text-white'
                     />
                   </div>
-                  
+
                   <Button type='submit' className='w-full' disabled={isUpdating}>
                     {isUpdating ? 'Updating...' : 'Update Room Details'}
                   </Button>
@@ -174,7 +213,7 @@ function RouteComponent() {
               </Button>
             )}
           </div>
-          
+
           <div className='flex items-center justify-between'>
             <div className='flex items-center'>
               <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>🔑</div>
@@ -242,10 +281,12 @@ function RouteComponent() {
                 </div>
               </div>
             )}
-            
+
             {tournament.roomPassword && (
               <div className='flex items-center'>
-                <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>🔑</div>
+                <div className='mr-2 flex h-5 w-5 items-center justify-center font-bold text-yellow-400 sm:mr-3'>
+                  🔑
+                </div>
                 <div>
                   <div className='text-sm text-gray-400 sm:text-base'>Room Password</div>
                   <div className='text-base sm:text-lg'>{tournament.roomPassword}</div>
@@ -314,6 +355,52 @@ function RouteComponent() {
             >
               View Participants
             </Button>
+
+            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className='bg-red-500 text-white hover:bg-red-600'>
+                  <Trash2 className='mr-1 h-4 w-4' />
+                  Delete Tournament
+                </Button>
+              </DialogTrigger>
+              <DialogContent className='dark bg-gray-950'>
+                <DialogHeader>
+                  <DialogTitle>Confirm Tournament Deletion</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete this tournament? This action cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+
+                {tournament.currentParticipants > 0 && (
+                  <div className='mt-2 rounded border border-amber-700 bg-amber-900/20 p-3'>
+                    <p className='text-sm font-medium text-amber-400'>
+                      Warning: This tournament has {tournament.currentParticipants} participant(s). Tournaments with
+                      registered participants cannot be deleted.
+                    </p>
+                  </div>
+                )}
+
+                <DialogFooter className='mt-4'>
+                  <Button
+                    variant='outline'
+                    onClick={() => setDeleteDialogOpen(false)}
+                    disabled={isDeleting}
+                    className='text-white'
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => deleteTournamentMutation()}
+                    disabled={isDeleting || tournament.currentParticipants > 0}
+                    className={`bg-red-500 text-white hover:bg-red-600 ${
+                      tournament.currentParticipants > 0 ? 'cursor-not-allowed opacity-50' : ''
+                    }`}
+                  >
+                    {isDeleting ? 'Deleting...' : 'Delete Tournament'}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>

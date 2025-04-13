@@ -52,20 +52,8 @@ function RouteComponent() {
         <div className='text-2xl font-semibold'>User Dashboard</div>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {userPages.map((page) => (
-            <NavCard
-              key={page.name}
-              name={page.name}
-              path={page.path}
-              color={page.color}
-              icon={page.icon}
-            />
+            <NavCard key={page.name} name={page.name} path={page.path} color={page.color} icon={page.icon} />
           ))}
-        </div>
-      </div>
-      <div className='mt-8'>
-        <h2 className='text-xl font-semibold mb-4'></h2>
-        <div className='bg-gray-100 rounded-lg p-4 text-gray-500'>
-          No recent activities to show.
         </div>
       </div>
     </div>

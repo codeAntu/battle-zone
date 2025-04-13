@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { Copy, Check } from 'lucide-react';
 
 export const Route = createFileRoute('/user/deposit')({
-  component: RouteComponent,
+  component: Deposit,
 });
 
 const depositValidator = z.object({
@@ -29,7 +29,7 @@ const depositInstructions = [
   '5. Your account will be credited once the transaction is confirmed.',
 ];
 
-function RouteComponent() {
+export function Deposit() {
   const [upiId, setUpiId] = useState('');
   const [amount, setAmount] = useState('');
   const [transactionId, setTransactionId] = useState('');

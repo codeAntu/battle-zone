@@ -6,20 +6,31 @@ export const Route = createFileRoute('/admin/')({
 });
 
 const pages = [
+  // Tournament Management
   {
     name: 'Create New Tournament',
     path: '/admin/tournaments',
     color: 'bg-blue-500',
   },
   {
-    name: 'View Tournaments',
+    name: 'Current Tournaments',
     path: '/admin/tournaments/current',
     color: 'bg-green-500',
   },
   {
-    name: 'View Finished Tournaments',
+    name: 'Tournament History',
     path: '/admin/tournaments/history',
     color: 'bg-gray-500',
+  },
+  {
+    name: 'Deposits',
+    path: '/admin/deposits',
+    color: 'bg-emerald-500',
+  },
+  {
+    name: 'Withdrawals',
+    path: '/admin/withdrawals',
+    color: 'bg-amber-500',
   },
 ];
 
@@ -34,7 +45,6 @@ function RouteComponent() {
           ))}
         </div>
       </div>
-      <div>History</div>
     </div>
   );
 }

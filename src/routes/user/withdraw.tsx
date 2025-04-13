@@ -11,15 +11,14 @@ import { z } from 'zod';
 import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/user/withdraw')({
-  component: RouteComponent,
+  component: Withdraw,
 });
 
 const withdrawValidator = z.object({
   amount: z.number().positive('Amount must be positive'),
   upiId: z.string().min(1, 'UPI ID is required'),
 });
-
-function RouteComponent() {
+export function Withdraw() {
   const [upiId, setUpiId] = useState('');
   const [amount, setAmount] = useState('');
   const [paymentOption, setPaymentOption] = useState('upi');

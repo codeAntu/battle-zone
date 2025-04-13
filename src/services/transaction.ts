@@ -100,3 +100,23 @@ export interface Withdrawal {
   userName: string;
   userEmail: string;
 }
+
+export const getHistory = async () => {
+  return getApi<TransactionHistoryResponse>(API.getTransactionHistory);
+};
+export interface TransactionHistoryResponse {
+  message: string;
+  history: History[];
+}
+
+export interface History {
+  id: number;
+  userId: number;
+  transactionType: string;
+  amount: number;
+  balanceEffect: string;
+  status: string;
+  message: string;
+  referenceId: number;
+  createdAt: Date;
+}

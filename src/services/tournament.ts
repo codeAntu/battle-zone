@@ -10,7 +10,6 @@ import {
   WinningResponse,
 } from './types';
 
-
 export const createTournament = async (data: TournamentData) => {
   console.log('Sending tournament data to API:', data);
   return postApi<TournamentResponse>(API.createTournament, data);
@@ -43,7 +42,7 @@ export const participateInTournament = async (
     playerUsername: string;
     playerUserId: string;
     playerLevel: number;
-  }
+  },
 ) => {
   return postApi(API.participateInTournament(id), playerData || {});
 };
@@ -82,4 +81,23 @@ export const tournamentKill = async (id: string, kills: number) => {
 
 export const addUserKillAmount = async (tournamentId: string, userId: number, kills: number) => {
   return postApi<TournamentResponse>(API.tournamentKill(tournamentId), { userId, kills });
+};
+
+export const deleteTournament = async (id: string) => {
+  return postApi<TournamentResponse>(API.deleteTournament(id), {});
+};
+
+export const editTournament = async (id: string, data: {
+  name?: string;
+  description?: string;
+  game?: string;
+  maxParticipants?: string;
+  prize?: string;
+  perKillPrize?: string;
+  entryFee?: string;
+  scheduledAt?: string;
+  roomId?: string;
+  roomPassword?: string;
+}) => {
+  return postApi<TournamentResponse>(API.editTournament(id), data);
 };
