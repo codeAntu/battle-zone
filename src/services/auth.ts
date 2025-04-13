@@ -1,4 +1,4 @@
-import { postApi } from '.';
+import { getApi, postApi } from '.';
 import API from './api';
 
 export interface UserLoginResponse {
@@ -84,6 +84,19 @@ export interface AdminVerifyResponse {
   };
 }
 
+
+export interface UserProfileResponse {
+  message: string;
+  user:    User;
+}
+
+export interface User {
+  id:      number;
+  name:    string;
+  email:   string;
+  balance: number;
+}
+
 export const userLogin = async (formdata: { email: string; password: string }) => {
   console.log(formdata);
   return postApi<UserLoginResponse>(API.userLogin, formdata);
@@ -110,4 +123,8 @@ export const adminRegister = async (formdata: { email: string; password: string 
 export const verifyAdmin = async (formdata: { email: string; verificationCode: string }) => {
   console.log('Admin verify:', formdata);
   return postApi<AdminVerifyResponse>(API.adminVerify, formdata);
+};
+
+export const getUserProfile = async () => {
+  return getApi<UserProfileResponse>(API.getProfile);
 };

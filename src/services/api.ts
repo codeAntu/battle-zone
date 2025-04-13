@@ -8,6 +8,8 @@ const API = {
   userRegister: `${BASE_URL}/user/auth/signup`,
   userVerify: `${BASE_URL}/user/auth/verify-otp`,
 
+  getProfile: `${BASE_URL}/user/profile`,
+
   // admin auth
   adminLogin: `${BASE_URL}/admin/auth/login`,
   adminRegister: `${BASE_URL}/admin/auth/signup`,
