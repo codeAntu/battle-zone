@@ -71,14 +71,14 @@ function RouteComponent() {
 
   const [tournamentData, setTournamentData] = useState({
     game: initialGame,
-    name: 'test name ',
-    description: 'something',
+    name: '',
+    description: '',
     roomId: '',
     roomPassword: '',
-    entryFee: '50',
-    prize: '500',
-    perKillPrize: '10',
-    maxParticipants: '20',
+    entryFee: '',
+    prize: '',
+    perKillPrize: '',
+    maxParticipants: '',
     date: '',
     time: '',
   });

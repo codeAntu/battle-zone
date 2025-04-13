@@ -12,14 +12,13 @@ import {
 import { appData } from '@/conts/data';
 import { useTokenStore } from '@/store/store';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { ChevronDown, LogOut, Menu, MoveRight, X } from 'lucide-react';
+import { LogOut, Menu, MoveRight, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 export default function Header() {
   const { isLoggedIn, logout, role } = useTokenStore();
   const navigate = useNavigate();
   const [isOpen, setOpen] = useState(false);
-  const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const navigationItems = [
@@ -90,7 +89,7 @@ export default function Header() {
           <p className='font-semibold whitespace-nowrap'>{appData.name}</p>
 
           {isOpen && (
-            <div className='bg-background absolute top-20 right-0 container  w-full flex-col gap-8 border-t p-5 shadow-lg hidden'>
+            <div className='bg-background absolute top-20 right-0 container hidden w-full flex-col gap-8 border-t p-5 shadow-lg'>
               {navigationItems.map((item) => (
                 <div key={item.title}>
                   <div className='flex flex-col gap-2'>
@@ -188,34 +187,14 @@ export default function Header() {
             </>
           ) : (
             <div className='relative' ref={dropdownRef}>
-              <Button onClick={() => setLoginDropdownOpen(!loginDropdownOpen)} className='flex items-center gap-2'>
-                Sign in <ChevronDown className='h-4 w-4' />
+              <Button
+                onClick={() => {
+                  navigate({ to: '/login' });
+                }}
+                className='flex items-center gap-2'
+              >
+                Sign in
               </Button>
-
-              {loginDropdownOpen && (
-                <div className='bg-card border-border absolute right-0 z-50 mt-2 w-40 rounded-md border shadow-lg'>
-                  <Button
-                    variant='ghost'
-                    className='w-full justify-start'
-                    onClick={() => {
-                      navigate({ to: '/user/login' });
-                      setLoginDropdownOpen(false);
-                    }}
-                  >
-                    Player Login
-                  </Button>
-                  <Button
-                    variant='ghost'
-                    className='w-full justify-start'
-                    onClick={() => {
-                      navigate({ to: '/admin/login' });
-                      setLoginDropdownOpen(false);
-                    }}
-                  >
-                    Admin Login
-                  </Button>
-                </div>
-              )}
             </div>
           )}
         </div>

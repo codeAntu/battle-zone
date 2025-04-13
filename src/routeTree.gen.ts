@@ -25,6 +25,7 @@ import { Route as UserLoginImport } from './routes/user/login'
 import { Route as UserHistoryImport } from './routes/user/history'
 import { Route as UserDepositImport } from './routes/user/deposit'
 import { Route as AdminWithdrawalsImport } from './routes/admin/withdrawals'
+import { Route as AdminUsersImport } from './routes/admin/users'
 import { Route as AdminLoginImport } from './routes/admin/login'
 import { Route as AdminGamesImport } from './routes/admin/games'
 import { Route as AdminDepositsImport } from './routes/admin/deposits'
@@ -124,6 +125,12 @@ const UserDepositRoute = UserDepositImport.update({
 const AdminWithdrawalsRoute = AdminWithdrawalsImport.update({
   id: '/admin/withdrawals',
   path: '/admin/withdrawals',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminUsersRoute = AdminUsersImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -265,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersImport
       parentRoute: typeof rootRoute
     }
     '/admin/withdrawals': {
@@ -427,6 +441,7 @@ export interface FileRoutesByFullPath {
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/games': typeof AdminGamesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/user/deposit': typeof UserDepositRoute
   '/user/history': typeof UserHistoryRoute
@@ -458,6 +473,7 @@ export interface FileRoutesByTo {
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/games': typeof AdminGamesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/user/deposit': typeof UserDepositRoute
   '/user/history': typeof UserHistoryRoute
@@ -490,6 +506,7 @@ export interface FileRoutesById {
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/games': typeof AdminGamesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/user/deposit': typeof UserDepositRoute
   '/user/history': typeof UserHistoryRoute
@@ -523,6 +540,7 @@ export interface FileRouteTypes {
     | '/admin/deposits'
     | '/admin/games'
     | '/admin/login'
+    | '/admin/users'
     | '/admin/withdrawals'
     | '/user/deposit'
     | '/user/history'
@@ -553,6 +571,7 @@ export interface FileRouteTypes {
     | '/admin/deposits'
     | '/admin/games'
     | '/admin/login'
+    | '/admin/users'
     | '/admin/withdrawals'
     | '/user/deposit'
     | '/user/history'
@@ -583,6 +602,7 @@ export interface FileRouteTypes {
     | '/admin/deposits'
     | '/admin/games'
     | '/admin/login'
+    | '/admin/users'
     | '/admin/withdrawals'
     | '/user/deposit'
     | '/user/history'
@@ -615,6 +635,7 @@ export interface RootRouteChildren {
   AdminDepositsRoute: typeof AdminDepositsRoute
   AdminGamesRoute: typeof AdminGamesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
   UserDepositRoute: typeof UserDepositRoute
   UserHistoryRoute: typeof UserHistoryRoute
@@ -646,6 +667,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminDepositsRoute: AdminDepositsRoute,
   AdminGamesRoute: AdminGamesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminWithdrawalsRoute: AdminWithdrawalsRoute,
   UserDepositRoute: UserDepositRoute,
   UserHistoryRoute: UserHistoryRoute,
@@ -686,6 +708,7 @@ export const routeTree = rootRoute
         "/admin/deposits",
         "/admin/games",
         "/admin/login",
+        "/admin/users",
         "/admin/withdrawals",
         "/user/deposit",
         "/user/history",
@@ -729,6 +752,9 @@ export const routeTree = rootRoute
     },
     "/admin/login": {
       "filePath": "admin/login.tsx"
+    },
+    "/admin/users": {
+      "filePath": "admin/users.tsx"
     },
     "/admin/withdrawals": {
       "filePath": "admin/withdrawals.tsx"

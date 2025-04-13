@@ -1,3 +1,4 @@
+
 export type TournamentData = {
   game: 'BGMI' | 'FREEFIRE';
   name: string;
@@ -83,4 +84,113 @@ export interface Winning {
   tournamentId: number;
   amount: number;
   createdAt: Date;
+}
+export interface GetUsersResponse {
+  users: User[];
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  isVerified: boolean;
+  verificationCode: string;
+  verificationCodeExpires: Date;
+  balance: number;
+  createdAt: Date;
+  updatedAt: Date;
+}export interface UserLoginResponse {
+  message: string;
+  token: string;
+  user: User;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  isVerified: boolean;
+  balance: number;
+}
+
+export interface UserRegisterResponse {
+  message: string;
+  title: string;
+  isVerified: boolean;
+  user: User;
+}
+
+export interface User {
+  email: string;
+  name: string;
+  password: string;
+  verificationCode: string;
+  verificationCodeExpires: Date;
+  isVerified: boolean;
+  balance: number;
+  id: number;
+}
+
+export interface ID {
+  id: number;
+}
+
+export interface UserVerifyResponse {
+  message: string;
+  isVerified: boolean;
+  token: string;
+  user: User;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  isVerified: boolean;
+  balance: number;
+}
+
+export interface AdminLoginResponse {
+  message: string;
+  token: string;
+  admin: {
+    id: number;
+    email: string;
+    name?: string;
+  };
+}
+
+export interface AdminRegisterResponse {
+  message: string;
+  title: string;
+  isVerified: boolean;
+  admin: {
+    id: number;
+    email: string;
+    name?: string;
+  };
+}
+
+export interface AdminVerifyResponse {
+  message: string;
+  isVerified: boolean;
+  token: string;
+  admin: {
+    id: number;
+    email: string;
+    name?: string;
+  };
+}
+
+export interface UserProfileResponse {
+  message: string;
+  user: User;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  balance: number;
 }
