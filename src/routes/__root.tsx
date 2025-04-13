@@ -1,9 +1,11 @@
-import Header from '@/components/header';
-import { createRootRoute, Outlet, useRouterState } from '@tanstack/react-router';
-import { Toaster } from 'react-hot-toast';
-import { UserNavigation } from '@/components/UserNavigation';
 import { AdminNavigation } from '@/components/AdminNavigation';
+import Header from '@/components/header';
+import { UserNavigation } from '@/components/UserNavigation';
 import { useTokenStore } from '@/store/store';
+import { createRootRoute, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+
 export const Route = createRootRoute({
   component: Component,
 });
@@ -11,28 +13,41 @@ export const Route = createRootRoute({
 function Component() {
   const { isLoggedIn, role } = useTokenStore();
   const router = useRouterState();
+  const navigate = useNavigate();
   const currentPath = router.location.pathname;
-  
-  // Check if current route is a login page
-  const isLoginPage = currentPath === '/login' || 
-                      currentPath === '/user/login' || 
-                      currentPath === '/admin/login';
+
+  const isLoginPage = currentPath === '/login' || currentPath === '/user/login' || currentPath === '/admin/login';
+
+  useEffect(() => {
+    if (isLoginPage && isLoggedIn()) {
+      const redirectPath = role === 'admin' ? '/admin' : '/user';
+      navigate({ to: redirectPath });
+      return;
+    }
+
+    if (isLoginPage) return;
+
+    if (currentPath.startsWith('/admin/') && isLoggedIn() && role !== 'admin') {
+      navigate({ to: '/user' });
+    }
+
+    if ((currentPath.startsWith('/admin/') || currentPath.startsWith('/user/')) && !isLoggedIn()) {
+      navigate({ to: '/login' });
+    }
+  }, [currentPath, isLoggedIn, role, navigate, isLoginPage]);
 
   return (
     <>
-      <div className='min-h-[100dvh] flex flex-col bg-black text-white'>
+      <div className='flex min-h-[100dvh] flex-col bg-black text-white'>
         <Toaster position='top-center' reverseOrder={false} />
         <Header />
 
-        <div className='flex-1 pb-16 overflow-y-auto'>
+        <div className='flex-1 overflow-y-auto pb-16'>
           <Outlet />
 
-          {/* Only show navigation when not on login page and user is logged in */}
           {!isLoginPage && isLoggedIn() && role === 'admin' && <AdminNavigation />}
           {!isLoginPage && isLoggedIn() && role === 'user' && <UserNavigation />}
         </div>
-
-        {/* <TanStackRouterDevtools /> */}
       </div>
     </>
   );

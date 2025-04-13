@@ -13,12 +13,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { endTournament, getAdminTournamentsById, getTournamentParticipants } from '@/services/tournament';
+import {
+  addUserKillAmount,
+  endTournament,
+  getAdminTournamentsById,
+  getTournamentParticipants,
+} from '@/services/tournament';
 import { Participant as ParticipantType } from '@/services/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
 import { format } from 'date-fns';
-import { Medal, Search, Trophy } from 'lucide-react';
+import { Medal, Search, Trophy, Crosshair } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -166,107 +171,85 @@ function RouteComponent() {
         <>
           <h2 className='mb-4 text-lg font-semibold sm:text-xl'>End Tournament by choosing a Winner</h2>
 
-          {selectedWinner && !changeWinner ? (
-            <div className='mb-6'>
-              <div className='mb-4 flex items-center justify-between'>
-                <h3 className='text-md flex items-center gap-2 font-medium'>
-                  <Trophy className='h-4 w-4 text-yellow-400' />
-                  Selected Winner
-                </h3>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={handleResetWinner}
-                  className='border-yellow-500/70 text-xs text-yellow-500/90 hover:bg-yellow-950/30'
-                >
-                  Change Winner
-                </Button>
-              </div>
+          {selectedWinner && !changeWinner && (
+            <div className='mb-4 flex items-center justify-between'>
+              <h3 className='text-md flex items-center gap-2 font-medium'>
+                <Trophy className='h-4 w-4 text-yellow-400' />
+                Selected Winner: <span className="font-semibold text-yellow-500">{winnerParticipant?.name}</span>
+              </h3>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={handleResetWinner}
+                className='border-yellow-500/70 text-xs text-yellow-500/90 hover:bg-yellow-950/30'
+              >
+                Change Winner
+              </Button>
+            </div>
+          )}
 
+          <div className='relative mb-6'>
+            <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400' />
+            <Input
+              type='text'
+              placeholder='Search participants by name or email'
+              className='pl-10'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {isParticipantsLoading ? (
+            <div className='flex min-h-[20vh] items-center justify-center p-5'>
+              <div className='border-primary h-10 w-10 animate-spin rounded-full border-t-2 border-b-2'></div>
+            </div>
+          ) : (
+            <>
               <Table className='text-center'>
+                <TableCaption>List of tournament participants</TableCaption>
                 <TableHeader>
                   <TableRow>
                     <TableHead className='text-center'>#</TableHead>
                     <TableHead className='text-center'>Name</TableHead>
                     <TableHead className='text-center'>Email</TableHead>
-                    <TableHead className='text-center'>Status</TableHead>
+                    <TableHead className='text-center'>Game ID</TableHead>
+                    <TableHead className='text-center'>Game Username</TableHead>
+                    <TableHead className='text-center'>Level</TableHead>
+                    <TableHead className='text-center'>Joined At</TableHead>
                     {!tournament.isEnded && <TableHead className='text-center'>Actions</TableHead>}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {winnerParticipant && (
-                    <ParticipantRow
-                      key={winnerParticipant.id}
-                      participant={winnerParticipant}
-                      index={0}
-                      isWinner={true}
-                      onSelectWinner={handleSelectWinner}
-                      tournamentEnded={tournament.isEnded}
-                    />
+                  {filteredParticipants.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={tournament.isEnded ? 7 : 8} className='h-24 text-center'>
+                        {searchQuery ? 'No participants match your search' : 'No participants found'}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredParticipants.map((participant, index) => (
+                      <ParticipantRow
+                        key={participant.id}
+                        participant={participant}
+                        index={index}
+                        isWinner={selectedWinner === participant.userId}
+                        onSelectWinner={handleSelectWinner}
+                        tournamentEnded={tournament.isEnded}
+                      />
+                    ))
                   )}
                 </TableBody>
               </Table>
-
-              <div className='mt-4 flex justify-center'>
-                <Button
-                  className='bg-red-500 px-8 text-white hover:bg-red-600'
-                  onClick={() => setShowEndConfirmation(true)}
-                >
-                  End Tournament with Selected Winner
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className='relative mb-6'>
-                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400' />
-                <Input
-                  type='text'
-                  placeholder='Search participants by name or email'
-                  className='pl-10'
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-
-              {isParticipantsLoading ? (
-                <div className='flex min-h-[20vh] items-center justify-center p-5'>
-                  <div className='border-primary h-10 w-10 animate-spin rounded-full border-t-2 border-b-2'></div>
+              
+              {selectedWinner && !changeWinner && (
+                <div className='mt-4 flex justify-center'>
+                  <Button
+                    className='bg-red-500 px-8 text-white hover:bg-red-600'
+                    onClick={() => setShowEndConfirmation(true)}
+                  >
+                    End Tournament with Selected Winner
+                  </Button>
                 </div>
-              ) : (
-                <Table className='text-center'>
-                  <TableCaption>List of tournament participants</TableCaption>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className='text-center'>#</TableHead>
-                      <TableHead className='text-center'>Name</TableHead>
-                      <TableHead className='text-center'>Email</TableHead>
-                      <TableHead className='text-center'>Joined At</TableHead>
-                      <TableHead className='text-center'>Status</TableHead>
-                      {!tournament.isEnded && <TableHead className='text-center'>Actions</TableHead>}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredParticipants.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={tournament.isEnded ? 5 : 6} className='h-24 text-center'>
-                          {searchQuery ? 'No participants match your search' : 'No participants found'}
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredParticipants.map((participant, index) => (
-                        <ParticipantRow
-                          key={participant.id}
-                          participant={participant}
-                          index={index}
-                          isWinner={selectedWinner === participant.userId}
-                          onSelectWinner={handleSelectWinner}
-                          tournamentEnded={tournament.isEnded}
-                        />
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
               )}
             </>
           )}
@@ -315,26 +298,26 @@ function RouteComponent() {
                     <TableHead className='text-center'>#</TableHead>
                     <TableHead className='text-center'>Name</TableHead>
                     <TableHead className='text-center'>Email</TableHead>
+                    <TableHead className='text-center'>Game ID</TableHead>
+                    <TableHead className='text-center'>Game Username</TableHead>
+                    <TableHead className='text-center'>Level</TableHead>
                     <TableHead className='text-center'>Joined At</TableHead>
-                    <TableHead className='text-center'>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredParticipants.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} className='h-24 text-center'>
+                      <TableCell colSpan={7} className='h-24 text-center'>
                         {searchQuery ? 'No participants match your search' : 'No participants found'}
                       </TableCell>
                     </TableRow>
                   ) : (
                     filteredParticipants.map((participant, index) => {
-                      // const isWinnerParticipant = tournament.winnerId === participant.userId;
                       return (
                         <ParticipantRow
                           key={participant.id}
                           participant={participant}
                           index={index}
-                          // isWinner={isWinnerParticipant}
                           onSelectWinner={handleSelectWinner}
                           tournamentEnded={tournament.isEnded}
                         />
@@ -372,28 +355,62 @@ function ParticipantRow({
   onSelectWinner: (id: number) => void;
   tournamentEnded: boolean;
 }) {
+  const { tournamentsId } = useParams({ from: '/admin/tournaments/end/$tournamentsId' });
+  const queryClient = useQueryClient();
+  const [killCount, setKillCount] = useState<string>('0'); // Changed to string for better input handling
+  const [showKillDialog, setShowKillDialog] = useState(false);
   const joinedDate = new Date(participant.joinedAt);
+
+  const addKillsMutation = useMutation({
+    mutationFn: (kills: number) => addUserKillAmount(tournamentsId, participant.userId, kills),
+    onSuccess: () => {
+      toast.success(`Kill count added for ${participant.name}`);
+      setShowKillDialog(false);
+      queryClient.invalidateQueries({ queryKey: ['tournamentParticipants', tournamentsId] });
+    },
+    onError: (error) => {
+      toast.error(`Failed to add kills: ${(error as Error).message}`);
+    },
+  });
+
+  const handleAddKills = () => {
+    const kills = parseInt(killCount);
+    if (!isNaN(kills) && kills >= 0) {
+      addKillsMutation.mutate(kills);
+    } else {
+      toast.error('Kill count must be a valid positive number');
+    }
+  };
+
+  // Reset kill count when dialog is opened
+  const handleOpenKillDialog = () => {
+    setKillCount('0');
+    setShowKillDialog(true);
+  };
 
   return (
     <TableRow className={isWinner ? 'bg-green-950/30' : ''}>
       <TableCell className='text-center'>{index + 1}</TableCell>
       <TableCell className='text-center font-medium'>{participant.name}</TableCell>
       <TableCell className='text-center'>{participant.email}</TableCell>
+      <TableCell className='text-center'>
+        {participant.playerUserId || <span className='text-gray-500'>Not provided</span>}
+      </TableCell>
+      <TableCell className='text-center'>
+        {participant.playerUsername || <span className='text-gray-500'>Not provided</span>}
+      </TableCell>
+      <TableCell className='text-center'>
+        {participant.playerLevel ? (
+          <span className='rounded-full bg-blue-900/30 px-2 py-1 text-blue-400'>Level {participant.playerLevel}</span>
+        ) : (
+          <span className='text-gray-500'>N/A</span>
+        )}
+      </TableCell>
       {participant.joinedAt && (
         <TableCell className='text-center'>
           {format(joinedDate, 'MMM d, yyyy')} at {format(joinedDate, 'h:mm a')}
         </TableCell>
       )}
-      <TableCell className='text-center'>
-        {isWinner ? (
-          <div className='flex items-center justify-center gap-1 text-yellow-400'>
-            <Trophy className='h-4 w-4' />
-            <span>Winner</span>
-          </div>
-        ) : (
-          <span className='text-gray-400'>Participant</span>
-        )}
-      </TableCell>
       {!tournamentEnded && (
         <TableCell className='text-center'>
           <div className='flex items-center justify-center space-x-2'>
@@ -428,6 +445,51 @@ function ParticipantRow({
                     className='bg-yellow-500 hover:bg-yellow-600'
                   >
                     Yes, Select Winner
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog open={showKillDialog} onOpenChange={setShowKillDialog}>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant='default'
+                  size='sm'
+                  className='h-8 bg-blue-500 text-xs hover:bg-blue-600'
+                  onClick={handleOpenKillDialog}
+                >
+                  <Crosshair className='mr-1 h-3 w-3' />
+                  Add Kill Prizes
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className='dark'>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className='text-white'>Record Kill Prizes</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Enter the number of kills achieved by
+                    <span className='font-semibold text-yellow-500'>{' ' + participant.name}</span>.
+                    Kill prizes will be calculated based on tournament settings.
+                  </AlertDialogDescription>
+                  <div className='mt-4 space-y-2'>
+                    <label className='text-sm text-gray-300'>Kill Count:</label>
+                    <Input
+                      type='number'
+                      min='0'
+                      value={killCount}
+                      onChange={(e) => setKillCount(e.target.value)}
+                      className='border-gray-700 bg-gray-800 text-white'
+                      placeholder='Enter number of kills'
+                    />
+                  </div>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleAddKills}
+                    className='bg-blue-500 hover:bg-blue-600'
+                    disabled={addKillsMutation.isPending}
+                  >
+                    {addKillsMutation.isPending ? 'Recording...' : 'Record Kill Prizes'}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

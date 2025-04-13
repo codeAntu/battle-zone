@@ -33,6 +33,7 @@ const API = {
   getAdminCurrentTournaments: `${BASE_URL}/admin/tournaments/current`,
   getTournamentParticipants: (id: string) => `${BASE_URL}/admin/tournaments/participants/${id}`,
   getUserTournamentHistory: `${BASE_URL}/admin/tournaments/history`,  
+  tournamentKill: (id: string) => `${BASE_URL}/admin/tournaments/kills/${id}`,
 
   // user tournaments
   getUserTournamentByName: (name: string) => `${BASE_URL}/user/tournaments/game/${name}`,

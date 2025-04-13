@@ -75,3 +75,11 @@ export const getUserWinnings = async () => {
 export const getUserTournamentHistory = async () => {
   return getApi<TournamentsResponse>(API.getUserTournamentHistory);
 };
+
+export const tournamentKill = async (id: string, kills: number) => {
+  return postApi<TournamentResponse>(API.tournamentKill(id), { kills });
+};
+
+export const addUserKillAmount = async (tournamentId: string, userId: number, kills: number) => {
+  return postApi<TournamentResponse>(API.tournamentKill(tournamentId), { userId, kills });
+};

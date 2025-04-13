@@ -62,17 +62,19 @@ function RouteComponent() {
         </TableHeader>
         <TableBody>
           {tournaments.map((tournament, index) => {
-            const gameImage = tournament.game === 'BGMI' 
-              ? 'https://www.financialexpress.com/wp-content/uploads/2025/03/BGMI-MOBILE1.jpg'
-              : 'https://img.gurugamer.com/resize/740x-/2020/07/23/free-fire-battlegrounds-pc-laptop-version-download-5cb5.jpg';
+            const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
             
             return (
               <TableRow key={tournament.id}>
                 <TableCell className='text-center font-medium'>{index + 1}</TableCell>
                 <TableCell className='font-medium'>{tournament.name}</TableCell>
-                <TableCell className='font-medium'>
+                <TableCell className='text-center'>
                   <div className='flex items-center justify-center gap-2'>
-                    <img src={gameImage} alt={tournament.game} className='h-10 w-10 rounded object-cover' />
+                    <img
+                      src={gameImage}
+                      alt={tournament.game}
+                      className='h-8 w-8 rounded-lg object-cover'
+                    />
                     <span>{tournament.game}</span>
                   </div>
                 </TableCell>

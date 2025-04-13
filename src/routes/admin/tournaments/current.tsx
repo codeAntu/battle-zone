@@ -50,7 +50,23 @@ function RouteComponent() {
               <TableCell className='text-center font-medium'>{index + 1}</TableCell>
               <TableCell className='font-medium'>{tournament.name}</TableCell>
 
-              <TableCell className='text-center'>{tournament.game}</TableCell>
+              <TableCell className='text-center'>
+                <div className='flex items-center justify-center gap-2'>
+                  {(() => {
+                    const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
+                    return (
+                      <>
+                        <img
+                          src={gameImage}
+                          alt={tournament.game}
+                          className='h-8 w-8 rounded-lg object-cover'
+                        />
+                        <span>{tournament.game}</span>
+                      </>
+                    );
+                  })()}
+                </div>
+              </TableCell>
               <TableCell className='text-center'>${tournament.entryFee}</TableCell>
               <TableCell className='text-center'>${tournament.prize}</TableCell>
               <TableCell className='text-center'>${tournament.perKillPrize}</TableCell>

@@ -62,7 +62,11 @@ export interface Participant {
   name: string;
   email: string;
   userId: number;
+  playerUserId?: string;     // Game ID provided by participant (corrected from userPlayerId)
+  playerUsername?: string;   // In-game username
+  playerLevel?: number;      // Player's level in the game
 }
+
 export interface WinningResponse {
   message: string;
   data: Datum[];
