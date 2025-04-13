@@ -41,6 +41,11 @@ const API = {
   isParticipated: (id: string) => `${BASE_URL}/user/tournaments/isParticipated/${id}`,
   getParticipatedTournaments: `${BASE_URL}/user/tournaments/participated`,
   getUserWinnings: `${BASE_URL}/user/tournaments/winnings`,
+  
+  // transactions
+  depositTransaction: `${BASE_URL}/user/transaction/deposit`,
+  withdrawTransaction: `${BASE_URL}/user/transaction/withdraw`,
+  getTransactionHistory: `${BASE_URL}/user/transaction/history`,
 };
 
 export default API;

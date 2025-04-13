@@ -4,10 +4,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createFileRoute } from '@tanstack/react-router';
+import { useMutation } from '@tanstack/react-query';
+import { depositTransaction } from '@/services/transaction';
 import { useState } from 'react';
+import { z } from 'zod';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/user/deposit')({
   component: RouteComponent,
+});
+
+const depositValidator = z.object({
+  amount: z.number().positive('Amount must be positive'),
+  transactionId: z.number().positive('Transaction ID is required'),
+  upiId: z.string().min(1, 'UPI ID is required'),
 });
 
 const depositInstructions = [
@@ -21,27 +31,72 @@ const depositInstructions = [
 function RouteComponent() {
   const [upiId, setUpiId] = useState('');
   const [amount, setAmount] = useState('');
+  const [transactionId, setTransactionId] = useState('');
   const [paymentOption, setPaymentOption] = useState('upi');
   const [errors, setErrors] = useState({
     upiId: '',
     amount: '',
+    transactionId: '',
+  });
+
+  const depositMutation = useMutation({
+    mutationFn: (data: { upiId: string; amount: number; transactionId: number }) =>
+      depositTransaction(data.upiId, data.amount, data.transactionId),
+    onSuccess: (data) => {
+      if (data.isAlert) {
+        toast.error(data.message || 'Something went wrong!');
+        return;
+      }
+
+      toast.success('Deposit request submitted successfully!');
+      setUpiId('');
+      setAmount('');
+      setTransactionId('');
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('An unexpected error occurred');
+        console.error('Unexpected error:', error);
+      }
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Simple validation
-    const newErrors = {
-      upiId: upiId ? '' : 'UPI ID is required',
-      amount: amount ? '' : 'Amount is required',
-    };
+    try {
+      const parsedAmount = parseFloat(amount);
+      const parsedTransactionId = parseInt(transactionId, 10);
 
-    setErrors(newErrors);
+      depositValidator.parse({
+        upiId,
+        amount: parsedAmount,
+        transactionId: parsedTransactionId,
+      });
 
-    // If no errors, proceed with submission
-    if (!newErrors.upiId && !newErrors.amount) {
-      console.log('Form submitted:', { upiId, amount, paymentOption });
-      // Here you would handle the actual deposit process
+      depositMutation.mutate({
+        upiId,
+        amount: parsedAmount,
+        transactionId: parsedTransactionId,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors = { upiId: '', amount: '', transactionId: '' };
+
+        error.errors.forEach((err) => {
+          const path = err.path[0] as keyof typeof newErrors;
+          if (path in newErrors) {
+            newErrors[path] = err.message;
+          }
+        });
+
+        setErrors(newErrors);
+      } else {
+        toast.error('An unexpected error occurred');
+        console.error('Unexpected error:', error);
+      }
     }
   };
 
@@ -53,7 +108,6 @@ function RouteComponent() {
           <CardDescription>Enter your details to add funds to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* QR Code Section */}
           <div className='mb-6 flex flex-col items-center'>
             <p className='mb-2 text-sm font-medium'>Scan QR code to pay directly</p>
             <div className='rounded-md border bg-white p-3'>
@@ -62,7 +116,6 @@ function RouteComponent() {
                 alt='Payment QR Code'
                 className='h-48 w-48 object-contain'
                 onError={(e) => {
-                  // Fallback if image doesn't load
                   const target = e.target as HTMLImageElement;
                   target.src =
                     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTk5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5RUiBDb2RlPC90ZXh0Pjwvc3ZnPg==';
@@ -81,7 +134,7 @@ function RouteComponent() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className='space-y-6'>
+          <form onSubmit={handleSubmit} className='space-y-4'>
             <div className='space-y-2'>
               <Label htmlFor='upiId'>UPI ID</Label>
               <Input
@@ -89,6 +142,7 @@ function RouteComponent() {
                 placeholder='Enter your UPI ID'
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
+                disabled={depositMutation.isPending}
               />
               {errors.upiId && <p className='text-sm text-red-500'>{errors.upiId}</p>}
             </div>
@@ -101,26 +155,38 @@ function RouteComponent() {
                 placeholder='Enter amount'
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                disabled={depositMutation.isPending}
               />
               {errors.amount && <p className='text-sm text-red-500'>{errors.amount}</p>}
             </div>
 
             <div className='space-y-2'>
+              <Label htmlFor='transactionId'>Transaction ID</Label>
+              <Input
+                id='transactionId'
+                type='number'
+                placeholder='Enter transaction ID'
+                value={transactionId}
+                onChange={(e) => setTransactionId(e.target.value)}
+                disabled={depositMutation.isPending}
+              />
+              {errors.transactionId && <p className='text-sm text-red-500'>{errors.transactionId}</p>}
+            </div>
+
+            <div className='space-y-2'>
               <Label>Payment Option</Label>
-              <Select value={paymentOption} onValueChange={setPaymentOption}>
+              <Select value={paymentOption} onValueChange={setPaymentOption} disabled={depositMutation.isPending}>
                 <SelectTrigger className='w-full'>
                   <SelectValue placeholder='Select payment method' />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value='upi'>UPI Transfer</SelectItem>
-                  <SelectItem value='card'>Debit/Credit Card</SelectItem>
-                  <SelectItem value='netbanking'>Net Banking</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <Button type='submit' className='w-full'>
-              Process Deposit
+            <Button type='submit' className='mt-4 w-full' disabled={depositMutation.isPending}>
+              {depositMutation.isPending ? 'Processing...' : 'Process Deposit'}
             </Button>
           </form>
         </CardContent>
