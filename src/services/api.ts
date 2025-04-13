@@ -15,7 +15,7 @@ const API = {
 
   // game
   gameList: `${BASE_URL}/game/list`,
-  
+
   // admin games
   adminGamesList: `${BASE_URL}/admin/games`,
   adminGameById: (id: string) => `${BASE_URL}/admin/games/${id}`,
@@ -32,7 +32,7 @@ const API = {
   getAdminTournamentHistory: `${BASE_URL}/admin/tournaments/history`,
   getAdminCurrentTournaments: `${BASE_URL}/admin/tournaments/current`,
   getTournamentParticipants: (id: string) => `${BASE_URL}/admin/tournaments/participants/${id}`,
-  getUserTournamentHistory: `${BASE_URL}/admin/tournaments/history`,  
+  getUserTournamentHistory: `${BASE_URL}/admin/tournaments/history`,
   tournamentKill: (id: string) => `${BASE_URL}/admin/tournaments/kills/${id}`,
 
   // user tournaments
@@ -41,11 +41,17 @@ const API = {
   isParticipated: (id: string) => `${BASE_URL}/user/tournaments/isParticipated/${id}`,
   getParticipatedTournaments: `${BASE_URL}/user/tournaments/participated`,
   getUserWinnings: `${BASE_URL}/user/tournaments/winnings`,
-  
+
   // transactions
   depositTransaction: `${BASE_URL}/user/transaction/deposit`,
   withdrawTransaction: `${BASE_URL}/user/transaction/withdraw`,
   getTransactionHistory: `${BASE_URL}/user/transaction/history`,
+
+  // admin transactions
+  adminDeposits: `${BASE_URL}/admin/transactions/deposits`,
+  adminWithdrawals: `${BASE_URL}/admin/transactions/withdrawals`,
+  approveDeposit: (id: string) => `${BASE_URL}/admin/transactions/deposit/${id}`,
+  approveWithdrawal: (id: string) => `${BASE_URL}/admin/transactions/withdrawal/${id}`,
 };
 
 export default API;

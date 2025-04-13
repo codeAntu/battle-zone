@@ -1,16 +1,6 @@
-import { postApi } from '.';
+import { postApi, getApi } from '.';
 import API from './api';
-
-// const depositValidator = z.object({
-//   amount: z.number().positive("Amount must be positive"),
-//   transactionId: z.number().positive("Transaction ID is required"),
-//   upiId: z.string().min(1, "UPI ID is required"),
-// });
-
-// const withdrawValidator = z.object({
-//   amount: z.number().positive("Amount must be positive"),
-//   upiId: z.string().min(1, "UPI ID is required"),
-// });
+import { z } from 'zod';
 
 export const withdrawTransaction = async (upiId: string, amount: number) => {
   return postApi(API.withdrawTransaction, { upiId, amount });
@@ -19,3 +9,94 @@ export const withdrawTransaction = async (upiId: string, amount: number) => {
 export const depositTransaction = async (upiId: string, amount: number, transactionId: number) => {
   return postApi(API.depositTransaction, { upiId, amount, transactionId });
 };
+
+// Admin transaction methods
+export const getAdminDeposits = async () => {
+  return getApi<DepositResponse>(API.adminDeposits);
+};
+
+export const getAdminWithdrawals = async () => {
+  return getApi<WithdrawalResponse>(API.adminWithdrawals);
+};
+
+// Updated validation schema that matches backend expectation
+const statusUpdateValidator = z
+  .object({
+    status: z.enum(['pending', 'approved', 'rejected']),
+    reason: z.string().min(1).optional(),
+  })
+  .refine(
+    (data) => {
+      // Require reason if status is "rejected"
+      return data.status !== 'rejected' || (data.status === 'rejected' && data.reason);
+    },
+    {
+      message: 'Reason is required when rejecting a transaction',
+      path: ['reason'],
+    },
+  );
+
+// Updated status update function that always sends an object
+export const updateTransactionStatus = async (
+  endpoint: string,
+  status: 'pending' | 'approved' | 'rejected',
+  reason?: string,
+) => {
+  // Create proper request body that matches backend expectation: { status, reason }
+  const requestBody = { status, reason };
+
+  const validatedData = statusUpdateValidator.parse(requestBody);
+  console.log('Validated Data:', validatedData); // Debugging line to check the validated data
+
+  return postApi(endpoint, validatedData);
+};
+
+// Admin transaction approval/rejection methods
+export const approveDeposit = async (id: string) => {
+  return updateTransactionStatus(API.approveDeposit(id), 'approved');
+};
+
+export const rejectDeposit = async (id: string, reason: string) => {
+  return updateTransactionStatus(API.approveDeposit(id), 'rejected', reason);
+};
+
+export const approveWithdrawal = async (id: string) => {
+  return updateTransactionStatus(API.approveWithdrawal(id), 'approved');
+};
+
+export const rejectWithdrawal = async (id: string, reason: string) => {
+  return updateTransactionStatus(API.approveWithdrawal(id), 'rejected', reason);
+};
+
+export interface DepositResponse {
+  message: string;
+  deposits: Deposit[];
+}
+
+export interface Deposit {
+  id: number;
+  userId: number;
+  amount: number;
+  transactionId: number;
+  upiId: string;
+  status: string;
+  createdAt: Date;
+  userName: string;
+  userEmail: string;
+}
+
+export interface WithdrawalResponse {
+  message: string;
+  withdrawals: Withdrawal[];
+}
+
+export interface Withdrawal {
+  id: number;
+  userId: number;
+  amount: number;
+  upiId: string;
+  status: string;
+  createdAt: Date;
+  userName: string;
+  userEmail: string;
+}

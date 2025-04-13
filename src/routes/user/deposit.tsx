@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { createFileRoute } from '@tanstack/react-router';
-import { useMutation } from '@tanstack/react-query';
 import { depositTransaction } from '@/services/transaction';
+import { useMutation } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { z } from 'zod';
 import toast from 'react-hot-toast';
+import { z } from 'zod';
 
 export const Route = createFileRoute('/user/deposit')({
   component: RouteComponent,
@@ -101,31 +101,19 @@ function RouteComponent() {
   };
 
   return (
-    <div className='container mx-auto max-w-md space-y-6 p-4'>
+    <div className='container mx-auto max-w-md p-4'>
       <Card>
-        <CardHeader className='items-center'>
-          <CardTitle>Deposit </CardTitle>
-          <CardDescription>Enter your details to add funds to your account</CardDescription>
-        </CardHeader>
         <CardContent>
-          <div className='mb-6 flex flex-col items-center'>
-            <p className='mb-2 text-sm font-medium'>Scan QR code to pay directly</p>
+          <CardTitle className='pt-5 pb-3 text-center'>Deposit </CardTitle>
+          <div className='flex flex-col items-center'>
+            <p className='mb-1 text-sm font-medium'>Scan QR code to pay directly</p>
             <div className='rounded-md border bg-white p-3'>
-              <img
-                src='/qr-placeholder.png'
-                alt='Payment QR Code'
-                className='h-48 w-48 object-contain'
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src =
-                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IiM5OTk5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5RUiBDb2RlPC90ZXh0Pjwvc3ZnPg==';
-                }}
-              />
+              <img src='/qr-placeholder.png' alt='Payment QR Code' className='h-48 w-48 object-contain' />
             </div>
-            <p className='text-muted-foreground mt-2 text-xs'>Supported methods: UPI, Paytm, GPay</p>
+            <p className='text-muted-foreground mt-1 text-xs'>Supported methods: UPI, Paytm, GPay</p>
           </div>
 
-          <div className='relative my-4'>
+          <div className='relative my-3'>
             <div className='absolute inset-0 flex items-center'>
               <span className='w-full border-t' />
             </div>
@@ -134,7 +122,7 @@ function RouteComponent() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className='space-y-4'>
+          <form onSubmit={handleSubmit} className='space-y-2'>
             <div className='space-y-2'>
               <Label htmlFor='upiId'>UPI ID</Label>
               <Input
@@ -204,13 +192,6 @@ function RouteComponent() {
           </ul>
         </CardContent>
       </Card>
-
-      <div>
-        <div className='text-xl font-bold'>History</div>
-        <div className='mt-4'>
-          <p className='text-sm text-gray-500'>No deposit history available.</p>
-        </div>
-      </div>
     </div>
   );
 }

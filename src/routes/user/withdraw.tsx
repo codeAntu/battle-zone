@@ -137,12 +137,6 @@ function RouteComponent() {
           </form>
         </CardContent>
       </Card>
-      <div>
-        <div className='text-xl font-bold'>History</div>
-        <div className='mt-4'>
-          <p className='text-sm text-gray-500'>No withdrawal history available.</p>
-        </div>
-      </div>
     </div>
   );
 }
