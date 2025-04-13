@@ -1,25 +1,21 @@
 import { Link } from '@tanstack/react-router';
-import { Gamepad, MoveRight } from 'lucide-react';
+import { ReactNode } from 'react';
 
 interface NavCardProps {
   name: string;
   path: string;
   color: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
 
-export default function NavCard({ name, path, color, icon = <Gamepad className='h-10 w-10' /> }: NavCardProps) {
+export default function NavCard({ name, path, color, icon }: NavCardProps) {
   return (
     <Link
       to={path}
-      key={name}
-      className={`rounded-xl border ${color} cursor-pointer px-5 py-3 transition duration-300 hover:scale-102`}
+      className={`${color} flex items-center rounded-lg p-5 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl`}
     >
-      {icon}
-      <div className='flex items-center justify-between font-semibold'>
-        <div>{name}</div>
-        <MoveRight className='aspect-square w-8' />
-      </div>
+      {icon && <div className="mr-4">{icon}</div>}
+      <div className="font-semibold">{name}</div>
     </Link>
   );
 }
