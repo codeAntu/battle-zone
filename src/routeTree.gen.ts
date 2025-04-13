@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WelcomeImport } from './routes/welcome'
 import { Route as LoginImport } from './routes/login'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
@@ -42,6 +43,12 @@ import { Route as AdminEditGameIdImport } from './routes/admin/edit-game.$id'
 import { Route as AdminTournamentsEndTournamentsIdImport } from './routes/admin/tournaments/end/$tournamentsId'
 
 // Create/Update Routes
+
+const WelcomeRoute = WelcomeImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -246,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/add-game': {
       id: '/admin/add-game'
       path: '/admin/add-game'
@@ -437,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
+  '/welcome': typeof WelcomeRoute
   '/admin/add-game': typeof AdminAddGameRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/games': typeof AdminGamesRoute
@@ -469,6 +484,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
+  '/welcome': typeof WelcomeRoute
   '/admin/add-game': typeof AdminAddGameRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/games': typeof AdminGamesRoute
@@ -502,6 +518,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
+  '/welcome': typeof WelcomeRoute
   '/admin/add-game': typeof AdminAddGameRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/games': typeof AdminGamesRoute
@@ -536,6 +553,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/login'
+    | '/welcome'
     | '/admin/add-game'
     | '/admin/deposits'
     | '/admin/games'
@@ -567,6 +585,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/login'
+    | '/welcome'
     | '/admin/add-game'
     | '/admin/deposits'
     | '/admin/games'
@@ -598,6 +617,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/login'
+    | '/welcome'
     | '/admin/add-game'
     | '/admin/deposits'
     | '/admin/games'
@@ -631,6 +651,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
+  WelcomeRoute: typeof WelcomeRoute
   AdminAddGameRoute: typeof AdminAddGameRoute
   AdminDepositsRoute: typeof AdminDepositsRoute
   AdminGamesRoute: typeof AdminGamesRoute
@@ -663,6 +684,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
+  WelcomeRoute: WelcomeRoute,
   AdminAddGameRoute: AdminAddGameRoute,
   AdminDepositsRoute: AdminDepositsRoute,
   AdminGamesRoute: AdminGamesRoute,
@@ -704,6 +726,7 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/login",
+        "/welcome",
         "/admin/add-game",
         "/admin/deposits",
         "/admin/games",
@@ -740,6 +763,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/welcome": {
+      "filePath": "welcome.tsx"
     },
     "/admin/add-game": {
       "filePath": "admin/add-game.tsx"
