@@ -53,7 +53,7 @@ export function AdminSignInPage() {
         setRole('admin');
         setToken(response.token);
         toast.success('Admin login successful!');
-        navigate({ to: '/welcome' }); // Changed from /admin/tournaments to /welcome
+        navigate({ to: '/admin/tournaments' });
       } else {
         setError('Invalid response from server');
         toast.error('Invalid response from server');
@@ -110,7 +110,7 @@ export function AdminSignInPage() {
         setRole('admin');
         setToken(response.token);
         toast.success('Verification successful! You are now logged in as admin.');
-        navigate({ to: '/welcome' }); // Changed from /admin/tournaments to /welcome
+        navigate({ to: '/admin/tournaments' });
       } else {
         setError('Invalid response from server');
         toast.error('Invalid response from server');
@@ -131,7 +131,6 @@ export function AdminSignInPage() {
         toast.error('Please enter the complete verification code');
         return;
       }
-
 
       verifyMutation({
         email: data.email,
