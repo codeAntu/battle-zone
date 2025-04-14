@@ -42,7 +42,7 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
   return (
     <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
       <div className='relative'>
-        <img className='hidden aspect-[2/1] w-full object-cover md:block' alt={tournament.game} src={imageUrl} />
+        <img className='aspect-[2/1] w-full object-cover m' alt={tournament.game} src={imageUrl} />
         <Tags tags={[tournament.game]} />
       </div>
       <div className='space-y-3 px-4 py-2'>

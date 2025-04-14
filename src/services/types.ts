@@ -1,4 +1,3 @@
-
 export type TournamentData = {
   game: 'BGMI' | 'FREEFIRE';
   name: string;
@@ -63,9 +62,9 @@ export interface Participant {
   name: string;
   email: string;
   userId: number;
-  playerUserId?: string;     // Game ID provided by participant (corrected from userPlayerId)
-  playerUsername?: string;   // In-game username
-  playerLevel?: number;      // Player's level in the game
+  playerUserId?: string; // Game ID provided by participant (corrected from userPlayerId)
+  playerUsername?: string; // In-game username
+  playerLevel?: number; // Player's level in the game
 }
 
 export interface WinningResponse {
@@ -100,7 +99,8 @@ export interface User {
   balance: number;
   createdAt: Date;
   updatedAt: Date;
-}export interface UserLoginResponse {
+}
+export interface UserLoginResponse {
   message: string;
   token: string;
   user: User;

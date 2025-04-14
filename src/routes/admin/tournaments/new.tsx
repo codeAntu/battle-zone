@@ -12,7 +12,6 @@ import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 import { createTournament } from '@/services/tournament';
 
-// Update the schema to match backend expectations
 export const tournamentSchema = z
   .object({
     game: z.enum(['BGMI', 'FREEFIRE'], {
@@ -32,7 +31,6 @@ export const tournamentSchema = z
       .number()
       .int('Max participants must be a valid integer')
       .positive('Maximum participants must be positive'),
-    // Keep these for form handling but don't include in final output
     date: z.string().min(1, 'Date is required'),
     time: z.string().min(1, 'Time is required'),
   })
@@ -63,7 +61,6 @@ function RouteComponent() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
-  // If URL has a valid game parameter, use it; otherwise leave it empty for user to select
   const initialGame =
     gameParam && ['BGMI', 'FREEFIRE'].includes(gameParam.toString().toUpperCase())
       ? (gameParam.toString().toUpperCase() as 'BGMI' | 'FREEFIRE')
@@ -96,8 +93,6 @@ function RouteComponent() {
         duration: 4000,
       });
 
-      // /admin/tournaments/$gameName/$tournamentsId'
-      // Redirect to the tournament details page
       const tournamentId = data.tournament.id;
       navigate({
         to: `/admin/tournaments/${tournamentId}`,
@@ -135,10 +130,8 @@ function RouteComponent() {
     setErrors({});
 
     try {
-      // First validate the form data with our frontend schema
       const validated = tournamentSchema.parse(tournamentData);
 
-      // Then transform to match backend schema by combining date and time
       const backendData = {
         game: validated.game,
         name: validated.name,
@@ -149,16 +142,14 @@ function RouteComponent() {
         prize: validated.prize,
         perKillPrize: validated.perKillPrize,
         maxParticipants: validated.maxParticipants,
-        scheduledAt: `${validated.date}T${validated.time}:00Z`, // Format as ISO string for backend
+        scheduledAt: `${validated.date}T${validated.time}`, 
       };
 
       console.log('Sending tournament data:', backendData);
 
-      // Send the transformed data to match backend expectations
       mutate(backendData);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // Format zod errors into a more usable object
         const formattedErrors: Record<string, string> = {};
         error.errors.forEach((err) => {
           if (err.path.length > 0) {
@@ -191,11 +182,9 @@ function RouteComponent() {
         <p className='text-2xl font-bold'>Create New Tournament</p>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
-          {/* Basic Info Section */}
           <div className='rounded-lg border border-gray-800 p-4'>
             <h3 className='mb-4 text-lg font-medium'>Basic Information</h3>
 
-            {/* Game and Tournament Name - side by side on all screens */}
             <div className='grid grid-cols-1 gap-4'>
               <div className='flex flex-col gap-1'>
                 <label htmlFor='game' className='text-sm font-medium'>
@@ -235,7 +224,6 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* Description - full width */}
             <div className='mt-4 flex flex-col gap-1'>
               <label htmlFor='description' className='text-sm font-medium'>
                 Description
@@ -250,11 +238,9 @@ function RouteComponent() {
             </div>
           </div>
 
-          {/* Prize & Participation Section */}
           <div className='rounded-lg border border-gray-800 p-4'>
             <h3 className='mb-4 text-lg font-medium'>Prize & Participation</h3>
 
-            {/* Entry Fee and Prize Pool - side by side on all screens */}
             <div className='grid grid-cols-2 gap-4'>
               <div className='flex flex-col gap-1'>
                 <label htmlFor='entryFee' className='text-sm font-medium'>
@@ -293,7 +279,6 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* Max Participants and Per Kill Prize - side by side on all screens */}
             <div className='mt-4 grid grid-cols-2 gap-4'>
               <div className='flex flex-col gap-1'>
                 <label htmlFor='maxParticipants' className='text-sm font-medium'>
@@ -333,7 +318,6 @@ function RouteComponent() {
             </div>
           </div>
 
-          {/* Schedule Section */}
           <div className='rounded-lg border border-gray-800 p-4'>
             <h3 className='mb-4 text-lg font-medium'>Schedule</h3>
             <div className='grid grid-cols-2 gap-4'>

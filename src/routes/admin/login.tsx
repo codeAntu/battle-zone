@@ -211,7 +211,7 @@ export function AdminSignInPage() {
             >
               {isVerify ? 'Verify' : isSignUp ? 'Create Admin Account' : 'Login as Admin'}
             </Button>
-            {!isVerify &&
+            {/* {!isVerify &&
               (isSignUp ? (
                 <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-white'>
                   <span className=''>Already have an account?</span>
@@ -222,7 +222,7 @@ export function AdminSignInPage() {
                   <span className=''>Don't have an account?</span>
                   <span className='underline'>Create Admin Account</span>
                 </Button>
-              ))}
+              ))} */}
           </div>
         </CardFooter>
       </Card>
