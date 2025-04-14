@@ -14,17 +14,7 @@ import { deleteTournament, getAdminTournamentsById, updateTournament } from '@/s
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router';
 import { format } from 'date-fns';
-import {
-  CalendarIcon,
-  Clock,
-  Copy,
-  DollarSign,
-  PencilIcon,
-  ShieldAlert,
-  Trash2,
-  Trophy,
-  Users
-} from 'lucide-react';
+import { CalendarIcon, Clock, Copy, DollarSign, PencilIcon, ShieldAlert, Trash2, Trophy, Users } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -121,6 +111,23 @@ function RouteComponent() {
             {tournamentStatus}
           </span>
         </div>
+
+        {tournament.image && (
+          <div className='mb-6 flex justify-center'>
+            <div className='max-w-md overflow-hidden rounded-lg'>
+              <img
+                src={tournament.image}
+                alt={`${tournament.name} banner`}
+                className='h-auto max-h-64 w-full object-contain'
+                onError={(e) => {
+                  e.currentTarget.src = 'https://placehold.co/600x400?text=Tournament';
+                  e.currentTarget.onerror = null;
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         <h1 className='mb-1 text-2xl font-bold sm:mb-2 sm:text-3xl'>{tournament.name}</h1>
         {tournament.description && (
           <p className='mb-2 text-base text-gray-300 sm:mb-4 sm:text-base'>{tournament.description}</p>

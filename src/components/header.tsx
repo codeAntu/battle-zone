@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { appData } from '@/conts/data';
 import { useTokenStore } from '@/store/store';
 import { useNavigate } from '@tanstack/react-router';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, MessageCircle } from 'lucide-react';
 import { useRef } from 'react';
 
 export default function Header() {
@@ -20,7 +20,18 @@ export default function Header() {
           <p className=''>{appData.name}</p>
         </div>
 
-        <div className='flex w-full justify-end gap-4 px-3 text-sm sm:text-base'>
+        <div className='flex w-full justify-end sm:gap-4 px-3 text-sm sm:text-base'>
+          {/* WhatsApp Support Button */}
+          <a 
+            href="https://wa.me/918854812760" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center mr-2 bg-green-600 hover:bg-green-700 transition-colors text-white px-3 py-1.5 rounded-full"
+          >
+            <MessageCircle className="h-4 w-4 mr-1" />
+            <span className="hidden sm:inline">Support</span>
+          </a>
+
           {isLoggedIn() ? (
             <>
               <Button
@@ -33,11 +44,11 @@ export default function Header() {
 
               <Button
                 variant='ghost'
-                className='flex items-center gap-2'
+                className='flex items-center border'
                 onClick={() => navigate({ to: '/user/profile' })}
               >
                 <div className='flex items-center gap-2'>
-                  <div className='bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full'>
+                  <div className='bg-primary/10 flex items-center justify-center rounded-full'>
                     <User className='text-primary h-5 w-5' />
                   </div>
                   <span className='hidden md:inline'>Profile</span>

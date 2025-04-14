@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 import { createTournament } from '@/services/tournament';
+import { ImageUpload } from '@/components/ImageUpload';
 
 export const tournamentSchema = z
   .object({
@@ -33,6 +34,7 @@ export const tournamentSchema = z
       .positive('Maximum participants must be positive'),
     date: z.string().min(1, 'Date is required'),
     time: z.string().min(1, 'Time is required'),
+    image: z.any().optional(),
   })
   .refine(
     (data) => {
@@ -78,6 +80,7 @@ function RouteComponent() {
     maxParticipants: '',
     date: '',
     time: '',
+    image: null as File | null,
   });
 
   const { mutate, isPending } = useMutation({
@@ -125,29 +128,46 @@ function RouteComponent() {
     }
   };
 
+  const handleImageSelected = (file: File | undefined) => {
+    setTournamentData((prev) => ({ ...prev, image: file || null }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
     try {
       const validated = tournamentSchema.parse(tournamentData);
+      const formData = new FormData();
 
-      const backendData = {
-        game: validated.game,
-        name: validated.name,
-        description: validated.description,
-        roomId: validated.roomId?.toString(),
-        roomPassword: validated.roomPassword,
-        entryFee: validated.entryFee,
-        prize: validated.prize,
-        perKillPrize: validated.perKillPrize,
-        maxParticipants: validated.maxParticipants,
-        scheduledAt: `${validated.date}T${validated.time}`, 
-      };
+      formData.append('game', validated.game);
+      formData.append('name', validated.name);
 
-      console.log('Sending tournament data:', backendData);
+      if (validated.description) {
+        formData.append('description', validated.description);
+      }
 
-      mutate(backendData);
+      if (validated.roomId) {
+        formData.append('roomId', validated.roomId.toString());
+      }
+
+      if (validated.roomPassword) {
+        formData.append('roomPassword', validated.roomPassword);
+      }
+
+      formData.append('entryFee', validated.entryFee.toString());
+      formData.append('prize', validated.prize.toString());
+      formData.append('perKillPrize', validated.perKillPrize.toString());
+      formData.append('maxParticipants', validated.maxParticipants.toString());
+      formData.append('scheduledAt', `${validated.date}T${validated.time}`);
+
+      if (tournamentData.image) {
+        formData.append('image', tournamentData.image);
+      }
+
+      console.log('Sending tournament form data');
+
+      mutate(formData);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const formattedErrors: Record<string, string> = {};
@@ -236,6 +256,12 @@ function RouteComponent() {
                 onChange={handleChange}
               />
             </div>
+          </div>
+
+          <div className='rounded-lg border border-gray-800 p-4'>
+            <h3 className='mb-4 text-lg font-medium'>Tournament Image</h3>
+            <ImageUpload onImageSelected={handleImageSelected} maxSizeInBytes={5 * 1024 * 1024} className='w-full' />
+            {errors.image && <p className='mt-1 text-xs text-red-500'>{errors.image}</p>}
           </div>
 
           <div className='rounded-lg border border-gray-800 p-4'>

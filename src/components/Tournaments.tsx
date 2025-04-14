@@ -37,12 +37,14 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
   const date = format(new Date(tournament.scheduledAt), 'dd MMM yyyy');
   const time = format(new Date(tournament.scheduledAt), 'hh:mm a');
 
-  const imageUrl = `/games/${tournament.game.toUpperCase()}/image.png`;
+  // Define image sources with fallbacks
+  const defaultGameImage = `/games/${tournament.game.toUpperCase()}/image.png`;
+  const imageUrl = tournament.image || defaultGameImage;
 
   return (
     <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
       <div className='relative'>
-        <img className='aspect-[2/1] w-full object-cover m' alt={tournament.game} src={imageUrl} />
+        <img className='m aspect-[2/1] w-full object-cover' alt={tournament.game} src={imageUrl} />
         <Tags tags={[tournament.game]} />
       </div>
       <div className='space-y-3 px-4 py-2'>

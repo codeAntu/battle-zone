@@ -17,7 +17,7 @@ export const Route = createFileRoute('/admin/login')({
 
 // Admin sign-in/sign-up component (ready to be moved to another file)
 export function AdminSignInPage() {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp] = useState(false);
   const [data, setData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isVerify, setIsVerify] = useState(false);

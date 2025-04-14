@@ -32,6 +32,7 @@ export interface Tournament {
   isEnded: boolean;
   createdAt: Date;
   updatedAt: Date;
+  image: string;
 }
 
 export interface TournamentsResponse {

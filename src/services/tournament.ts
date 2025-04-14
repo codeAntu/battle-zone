@@ -4,14 +4,13 @@ import {
   isParticipatedResponse,
   participantResponse,
   TournamentByNameResponse,
-  TournamentData,
   TournamentResponse,
   TournamentsResponse,
-  WinningResponse,
+  WinningResponse
 } from './types';
 
-export const createTournament = async (data: TournamentData) => {
-  console.log('Sending tournament data to API:', data);
+export const createTournament = async (data: FormData) => {
+  console.log('Sending tournament form data to API');
   return postApi<TournamentResponse>(API.createTournament, data);
 };
 
@@ -87,17 +86,20 @@ export const deleteTournament = async (id: string) => {
   return postApi<TournamentResponse>(API.deleteTournament(id), {});
 };
 
-export const editTournament = async (id: string, data: {
-  name?: string;
-  description?: string;
-  game?: string;
-  maxParticipants?: string;
-  prize?: string;
-  perKillPrize?: string;
-  entryFee?: string;
-  scheduledAt?: string;
-  roomId?: string;
-  roomPassword?: string;
-}) => {
+export const editTournament = async (
+  id: string,
+  data: {
+    name?: string;
+    description?: string;
+    game?: string;
+    maxParticipants?: string;
+    prize?: string;
+    perKillPrize?: string;
+    entryFee?: string;
+    scheduledAt?: string;
+    roomId?: string;
+    roomPassword?: string;
+  },
+) => {
   return postApi<TournamentResponse>(API.editTournament(id), data);
 };

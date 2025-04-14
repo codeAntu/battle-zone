@@ -125,6 +125,10 @@ export default function TournamentDrawer({
 
   const hasParticipated = !isLoading && participationData?.participation;
 
+  // Define image sources with fallbacks
+  const defaultGameImage = `/games/${tournament.game.toUpperCase()}/image.png`;
+  const imageUrl = tournament.image || defaultGameImage;
+
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger className={viewOnly ? '' : 'w-full'} onClick={() => setIsOpen(true)}>
@@ -138,6 +142,28 @@ export default function TournamentDrawer({
               {tournament.isEnded && <span className='ml-2 text-xs text-red-400'>(Ended)</span>}
             </span>
           </DialogTitle>
+
+          {/* Tournament Image Section */}
+          <div className='mb-3 flex justify-center overflow-hidden'>
+            <div className='relative w-full max-w-sm rounded-lg'>
+              <img 
+                src={imageUrl} 
+                alt={tournament.name}
+                className='h-auto w-full rounded-lg object-contain'
+                style={{ maxHeight: '200px' }}
+                onError={(e) => {
+                  // If tournament image fails, try the default game image
+                  if (tournament.image && e.currentTarget.src !== defaultGameImage) {
+                    e.currentTarget.src = defaultGameImage;
+                  } else {
+                    // If both fail, use a generic placeholder
+                    e.currentTarget.src = "https://placehold.co/600x300?text=Tournament";
+                  }
+                  e.currentTarget.onerror = null; // Prevent infinite error loop
+                }}
+              />
+            </div>
+          </div>
 
           {/* Show different content based on participation status */}
           {hasParticipated || viewOnly ? (
