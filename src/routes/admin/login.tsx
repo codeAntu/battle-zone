@@ -84,7 +84,7 @@ export function AdminSignInPage() {
       setError('');
       toast.success('Admin registration successful! Please verify your email.');
       setTimeout(() => {
-        toast('Verification code sent to your email, please check your inbox.');
+        toast('Verification code sent to your email, please check your inbox and spam box.');
       }, 2000);
     },
   });
@@ -160,6 +160,12 @@ export function AdminSignInPage() {
           <p className='text-muted-foreground before:bg-border after:bg-border flex items-center gap-x-3 text-sm before:h-px before:flex-1 after:h-px after:flex-1'>
             {isVerify ? 'Verify Account' : isSignUp ? 'Create Admin Account' : 'Login as Admin'}
           </p>
+
+          {isVerify && (
+            <p className='text-sm text-muted-foreground'>
+              If you don't see the verification code in your inbox, please check your spam box.
+            </p>
+          )}
 
           <div className='space-y-2'>
             <Label>Email</Label>

@@ -82,7 +82,7 @@ export function Login() {
       setError('');
       toast.success('Registration successful! Please verify your email.');
       setTimeout(() => {
-        toast('Verification code sent to your email, please check your inbox.');
+        toast('Verification code sent to your email, please check your inbox and spam box.');
       }, 2000);
     },
   });
@@ -191,6 +191,12 @@ export function Login() {
               <Label>Password</Label>
               <Input type='password' name='password' required value={data.password} onChange={handleInputChange} />
             </div>
+          )}
+
+          {isVerify && (
+            <p className='text-sm text-muted-foreground'>
+              If you don't see the verification code in your inbox, please check your spam box.
+            </p>
           )}
 
           <Error message={error} />

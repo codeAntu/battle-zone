@@ -42,18 +42,20 @@ export default function Header() {
                 Dashboard
               </Button>
 
-              <Button
-                variant='ghost'
-                className='flex items-center border'
-                onClick={() => navigate({ to: '/user/profile' })}
-              >
-                <div className='flex items-center gap-2'>
-                  <div className='bg-primary/10 flex items-center justify-center rounded-full'>
-                    <User className='text-primary h-5 w-5' />
+              {role !== 'admin' && (
+                <Button
+                  variant='ghost'
+                  className='flex items-center border'
+                  onClick={() => navigate({ to: '/user/profile' })}
+                >
+                  <div className='flex items-center gap-2'>
+                    <div className='bg-primary/10 flex items-center justify-center rounded-full'>
+                      <User className='text-primary h-5 w-5' />
+                    </div>
+                    <span className='hidden md:inline'>Profile</span>
                   </div>
-                  <span className='hidden md:inline'>Profile</span>
-                </div>
-              </Button>
+                </Button>
+              )}
 
               <div className='hidden border-r md:inline'></div>
               <Button
