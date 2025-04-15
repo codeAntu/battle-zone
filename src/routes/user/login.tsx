@@ -10,10 +10,44 @@ import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { z } from "zod";
 
 export const Route = createFileRoute('/user/login')({
   component: Login,
 });
+
+const signupValidator = z
+  .object({
+    email: z
+      .string({ required_error: "Email is required" })
+      .trim()
+      .toLowerCase()
+      .email({ message: "Invalid email format" }),
+    password: z
+      .string({ required_error: "Password is required" })
+      .trim()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(100, { message: "Password must be at most 100 characters long" }),
+  })
+  .strict();
+
+ const verifyOtpValidator = z
+  .object({
+    email: z
+      .string({ required_error: "Email is required" })
+      .trim()
+      .toLowerCase()
+      .email({ message: "Invalid email format" }),
+    verificationCode: z
+      .string({ required_error: "OTP is required" })
+      .trim()
+      .min(6, { message: "OTP must be at least 6 characters long" })
+      .max(6, { message: "OTP must be at most 6 characters long" }),
+  })
+  .strict()
+  .refine((data) => data.email || data.verificationCode, {
+    message: "Email and OTP is required",
+  });
 
 export function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -113,33 +147,34 @@ export function Login() {
   });
 
   const handleSubmit = () => {
-    if (!data.email || (!isVerify && !data.password)) {
-      setError('Email and password are required');
-      toast.error('Email and password are required');
-      return;
-    }
+    try {
+      if (isVerify) {
+        verifyOtpValidator.parse({ email: data.email, verificationCode: otp });
 
-    if (isVerify) {
-      if (!otp || otp.length < 6) {
-        setError('Please enter the complete verification code');
-        toast.error('Please enter the complete verification code');
-        return;
+        verifyMutation({
+          email: data.email,
+          verificationCode: otp,
+        });
+      } else if (isSignUp) {
+        signupValidator.parse(data);
+
+        registerMutation({
+          email: data.email,
+          password: data.password,
+        });
+      } else {
+        signupValidator.parse(data);
+
+        loginMutation({
+          email: data.email,
+          password: data.password,
+        });
       }
-
-      verifyMutation({
-        email: data.email,
-        verificationCode: otp,
-      });
-    } else if (isSignUp) {
-      registerMutation({
-        email: data.email,
-        password: data.password,
-      });
-    } else {
-      loginMutation({
-        email: data.email,
-        password: data.password,
-      });
+    } catch (validationError) {
+      if (validationError instanceof z.ZodError) {
+        setError(validationError.errors[0]?.message || 'Validation error');
+        toast.error(validationError.errors[0]?.message || 'Validation error');
+      }
     }
   };
 
