@@ -175,7 +175,7 @@ function RouteComponent() {
             <div className='mb-4 flex items-center justify-between'>
               <h3 className='text-md flex items-center gap-2 font-medium'>
                 <Trophy className='h-4 w-4 text-yellow-400' />
-                Selected Winner: <span className="font-semibold text-yellow-500">{winnerParticipant?.name}</span>
+                Selected Winner: <span className='font-semibold text-yellow-500'>{winnerParticipant?.name}</span>
               </h3>
               <Button
                 variant='outline'
@@ -240,7 +240,7 @@ function RouteComponent() {
                   )}
                 </TableBody>
               </Table>
-              
+
               {selectedWinner && !changeWinner && (
                 <div className='mt-4 flex justify-center'>
                   <Button
@@ -357,13 +357,18 @@ function ParticipantRow({
 }) {
   const { tournamentsId } = useParams({ from: '/admin/tournaments/end/$tournamentsId' });
   const queryClient = useQueryClient();
-  const [killCount, setKillCount] = useState<string>('0'); // Changed to string for better input handling
+  const [killCount, setKillCount] = useState<string>(''); // Changed to string for better input handling
   const [showKillDialog, setShowKillDialog] = useState(false);
   const joinedDate = new Date(participant.joinedAt);
 
   const addKillsMutation = useMutation({
     mutationFn: (kills: number) => addUserKillAmount(tournamentsId, participant.userId, kills),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.isAlert) {
+        toast.error(data.message || data.error || 'Failed to add kills');
+        return;
+      }
+
       toast.success(`Kill count added for ${participant.name}`);
       setShowKillDialog(false);
       queryClient.invalidateQueries({ queryKey: ['tournamentParticipants', tournamentsId] });
@@ -384,7 +389,7 @@ function ParticipantRow({
 
   // Reset kill count when dialog is opened
   const handleOpenKillDialog = () => {
-    setKillCount('0');
+    setKillCount('');
     setShowKillDialog(true);
   };
 
@@ -467,14 +472,14 @@ function ParticipantRow({
                   <AlertDialogTitle className='text-white'>Record Kill Prizes</AlertDialogTitle>
                   <AlertDialogDescription>
                     Enter the number of kills achieved by
-                    <span className='font-semibold text-yellow-500'>{' ' + participant.name}</span>.
-                    Kill prizes will be calculated based on tournament settings.
+                    <span className='font-semibold text-yellow-500'>{' ' + participant.name}</span>. Kill prizes will be
+                    calculated based on tournament settings.
                   </AlertDialogDescription>
                   <div className='mt-4 space-y-2'>
                     <label className='text-sm text-gray-300'>Kill Count:</label>
                     <Input
                       type='number'
-                      min='0'
+                      // min='0'
                       value={killCount}
                       onChange={(e) => setKillCount(e.target.value)}
                       className='border-gray-700 bg-gray-800 text-white'

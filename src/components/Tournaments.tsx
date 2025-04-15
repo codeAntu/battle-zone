@@ -45,7 +45,6 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
     <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
       <div className='relative'>
         <img className='m aspect-[2/1] w-full object-cover' alt={tournament.game} src={imageUrl} />
-        <Tags tags={[tournament.game]} />
       </div>
       <div className='space-y-3 px-4 py-2'>
         <div className='flex items-center justify-between'>
@@ -101,18 +100,4 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
       <div></div>
     </div>
   );
-}
-
-function Tags({ tags }: { tags: string[] }) {
-  return (
-    <div className='absolute bottom-0 left-0 flex w-full gap-1 overflow-auto rounded-t-2xl px-2 pt-2 pb-1.5 backdrop-blur-sm'>
-      {tags.map((tag, index) => (
-        <Tag key={index}>{tag}</Tag>
-      ))}
-    </div>
-  );
-}
-
-function Tag({ children }: { children: React.ReactNode }) {
-  return <div className='rounded-lg bg-blue-500 px-2 py-1 pb-1.5 text-xs font-medium text-white'>{children}</div>;
 }

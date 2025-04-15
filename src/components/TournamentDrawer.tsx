@@ -144,30 +144,17 @@ export default function TournamentDrawer({
           </DialogTitle>
 
           {/* Tournament Image Section */}
-          <div className='mb-3 flex justify-center overflow-hidden'>
-            <div className='relative w-full max-w-sm rounded-lg'>
-              <img 
-                src={imageUrl} 
-                alt={tournament.name}
-                className='h-auto w-full rounded-lg object-contain'
-                style={{ maxHeight: '200px' }}
-                onError={(e) => {
-                  // If tournament image fails, try the default game image
-                  if (tournament.image && e.currentTarget.src !== defaultGameImage) {
-                    e.currentTarget.src = defaultGameImage;
-                  } else {
-                    // If both fail, use a generic placeholder
-                    e.currentTarget.src = "https://placehold.co/600x300?text=Tournament";
-                  }
-                  e.currentTarget.onerror = null; // Prevent infinite error loop
-                }}
-              />
-            </div>
-          </div>
 
           {/* Show different content based on participation status */}
           {hasParticipated || viewOnly ? (
             <>
+              {tournament.image && (
+                <div className='mb-3 flex justify-center overflow-hidden'>
+                  <div className='relative w-full max-w-sm rounded-lg'>
+                    <img src={imageUrl} alt={tournament.name} className='h-auto w-full rounded-lg object-contain' />
+                  </div>
+                </div>
+              )}
               {/* Tournament details UI for participants */}
               <div className='rounded-lg border border-gray-800 bg-white/5 p-3 text-white shadow-lg sm:p-6'>
                 {/* Tournament info with better mobile layout */}
@@ -184,11 +171,11 @@ export default function TournamentDrawer({
 
                     {/* Status information */}
                     <div className='flex items-center gap-2'>
-                        {tournament.isEnded ? (
+                      {tournament.isEnded ? (
                         <Trophy className='size-5 text-red-500' />
-                        ) : (
+                      ) : (
                         <Trophy className='size-5 text-green-500' />
-                        )}
+                      )}
                       <div className='-mt-0.5'>
                         <div className='text-[13px] text-gray-400 sm:text-sm'>Status</div>
                         <div className='text-[15px] font-medium sm:text-base'>
@@ -396,7 +383,7 @@ export default function TournamentDrawer({
                     id='playerLevel'
                     type='number'
                     value={playerLevel}
-                    onChange={(e) => setPlayerLevel(e.target.valueAsNumber || 30)}
+                    onChange={(e) => setPlayerLevel(e.target.valueAsNumber)}
                     placeholder='Enter your player level'
                     className='border-gray-800 bg-black text-white placeholder:text-gray-500'
                   />
