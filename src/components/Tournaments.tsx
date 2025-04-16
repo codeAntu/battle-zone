@@ -1,5 +1,5 @@
 import { Tournament as TournamentType } from '@/services/types';
-import { format } from 'date-fns';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { ArrowLeft, Calendar, Clock, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
 import TournamentDrawer from './TournamentDrawer';
 import { Button } from './ui/button';
@@ -35,8 +35,8 @@ export default function Tournaments({ tournaments }: { tournaments: TournamentTy
 }
 
 function Tournament({ tournament }: { tournament: TournamentType }) {
-  const date = format(new Date(tournament.scheduledAt), 'dd MMM yyyy');
-  const time = format(new Date(tournament.scheduledAt), 'hh:mm a');
+  const date = formatDateToUTC(tournament.scheduledAt);
+  const time = formatTimeToUTC(tournament.scheduledAt);
 
   // Define image sources with fallbacks
   const defaultGameImage = `/games/${tournament.game.toUpperCase()}/image.png`;

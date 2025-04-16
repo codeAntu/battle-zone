@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { deleteTournament, getAdminTournamentsById, updateTournament } from '@/services/tournament';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router';
@@ -95,12 +96,8 @@ function RouteComponent() {
 
   const tournament = data.tournament;
   const scheduledDate = tournament.scheduledAt ? new Date(tournament.scheduledAt) : null;
-  const formattedDate = scheduledDate
-    ? `${scheduledDate.toLocaleString('en-US', { month: 'long' })} ${scheduledDate.getUTCDate()}, ${scheduledDate.getUTCFullYear()}`
-    : null;
-  const formattedTime = scheduledDate
-    ? `${(scheduledDate.getUTCHours() % 12 || 12).toString().padStart(2, '0')}:${scheduledDate.getUTCMinutes().toString().padStart(2, '0')} ${scheduledDate.getUTCHours() < 12 ? 'AM' : 'PM'}`
-    : null;
+  const formattedDate = scheduledDate ? formatDateToUTC(scheduledDate.toISOString()) : null;
+  const formattedTime = scheduledDate ? formatTimeToUTC(scheduledDate.toISOString()) : null;
   const tournamentStatus = tournament.isEnded ? 'COMPLETED' : 'ONGOING';
 
   console.log(formattedDate);

@@ -176,7 +176,7 @@ function DepositsComponent() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        {format(new Date(deposit.createdAt), "MMM dd, yyyy 'at' h:mm a")}
+                        {format(new Date(typeof deposit.createdAt === 'string' ? deposit.createdAt : deposit.createdAt.toISOString()), "MMM dd, yyyy 'at' h:mm a")}
                       </TableCell>
                       <TableCell className="text-center">
                         <div className="flex justify-center gap-2">

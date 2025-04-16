@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import {
   addUserKillAmount,
   endTournament,
@@ -335,7 +336,7 @@ function RouteComponent() {
         {!tournament.isEnded ? (
           <p>Note: Make sure all participants are properly recorded before ending the tournament</p>
         ) : (
-          <p>This tournament was completed on {format(new Date(tournament.updatedAt), 'MMMM d, yyyy')}</p>
+          <p>This tournament was completed on {format(new Date(tournament.updatedAt.toString()), 'MMMM d, yyyy')}</p>
         )}
       </div>
     </div>
@@ -359,7 +360,9 @@ function ParticipantRow({
   const queryClient = useQueryClient();
   const [killCount, setKillCount] = useState<string>(''); // Changed to string for better input handling
   const [showKillDialog, setShowKillDialog] = useState(false);
-  const joinedDate = new Date(participant.joinedAt);
+  const joinedDate = participant.joinedAt ? new Date(participant.joinedAt) : null;
+  const formattedJoinedDate = joinedDate ? formatDateToUTC(joinedDate.toISOString()) : null;
+  const formattedJoinedTime = joinedDate ? formatTimeToUTC(joinedDate.toISOString()) : null;
 
   const addKillsMutation = useMutation({
     mutationFn: (kills: number) => addUserKillAmount(tournamentsId, participant.userId, kills),
@@ -413,7 +416,7 @@ function ParticipantRow({
       </TableCell>
       {participant.joinedAt && (
         <TableCell className='text-center'>
-          {format(joinedDate, 'MMM d, yyyy')} at {format(joinedDate, 'h:mm a')}
+          {formattedJoinedDate} at {formattedJoinedTime}
         </TableCell>
       )}
       {!tournamentEnded && (

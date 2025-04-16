@@ -173,7 +173,7 @@ function WithdrawalsComponent() {
                         <Badge className={getStatusBadgeColor(withdrawal.status)}>{withdrawal.status}</Badge>
                       </TableCell>
                       <TableCell className='text-center'>
-                        {format(new Date(withdrawal.createdAt), "MMM dd, yyyy 'at' h:mm a")}
+                        {format(new Date(typeof withdrawal.createdAt === 'string' ? withdrawal.createdAt : withdrawal.createdAt.toISOString()), "MMM dd, yyyy 'at' h:mm a")}
                       </TableCell>
                       <TableCell className='text-center'>
                         <div className='flex justify-center gap-2'>

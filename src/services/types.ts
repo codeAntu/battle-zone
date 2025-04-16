@@ -28,10 +28,10 @@ export interface Tournament {
   perKillPrize: number;
   maxParticipants: number;
   currentParticipants: number;
-  scheduledAt: Date;
+  scheduledAt: string;
   isEnded: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   image: string;
 }
 
@@ -59,7 +59,7 @@ export interface participantResponse {
 
 export interface Participant {
   id: number;
-  joinedAt: Date;
+  joinedAt: string;
   name: string;
   email: string;
   userId: number;
@@ -83,8 +83,9 @@ export interface Winning {
   userId: number;
   tournamentId: number;
   amount: number;
-  createdAt: Date;
+  createdAt: string;
 }
+
 export interface GetUsersResponse {
   users: User[];
 }
@@ -96,10 +97,10 @@ export interface User {
   password: string;
   isVerified: boolean;
   verificationCode: string;
-  verificationCodeExpires: Date;
+  verificationCodeExpires: string;
   balance: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 export interface UserLoginResponse {
   message: string;
@@ -127,7 +128,7 @@ export interface User {
   name: string;
   password: string;
   verificationCode: string;
-  verificationCodeExpires: Date;
+  verificationCodeExpires: string;
   isVerified: boolean;
   balance: number;
   id: number;

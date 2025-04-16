@@ -1,8 +1,10 @@
+import { ImageUpload } from '@/components/ImageUpload';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { createTournament } from '@/services/tournament';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { format } from 'date-fns';
@@ -10,8 +12,6 @@ import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
-import { createTournament } from '@/services/tournament';
-import { ImageUpload } from '@/components/ImageUpload';
 
 export const tournamentSchema = z
   .object({

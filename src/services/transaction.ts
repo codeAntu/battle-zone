@@ -1,3 +1,4 @@
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { postApi, getApi } from '.';
 import API from './api';
 import { z } from 'zod';
@@ -119,4 +120,12 @@ export interface History {
   message: string;
   referenceId: number;
   createdAt: Date;
+  formattedCreatedAt: string;
+  formattedCreatedTime: string;
 }
+
+export const formatHistory = (transaction: History) => {
+  const formattedCreatedAt = formatDateToUTC(typeof transaction.createdAt === 'string' ? transaction.createdAt : transaction.createdAt.toISOString());
+  const formattedCreatedTime = formatTimeToUTC(typeof transaction.createdAt === 'string' ? transaction.createdAt : transaction.createdAt.toISOString());
+  return { ...transaction, formattedCreatedAt, formattedCreatedTime };
+};

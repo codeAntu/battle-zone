@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { getUserTournamentHistory } from '@/services/tournament';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { format } from 'date-fns';
 
 export const Route = createFileRoute('/admin/tournaments/history')({
   component: RouteComponent,
@@ -63,7 +63,11 @@ function RouteComponent() {
         <TableBody>
           {tournaments.map((tournament, index) => {
             const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
-            
+            const formattedDate = tournament.scheduledAt ? formatDateToUTC(tournament.scheduledAt) : null;
+            const formattedTime = tournament.scheduledAt ? formatTimeToUTC(tournament.scheduledAt) : null;
+            const updatedDate = formatDateToUTC(tournament.updatedAt);
+            const updatedTime = formatTimeToUTC(tournament.updatedAt);
+
             return (
               <TableRow key={tournament.id}>
                 <TableCell className='text-center font-medium'>{index + 1}</TableCell>
@@ -85,10 +89,10 @@ function RouteComponent() {
                   {tournament.currentParticipants}/{tournament.maxParticipants}
                 </TableCell>
                 <TableCell className='text-center'>
-                  {format(new Date(tournament.scheduledAt), 'dd MMM yyyy HH:mm')}
+                  {formattedDate} {formattedTime}
                 </TableCell>
                 <TableCell className='text-center'>
-                  {format(new Date(tournament.updatedAt), 'dd MMM yyyy HH:mm')}
+                  {updatedDate} {updatedTime}
                 </TableCell>
                 <TableCell className='text-center'>
                   <div className='flex justify-center'>

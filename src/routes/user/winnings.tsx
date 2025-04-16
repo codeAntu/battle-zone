@@ -1,11 +1,11 @@
+import TournamentDrawer from '@/components/TournamentDrawer';
+import { Button } from '@/components/ui/button';
+import { getUserWinnings } from '@/services/tournament';
+import { Tournament } from '@/services/types';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { format } from 'date-fns';
-import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { getUserWinnings } from '@/services/tournament';
 import { Trophy } from 'lucide-react';
-import TournamentDrawer from '@/components/TournamentDrawer';
-import { Tournament } from '@/services/types';
 
 export const Route = createFileRoute('/user/winnings')({
   component: RouteComponent,
@@ -69,6 +69,8 @@ function RouteComponent() {
 
 function Game({ tournament, amount, date }: { tournament: Tournament; amount: number; date: string | Date }) {
   const gameImage = '/games/' + tournament.game.toUpperCase() + '/icon.png';
+  // const formattedDate = formatDateToUTC(date instanceof Date ? date.toISOString() : date);
+  // const formattedTime = formatTimeToUTC(date instanceof Date ? date.toISOString() : date);
 
   return (
     <div className='flex flex-col gap-2'>

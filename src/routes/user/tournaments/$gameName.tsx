@@ -3,6 +3,7 @@ import TournamentNotFound from '@/components/TournamentNotFound';
 import { getUserTournamentByName } from '@/services/tournament';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useParams } from '@tanstack/react-router';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 
 export const Route = createFileRoute('/user/tournaments/$gameName')({
   component: RouteComponent,
@@ -27,7 +28,12 @@ function RouteComponent() {
 
   console.log(data);
   
-  const tournaments = data?.tournaments?.map((item) => item.tournament) || [];
+  const tournaments = data?.tournaments?.map((item) => {
+    const tournament = item.tournament;
+    const formattedDate = formatDateToUTC(tournament.scheduledAt);
+    const formattedTime = formatTimeToUTC(tournament.scheduledAt);
+    return { ...tournament, formattedDate, formattedTime };
+  }) || [];
   
   return (
     <div className='p-4'>

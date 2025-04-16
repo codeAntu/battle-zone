@@ -2,6 +2,7 @@ import { getAdminCurrentTournaments } from '@/services/tournament';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 
 export const Route = createFileRoute('/admin/tournaments/current')({
   component: RouteComponent,
@@ -45,63 +46,70 @@ function RouteComponent() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.tournaments.map((tournament, index) => (
-            <TableRow key={tournament.id}>
-              <TableCell className='text-center font-medium'>{index + 1}</TableCell>
-              <TableCell className='font-medium'>{tournament.name}</TableCell>
+          {data.tournaments.map((tournament, index) => {
+            const formattedDate = formatDateToUTC(tournament.scheduledAt);
+            const formattedTime = formatTimeToUTC(tournament.scheduledAt);
 
-              <TableCell className='text-center'>
-                <div className='flex items-center justify-center gap-2'>
-                  {(() => {
-                    const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
-                    return (
-                      <>
-                        <img
-                          src={gameImage}
-                          alt={tournament.game}
-                          className='h-8 w-8 rounded-lg object-cover'
-                        />
-                        <span>{tournament.game}</span>
-                      </>
-                    );
-                  })()}
-                </div>
-              </TableCell>
-              <TableCell className='text-center'>${tournament.entryFee}</TableCell>
-              <TableCell className='text-center'>${tournament.prize}</TableCell>
-              <TableCell className='text-center'>${tournament.perKillPrize}</TableCell>
-              <TableCell className='text-center'>
-                {tournament.currentParticipants} / {tournament.maxParticipants}
-              </TableCell>
-              <TableCell className='text-center'>{new Date(tournament.scheduledAt).toLocaleString()}</TableCell>
-              <TableCell className='text-center'>
-                <div className='flex justify-center gap-2'>
-                  <button
-                    className='rounded-md border border-blue-500 px-3 py-1 text-xs font-semibold text-blue-500 hover:bg-blue-500 hover:text-white'
-                    onClick={() => {
-                      router.navigate({
-                        to: '/admin/tournaments/$tournamentsId',
-                        params: { tournamentsId: tournament.id.toString() },
-                      });
-                    }}
-                  >
-                    View
-                  </button>
-                  <button
-                    className='border-primary text-primary hover:bg-primary rounded-md border px-3 py-1 text-xs font-semibold hover:text-black'
-                    onClick={() => {
-                      router.navigate({
-                        to: '/admin/tournaments/end/$tournamentsId',
-                        params: { tournamentsId: tournament.id.toString() },
-                      });
-                    }}
-                  >
-                    End Tournament
-                  </button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+            return (
+              <TableRow key={tournament.id}>
+                <TableCell className='text-center font-medium'>{index + 1}</TableCell>
+                <TableCell className='font-medium'>{tournament.name}</TableCell>
+
+                <TableCell className='text-center'>
+                  <div className='flex items-center justify-center gap-2'>
+                    {(() => {
+                      const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
+                      return (
+                        <>
+                          <img
+                            src={gameImage}
+                            alt={tournament.game}
+                            className='h-8 w-8 rounded-lg object-cover'
+                          />
+                          <span>{tournament.game}</span>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </TableCell>
+                <TableCell className='text-center'>${tournament.entryFee}</TableCell>
+                <TableCell className='text-center'>${tournament.prize}</TableCell>
+                <TableCell className='text-center'>${tournament.perKillPrize}</TableCell>
+                <TableCell className='text-center'>
+                  {tournament.currentParticipants} / {tournament.maxParticipants}
+                </TableCell>
+                <TableCell className='text-center'>
+                  {formattedDate} {formattedTime}
+                </TableCell>
+                <TableCell className='text-center'>
+                  <div className='flex justify-center gap-2'>
+                    <button
+                      className='rounded-md border border-blue-500 px-3 py-1 text-xs font-semibold text-blue-500 hover:bg-blue-500 hover:text-white'
+                      onClick={() => {
+                        router.navigate({
+                          to: '/admin/tournaments/$tournamentsId',
+                          params: { tournamentsId: tournament.id.toString() },
+                        });
+                      }}
+                    >
+                      View
+                    </button>
+                    <button
+                      className='border-primary text-primary hover:bg-primary rounded-md border px-3 py-1 text-xs font-semibold hover:text-black'
+                      onClick={() => {
+                        router.navigate({
+                          to: '/admin/tournaments/end/$tournamentsId',
+                          params: { tournamentsId: tournament.id.toString() },
+                        });
+                      }}
+                    >
+                      End Tournament
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

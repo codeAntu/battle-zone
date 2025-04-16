@@ -1,7 +1,6 @@
 import { getHistory, History as HistoryType } from '@/services/transaction';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { format } from 'date-fns';
 
 // Import Shadcn UI components
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +14,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import { formatDateToUTC } from '@/lib/utils';
 
 export const Route = createFileRoute('/user/history')({
   component: History,
@@ -102,11 +102,8 @@ export function History() {
 }
 
 function TransactionRow({ transaction }: { transaction: HistoryType }) {
-  // Format date from ISO string
-  const formattedDate = format(
-    new Date(transaction.createdAt),
-    'MMM dd, yyyy • HH:mm'
-  );
+  // Format date using utility function
+  const formattedDate = formatDateToUTC(transaction.createdAt instanceof Date ? transaction.createdAt.toISOString() : transaction.createdAt);
 
   // Determine style for status badge
   const getStatusVariant = () => {

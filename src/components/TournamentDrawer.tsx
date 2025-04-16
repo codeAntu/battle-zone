@@ -2,7 +2,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { isParticipated, participateInTournament } from '@/services/tournament';
 import { Tournament as TournamentType } from '@/services/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { BadgeIndianRupee, Calendar, Copy, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -33,8 +33,8 @@ export default function TournamentDrawer({
   viewOnly = false,
   showCurrency = 'rupees',
 }: TournamentDrawerProps) {
-  const date = format(new Date(tournament.scheduledAt), 'dd MMM yyyy');
-  const time = format(new Date(tournament.scheduledAt), 'hh:mm a');
+  const date = formatDateToUTC(tournament.scheduledAt);
+  const time = formatTimeToUTC(tournament.scheduledAt);
   const [isOpen, setIsOpen] = useState(false);
 
   // Form state for participation
