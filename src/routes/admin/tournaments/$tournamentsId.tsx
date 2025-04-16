@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { deleteTournament, getAdminTournamentsById, updateTournament } from '@/services/tournament';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router';
-import { format } from 'date-fns';
 import { CalendarIcon, Clock, Copy, DollarSign, PencilIcon, ShieldAlert, Trash2, Trophy, Users } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -70,6 +69,8 @@ function RouteComponent() {
     },
   });
 
+  console.log(data);
+
   if (isLoading) {
     return (
       <div className='flex min-h-[50vh] items-center justify-center p-5'>
@@ -94,7 +95,16 @@ function RouteComponent() {
 
   const tournament = data.tournament;
   const scheduledDate = tournament.scheduledAt ? new Date(tournament.scheduledAt) : null;
+  const formattedDate = scheduledDate
+    ? `${scheduledDate.toLocaleString('en-US', { month: 'long' })} ${scheduledDate.getUTCDate()}, ${scheduledDate.getUTCFullYear()}`
+    : null;
+  const formattedTime = scheduledDate
+    ? `${(scheduledDate.getUTCHours() % 12 || 12).toString().padStart(2, '0')}:${scheduledDate.getUTCMinutes().toString().padStart(2, '0')} ${scheduledDate.getUTCHours() < 12 ? 'AM' : 'PM'}`
+    : null;
   const tournamentStatus = tournament.isEnded ? 'COMPLETED' : 'ONGOING';
+
+  console.log(formattedDate);
+  console.log(formattedTime);
 
   return (
     <div className='mx-auto max-w-4xl p-3 sm:p-5'>
@@ -261,21 +271,25 @@ function RouteComponent() {
 
             {scheduledDate && (
               <>
-                <div className='flex items-center'>
-                  <CalendarIcon className='mr-2 h-5 w-5 text-green-400 sm:mr-3' />
-                  <div>
-                    <div className='text-sm text-gray-400 sm:text-base'>Date</div>
-                    <div className='text-base sm:text-lg'>{format(scheduledDate, 'MMMM d, yyyy')}</div>
+                {formattedDate && (
+                  <div className='flex items-center'>
+                    <CalendarIcon className='mr-2 h-5 w-5 text-green-400 sm:mr-3' />
+                    <div>
+                      <div className='text-sm text-gray-400 sm:text-base'>Date</div>
+                      <div className='text-base sm:text-lg'>{formattedDate}</div>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className='flex items-center'>
-                  <Clock className='mr-2 h-5 w-5 text-purple-400 sm:mr-3' />
-                  <div>
-                    <div className='text-sm text-gray-400 sm:text-base'>Time</div>
-                    <div className='text-base sm:text-lg'>{format(scheduledDate, 'h:mm a')}</div>
+                {formattedTime && (
+                  <div className='flex items-center'>
+                    <Clock className='mr-2 h-5 w-5 text-purple-400 sm:mr-3' />
+                    <div>
+                      <div className='text-sm text-gray-400 sm:text-base'>Time</div>
+                      <div className='text-base sm:text-lg'>{formattedTime}</div>
+                    </div>
                   </div>
-                </div>
+                )}
               </>
             )}
 

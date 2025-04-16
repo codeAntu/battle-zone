@@ -159,7 +159,7 @@ function RouteComponent() {
       formData.append('prize', validated.prize.toString());
       formData.append('perKillPrize', validated.perKillPrize.toString());
       formData.append('maxParticipants', validated.maxParticipants.toString());
-      formData.append('scheduledAt', `${validated.date}T${validated.time}`);
+      formData.append('scheduledAt', `${validated.date}T${validated.time}Z`);
 
       if (tournamentData.image) {
         formData.append('image', tournamentData.image);
