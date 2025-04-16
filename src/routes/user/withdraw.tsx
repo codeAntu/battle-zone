@@ -15,7 +15,7 @@ export const Route = createFileRoute('/user/withdraw')({
 });
 
 const withdrawValidator = z.object({
-  amount: z.number().positive('Amount must be positive'),
+  amount: z.number().positive('Amount must be positive').min(100, 'Minimum withdrawal amount is 100'),
   upiId: z.string().min(1, 'UPI ID is required'),
 });
 export function Withdraw() {

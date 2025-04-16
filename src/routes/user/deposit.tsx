@@ -16,7 +16,7 @@ export const Route = createFileRoute('/user/deposit')({
 });
 
 const depositValidator = z.object({
-  amount: z.number().positive('Amount must be positive'),
+  amount: z.number().positive('Amount must be positive').min(10, 'Minimum deposit amount is 10'),
   transactionId: z.number().positive('Transaction ID is required'),
   upiId: z.string().min(1, 'UPI ID is required'),
 });
