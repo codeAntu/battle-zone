@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { ArrowLeft, Calendar, Clock, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
 import TournamentDrawer from './TournamentDrawer';
 import { Button } from './ui/button';
+import { Progress } from './ui/progress';
 
 export default function Tournaments({ tournaments }: { tournaments: TournamentType[] }) {
   console.log(tournaments);
@@ -25,7 +26,7 @@ export default function Tournaments({ tournaments }: { tournaments: TournamentTy
   }
 
   return (
-    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+    <div className='grid grid-cols-1 sm:grid-cols-2  gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
       {tournaments.map((tournament) => (
         <Tournament key={tournament.id} tournament={tournament} />
       ))}
@@ -40,6 +41,8 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
   // Define image sources with fallbacks
   const defaultGameImage = `/games/${tournament.game.toUpperCase()}/image.png`;
   const imageUrl = tournament.image || defaultGameImage;
+
+  const progress = (tournament.currentParticipants / tournament.maxParticipants) * 100;
 
   return (
     <div className='transform overflow-hidden rounded-xl border bg-white/10 text-white/80 shadow-lg transition-transform duration-300 hover:scale-102'>
@@ -89,6 +92,14 @@ function Tournament({ tournament }: { tournament: TournamentType }) {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className='space-y-2'>
+          <div className='flex justify-between text-sm'>
+            <span>{tournament.currentParticipants} Players Joined</span>
+            <span>{tournament.maxParticipants} Max Players</span>
+          </div>
+          <Progress value={progress} className='h-2' />
         </div>
 
         <TournamentDrawer data={tournament}>
