@@ -5,7 +5,6 @@ import { getUserWinnings } from '@/services/tournament';
 import { Tournament } from '@/services/types';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { format } from 'date-fns';
 import { Trophy } from 'lucide-react';
 
 export const Route = createFileRoute('/user/winnings')({
@@ -96,12 +95,8 @@ function Game({ tournament, amount, date }: { tournament: Tournament; amount: nu
               </span>
             </div>
             <div className='flex flex-wrap items-center gap-2 text-xs text-gray-400'>
-              <span>{format(new Date(date), 'dd MMM yyyy')}</span>
+              <span>{formattedDate} {formattedTime}</span>
               <span className='font-semibold text-yellow-400'>+{amount} coins won</span>
-            </div>
-            <div className='flex gap-3 text-xs text-gray-400'>
-              <p>Date: {formattedDate}</p>
-              <p>Time: {formattedTime}</p>
             </div>
           </div>
         </div>
