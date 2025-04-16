@@ -1,5 +1,6 @@
 import TournamentDrawer from '@/components/TournamentDrawer';
 import { Button } from '@/components/ui/button';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { getUserWinnings } from '@/services/tournament';
 import { Tournament } from '@/services/types';
 import { useQuery } from '@tanstack/react-query';
@@ -69,8 +70,8 @@ function RouteComponent() {
 
 function Game({ tournament, amount, date }: { tournament: Tournament; amount: number; date: string | Date }) {
   const gameImage = '/games/' + tournament.game.toUpperCase() + '/icon.png';
-  // const formattedDate = formatDateToUTC(date instanceof Date ? date.toISOString() : date);
-  // const formattedTime = formatTimeToUTC(date instanceof Date ? date.toISOString() : date);
+  const formattedDate = formatDateToUTC(date instanceof Date ? date.toISOString() : date);
+  const formattedTime = formatTimeToUTC(date instanceof Date ? date.toISOString() : date);
 
   return (
     <div className='flex flex-col gap-2'>
@@ -97,6 +98,10 @@ function Game({ tournament, amount, date }: { tournament: Tournament; amount: nu
             <div className='flex flex-wrap items-center gap-2 text-xs text-gray-400'>
               <span>{format(new Date(date), 'dd MMM yyyy')}</span>
               <span className='font-semibold text-yellow-400'>+{amount} coins won</span>
+            </div>
+            <div className='flex gap-3 text-xs text-gray-400'>
+              <p>Date: {formattedDate}</p>
+              <p>Time: {formattedTime}</p>
             </div>
           </div>
         </div>

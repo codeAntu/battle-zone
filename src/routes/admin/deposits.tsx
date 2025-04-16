@@ -1,19 +1,3 @@
-import { approveDeposit, getAdminDeposits, rejectDeposit } from '@/services/transaction';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,10 +9,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Check, X } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
+import { approveDeposit, getAdminDeposits, rejectDeposit } from '@/services/transaction';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { Check, X } from 'lucide-react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/admin/deposits')({
   component: DepositsComponent,
@@ -176,7 +176,10 @@ function DepositsComponent() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        {format(new Date(typeof deposit.createdAt === 'string' ? deposit.createdAt : deposit.createdAt.toISOString()), "MMM dd, yyyy 'at' h:mm a")}
+                        <div className='space-x-2'>
+                          <span>{formatDateToUTC(deposit.createdAt instanceof Date ? deposit.createdAt.toISOString() : deposit.createdAt)}</span>
+                          <span>{formatTimeToUTC(deposit.createdAt instanceof Date ? deposit.createdAt.toISOString() : deposit.createdAt)}</span>
+                        </div>
                       </TableCell>
                       <TableCell className="text-center">
                         <div className="flex justify-center gap-2">

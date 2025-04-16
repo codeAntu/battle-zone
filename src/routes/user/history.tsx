@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { formatDateToUTC } from '@/lib/utils';
+import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 
 export const Route = createFileRoute('/user/history')({
   component: History,
@@ -82,7 +82,7 @@ export function History() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
+                <TableHead>Date & Time</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
@@ -104,6 +104,7 @@ export function History() {
 function TransactionRow({ transaction }: { transaction: HistoryType }) {
   // Format date using utility function
   const formattedDate = formatDateToUTC(transaction.createdAt instanceof Date ? transaction.createdAt.toISOString() : transaction.createdAt);
+  const formattedTime = formatTimeToUTC(transaction.createdAt instanceof Date ? transaction.createdAt.toISOString() : transaction.createdAt);
 
   // Determine style for status badge
   const getStatusVariant = () => {
@@ -148,7 +149,7 @@ function TransactionRow({ transaction }: { transaction: HistoryType }) {
   return (
     <TableRow className="border-border/40">
       <TableCell className="text-muted-foreground">
-        {formattedDate}
+        {formattedDate} {formattedTime}
       </TableCell>
       <TableCell>
         <div className="flex items-center">
