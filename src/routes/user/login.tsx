@@ -6,52 +6,20 @@ import { Label } from '@/components/ui/label';
 import { appData } from '@/conts/data';
 import { userLogin, userRegister, verifyUser } from '@/services/auth';
 import { useTokenStore } from '@/store/store';
+import { signupValidator, verifyOtpValidator } from '@/zod/auth';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { z } from "zod";
+import { z } from 'zod';
 
 export const Route = createFileRoute('/user/login')({
   component: Login,
 });
 
-const signupValidator = z
-  .object({
-    email: z
-      .string({ required_error: "Email is required" })
-      .trim()
-      .toLowerCase()
-      .email({ message: "Invalid email format" }),
-    password: z
-      .string({ required_error: "Password is required" })
-      .trim()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(100, { message: "Password must be at most 100 characters long" }),
-  })
-  .strict();
-
- const verifyOtpValidator = z
-  .object({
-    email: z
-      .string({ required_error: "Email is required" })
-      .trim()
-      .toLowerCase()
-      .email({ message: "Invalid email format" }),
-    verificationCode: z
-      .string({ required_error: "OTP is required" })
-      .trim()
-      .min(6, { message: "OTP must be at least 6 characters long" })
-      .max(6, { message: "OTP must be at most 6 characters long" }),
-  })
-  .strict()
-  .refine((data) => data.email || data.verificationCode, {
-    message: "Email and OTP is required",
-  });
-
 export function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [data, setData] = useState({ email: '', password: '' });
+  const [data, setData] = useState({ email: '', password: '1111111111111' });
   const [error, setError] = useState('');
   const [isVerify, setIsVerify] = useState(false);
   const [otp, setOtp] = useState('');
@@ -87,7 +55,7 @@ export function Login() {
         setRole('user');
         setToken(response.token);
         toast.success('Login successful!');
-        navigate({ to: '/welcome' }); // Changed from /user/tournaments to /welcome
+        navigate({ to: '/welcome' });
       } else {
         setError('Invalid response from server');
       }
@@ -141,7 +109,7 @@ export function Login() {
         setRole('user');
         setToken(response.token);
         toast.success('Verification successful! You are now logged in.');
-        navigate({ to: '/welcome' }); // Changed from /user/tournaments to /welcome
+        navigate({ to: '/welcome' });
       }
     },
   });
@@ -229,7 +197,7 @@ export function Login() {
           )}
 
           {isVerify && (
-            <p className='text-sm text-muted-foreground'>
+            <p className='text-muted-foreground text-sm'>
               If you don't see the verification code in your inbox, please check your spam box.
             </p>
           )}
