@@ -1,5 +1,4 @@
-const BASE_URL =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : 'https://game-rho-gold-63.vercel.app/';
+const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 const API = {
   hello: `${BASE_URL}/hello`,
@@ -16,7 +15,7 @@ const API = {
   adminVerify: `${BASE_URL}/admin/auth/verify-otp`,
 
   // game
-  gameList: `${BASE_URL}/game/all`,
+  gameList: `${BASE_URL}/game/list`,
   
   getUsers: `${BASE_URL}/admin/users`,
 
