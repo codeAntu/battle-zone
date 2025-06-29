@@ -1,10 +1,19 @@
 import { getApi, postApi } from '.';
 import API from './api';
-import { AdminLoginResponse, AdminRegisterResponse, AdminVerifyResponse, GetUsersResponse, UserLoginResponse, UserProfileResponse, UserRegisterResponse, UserVerifyResponse } from './types';
+import {
+  AdminLoginApiResponse,
+  AdminRegisterResponse,
+  AdminVerifyResponse,
+  GetUsersResponse,
+  UserLoginApiResponse,
+  UserProfileResponse,
+  UserRegisterResponse,
+  UserVerifyResponse,
+} from './types';
 
 export const userLogin = async (formdata: { email: string; password: string }) => {
   console.log(formdata);
-  return postApi<UserLoginResponse>(API.userLogin, formdata);
+  return postApi<UserLoginApiResponse>(API.userLogin, formdata);
 };
 
 export const userRegister = async (formdata: { email: string; password: string }) => {
@@ -17,7 +26,7 @@ export const verifyUser = async (formdata: { email: string; verificationCode: st
 
 export const adminLogin = async (formdata: { email: string; password: string }) => {
   console.log('Admin login:', formdata);
-  return postApi<AdminLoginResponse>(API.adminLogin, formdata);
+  return postApi<AdminLoginApiResponse>(API.adminLogin, formdata);
 };
 
 export const adminRegister = async (formdata: { email: string; password: string }) => {

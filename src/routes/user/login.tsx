@@ -19,7 +19,7 @@ export const Route = createFileRoute('/user/login')({
 
 export function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [data, setData] = useState({ email: '', password: '1111111111111' });
+  const [data, setData] = useState({ email: 'codeantu@gmail.com', password: '1111111111111' });
   const [error, setError] = useState('');
   const [isVerify, setIsVerify] = useState(false);
   const [otp, setOtp] = useState('');
@@ -40,6 +40,8 @@ export function Login() {
       console.log(error);
     },
     onSuccess: (response) => {
+      console.log(response);
+
       if (response.isAlert) {
         toast.error(response.message || 'Something went wrong!');
         return;
@@ -49,11 +51,9 @@ export function Login() {
         return;
       }
 
-      if (response.token) {
-        console.log(response);
-
+      if (response.data && response.data.token) {
         setRole('user');
-        setToken(response.token);
+        setToken(response.data.token);
         toast.success('Login successful!');
         navigate({ to: '/welcome' });
       } else {

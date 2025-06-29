@@ -15,7 +15,7 @@ const API = {
   adminVerify: `${BASE_URL}/admin/auth/verify-otp`,
 
   // game
-  gameList: `${BASE_URL}/game/list`,
+  gameList: `${BASE_URL}/game/all`,
   
   getUsers: `${BASE_URL}/admin/users`,
 

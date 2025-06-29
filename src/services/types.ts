@@ -196,3 +196,23 @@ export interface User {
   email: string;
   balance: number;
 }
+
+export interface UserLoginApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    token: string;
+    user: User;
+  };
+  timestamp: string;
+}
+
+export interface AdminLoginApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    token: string;
+    user: User;
+  };
+  timestamp: string;
+}
