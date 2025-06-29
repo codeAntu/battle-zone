@@ -143,7 +143,7 @@ function WithdrawalsComponent() {
           <CardTitle className='text-center'>Withdrawal Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          {withdrawalData?.withdrawals && withdrawalData.withdrawals.length > 0 ? (
+          {withdrawalData?.data.withdrawals && withdrawalData.data.withdrawals.length > 0 ? (
             <div className='overflow-x-auto'>
               <Table>
                 <TableHeader>
@@ -158,7 +158,7 @@ function WithdrawalsComponent() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {withdrawalData.withdrawals.map((withdrawal) => {
+                  {withdrawalData.data.withdrawals.map((withdrawal) => {
                     const formattedDate = formatDateToUTC(
                       withdrawal.createdAt instanceof Date ? withdrawal.createdAt.toISOString() : withdrawal.createdAt,
                     );

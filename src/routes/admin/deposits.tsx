@@ -138,7 +138,7 @@ function DepositsComponent() {
           <CardTitle className='text-center'>Deposit Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          {transactions?.deposits && transactions.deposits.length > 0 ? (
+          {transactions?.data.deposits && transactions.data.deposits.length > 0 ? (
             <div className='overflow-x-auto'>
               <Table>
                 <TableHeader>
@@ -154,7 +154,7 @@ function DepositsComponent() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {transactions.deposits.map((deposit) => (
+                  {transactions.data.deposits.map((deposit) => (
                     <TableRow key={deposit.id}>
                       <TableCell className='text-center font-medium'>{deposit.id}</TableCell>
                       <TableCell className='text-center'>

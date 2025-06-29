@@ -50,7 +50,7 @@ export function History() {
       </div>
     );
 
-  if (!data || !data.history || data.history.length === 0) {
+  if (!data || !data.data.history || data.data.history.length === 0) {
     return (
       <div className='container mx-auto p-4'>
         <Card className='border-border/40 bg-background'>
@@ -81,7 +81,7 @@ export function History() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.history.map((transaction) => (
+              {data.data.history.map((transaction) => (
                 <TransactionRow key={transaction.id} transaction={transaction} />
               ))}
             </TableBody>

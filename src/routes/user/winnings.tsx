@@ -34,7 +34,7 @@ function RouteComponent() {
   }
 
   console.log(data);
-  const winnings = data?.data || [];
+  const winnings = data?.data.winnings || [];
 
   return (
     <div className='p-5'>

@@ -33,7 +33,7 @@ function RouteComponent() {
     );
   }
 
-  const tournaments = data?.data.tournaments || [];
+  const tournaments = data?.data?.tournaments || [];
 
   console.log(tournaments);
   console.log(data);

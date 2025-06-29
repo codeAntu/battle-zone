@@ -70,8 +70,11 @@ export const rejectWithdrawal = async (id: string, reason: string) => {
 };
 
 export interface DepositResponse {
+  status: string;
   message: string;
-  deposits: Deposit[];
+  data: {
+    deposits: Deposit[];
+  };
 }
 
 export interface Deposit {
@@ -87,8 +90,11 @@ export interface Deposit {
 }
 
 export interface WithdrawalResponse {
+  status: string;
   message: string;
-  withdrawals: Withdrawal[];
+  data: {
+    withdrawals: Withdrawal[];
+  };
 }
 
 export interface Withdrawal {
@@ -106,8 +112,11 @@ export const getHistory = async () => {
   return getApi<TransactionHistoryResponse>(API.getTransactionHistory);
 };
 export interface TransactionHistoryResponse {
+  status: string;
   message: string;
-  history: History[];
+  data: {
+    history: History[];
+  };
 }
 
 export interface History {
@@ -125,7 +134,11 @@ export interface History {
 }
 
 export const formatHistory = (transaction: History) => {
-  const formattedCreatedAt = formatDateToUTC(typeof transaction.createdAt === 'string' ? transaction.createdAt : transaction.createdAt.toISOString());
-  const formattedCreatedTime = formatTimeToUTC(typeof transaction.createdAt === 'string' ? transaction.createdAt : transaction.createdAt.toISOString());
+  const formattedCreatedAt = formatDateToUTC(
+    typeof transaction.createdAt === 'string' ? transaction.createdAt : transaction.createdAt.toISOString(),
+  );
+  const formattedCreatedTime = formatTimeToUTC(
+    typeof transaction.createdAt === 'string' ? transaction.createdAt : transaction.createdAt.toISOString(),
+  );
   return { ...transaction, formattedCreatedAt, formattedCreatedTime };
 };

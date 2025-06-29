@@ -93,7 +93,9 @@ export interface WinningResponse {
   success: boolean;
   message: string;
   timestamp: string;
-  data: Datum[];
+  data: {
+    winnings: Datum[];
+  };
 }
 
 export interface Datum {
