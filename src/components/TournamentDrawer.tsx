@@ -123,7 +123,7 @@ export default function TournamentDrawer({
     }
   };
 
-  const hasParticipated = !isLoading && participationData?.participation;
+  const hasParticipated = !isLoading && participationData?.data.isParticipated;
 
   // Define image sources with fallbacks
   const defaultGameImage = `/games/${tournament.game.toUpperCase()}/image.png`;

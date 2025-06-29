@@ -48,16 +48,22 @@ export interface TournamentsResponse {
   timestamp: string;
 }
 
-
-
 export interface isParticipatedResponse {
+  success: boolean;
   message: string;
-  participation: boolean;
+  data: {
+    isParticipated: boolean;
+  };
+  timestamp: string;
 }
 
 export interface TournamentByNameResponse {
+  status: boolean;
   message: string;
-  tournaments: TournamentElement[];
+  data: {
+    tournaments: TournamentElement[];
+  };
+  timestamp: string;
 }
 
 export interface TournamentElement {
@@ -84,7 +90,9 @@ export interface Participant {
 }
 
 export interface WinningResponse {
+  success: boolean;
   message: string;
+  timestamp: string;
   data: Datum[];
 }
 
@@ -102,7 +110,12 @@ export interface Winning {
 }
 
 export interface GetUsersResponse {
-  users: User[];
+  success: boolean;
+  message: string;
+  timestamp: string;
+  data: {
+    users: User[];
+  };
 }
 
 export interface User {
@@ -209,8 +222,12 @@ export interface AdminVerifyResponse {
 }
 
 export interface UserProfileResponse {
+  success: boolean;
   message: string;
-  user: User;
+  timestamp: string;
+  data: {
+    user: User;
+  };
 }
 
 export interface User {

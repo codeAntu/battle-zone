@@ -58,7 +58,7 @@ function RouteComponent() {
 
   // Filter users based on search query
   const filteredUsers =
-    data?.users?.filter(
+    data?.data.users?.filter(
       (user) =>
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase()),

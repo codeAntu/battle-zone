@@ -43,7 +43,7 @@ function RouteComponent() {
           {/* Profile avatar */}
           <div className='flex justify-center'>
             <div className='ring-opacity-50 flex h-24 w-24 items-center justify-center rounded-full border-2 border-gray-900 bg-gradient-to-br from-purple-800 to-indigo-900 text-2xl font-bold text-white ring-2 shadow-md ring-purple-500'>
-              {data.user.name?.charAt(0).toUpperCase()}
+              {data.data.user.name?.charAt(0).toUpperCase()}
             </div>
           </div>
 
@@ -53,31 +53,31 @@ function RouteComponent() {
               <div className='flex items-center rounded-md p-1.5 transition-all hover:bg-gray-800'>
                 <User className='mr-3 h-4 w-4 text-purple-400' />
                 <span className='min-w-16 text-sm font-medium text-gray-400'>Username</span>
-                <span className='ml-2 text-sm font-semibold text-white'>{data.user.name}</span>
+                <span className='ml-2 text-sm font-semibold text-white'>{data.data.user.name}</span>
               </div>
 
               <div className='flex items-center rounded-md p-1.5 transition-all hover:bg-gray-800'>
                 <Mail className='mr-3 h-4 w-4 text-purple-400' />
                 <span className='min-w-16 text-sm font-medium text-gray-400'>Email</span>
-                <span className='ml-2 text-sm font-semibold text-white'>{data.user.email}</span>
+                <span className='ml-2 text-sm font-semibold text-white'>{data.data.user.email}</span>
               </div>
 
               <div className='flex items-center rounded-lg border border-gray-900 bg-gradient-to-r from-black to-gray-950 p-3 shadow-inner'>
                 <Wallet className='mr-3 h-5 w-5 text-green-400' />
                 <span className='min-w-16 text-sm font-medium text-gray-400'>Balance</span>
-                <span className='ml-2 text-base font-bold text-green-400'>₹{data.user.balance?.toLocaleString()}</span>
+                <span className='ml-2 text-base font-bold text-green-400'>₹{data.data.user.balance?.toLocaleString()}</span>
               </div>
 
-              {data.user.isVerified !== undefined && (
+              {data.data.user.isVerified !== undefined && (
                 <div className='flex items-center rounded-md p-1.5 transition-all hover:bg-black'>
                   <Shield className='mr-3 h-4 w-4 text-purple-400' />
                   <span className='min-w-16 text-sm font-medium text-gray-400'>Status</span>
                   <span
                     className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                      data.user.isVerified ? 'bg-green-950 text-green-400' : 'bg-red-950 text-red-400'
+                      data.data.user.isVerified ? 'bg-green-950 text-green-400' : 'bg-red-950 text-red-400'
                     }`}
                   >
-                    {data.user.isVerified ? 'Verified' : 'Not Verified'}
+                    {data.data.user.isVerified ? 'Verified' : 'Not Verified'}
                   </span>
                 </div>
               )}

@@ -29,7 +29,7 @@ function RouteComponent() {
   console.log(data);
 
   const tournaments =
-    data?.tournaments?.map((item) => {
+    data?.data.tournaments.map((item) => {
       const tournament = item.tournament;
       const formattedDate = formatDateToUTC(tournament.scheduledAt);
       const formattedTime = formatTimeToUTC(tournament.scheduledAt);
