@@ -1,11 +1,11 @@
 import GameCard from '@/components/gameCard';
-import { getGameList, GameType } from '@/services/game';
+import { GameType, getAllGames } from '@/services/game';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 // Import Swiper components
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import { Autoplay, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 export const Route = createFileRoute('/user/tournaments/')({
   component: RouteComponent,
@@ -13,7 +13,7 @@ export const Route = createFileRoute('/user/tournaments/')({
 function RouteComponent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['tournaments'],
-    queryFn: getGameList,
+    queryFn: getAllGames,
   });
 
   if (isLoading) {
@@ -68,9 +68,7 @@ function RouteComponent() {
           </Swiper>
         </div>
       </div>
-      <div
-        className='text-2xl font-bold text-white/80 md:hidden'  
-      >Games</div>
+      <div className='text-2xl font-bold text-white/80 md:hidden'>Games</div>
 
       <div className='grid grid-cols-3 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {allGames.map((game) => {

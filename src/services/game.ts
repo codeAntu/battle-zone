@@ -1,9 +1,28 @@
 import { getApi, postApi } from '.';
 import API from './api';
 
+// export interface GameResponse {
+//   message: string;
+//   data: GameType[];
+// }
+
 export interface GameResponse {
+  success: boolean;
   message: string;
-  data: GameType[];
+  data: Data;
+  timestamp: Date;
+}
+
+export interface Data {
+  games: Game[];
+}
+
+export interface Game {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  iconUrl: string;
 }
 
 export interface SingleGameResponse {
@@ -33,7 +52,7 @@ export interface UpdateGameType {
   image?: string;
 }
 
-export const getGameList = async () => {
+export const getAllGames = async () => {
   return getApi<GameResponse>(API.gameList);
 };
 

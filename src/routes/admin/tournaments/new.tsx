@@ -69,17 +69,17 @@ function RouteComponent() {
       : '';
 
   const [tournamentData, setTournamentData] = useState({
-    game: initialGame,
-    name: '',
-    description: '',
-    roomId: '',
-    roomPassword: '',
-    entryFee: '',
-    prize: '',
-    perKillPrize: '',
-    maxParticipants: '',
-    date: '',
-    time: '',
+    game: initialGame || 'BGMI',
+    name: 'Test Tournament',
+    description: 'Temporary description',
+    roomId: '12345',
+    roomPassword: 'testpass',
+    entryFee: '10',
+    prize: '100',
+    perKillPrize: '5',
+    maxParticipants: '50',
+    date: format(new Date(Date.now() + 86400000), 'yyyy-MM-dd'), // tomorrow
+    time: '18:00',
     image: null as File | null,
   });
 
