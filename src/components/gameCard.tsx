@@ -1,4 +1,4 @@
-import { GameType } from '@/services/game';
+import { GameType } from '@/api/game';
 import { Link } from '@tanstack/react-router';
 import { MoveRight } from 'lucide-react';
 import { useState } from 'react';
@@ -46,7 +46,9 @@ export default function GameCard({ game, comingSoon = false }: GameCardProps) {
       {/* Coming soon overlay - show when comingSoon prop is true */}
       {comingSoon && (
         <div className='absolute inset-0 flex items-center justify-center bg-black/50 md:hidden'>
-          <div className='rounded-lg px-4 py-2 text-xs font-bold text-center text-yellow-500 backdrop-blur-sm'>COMING SOON</div>
+          <div className='rounded-lg px-4 py-2 text-center text-xs font-bold text-yellow-500 backdrop-blur-sm'>
+            COMING SOON
+          </div>
         </div>
       )}
 

@@ -1,3 +1,4 @@
+import { deleteTournament, getAdminTournamentsById, updateTournament } from '@/api/tournament';
 import TournamentNotFound from '@/components/TournamentNotFound';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
-import { deleteTournament, getAdminTournamentsById, updateTournament } from '@/services/tournament';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router';
 import { CalendarIcon, Clock, Copy, DollarSign, PencilIcon, ShieldAlert, Trash2, Trophy, Users } from 'lucide-react';
@@ -90,11 +90,11 @@ function RouteComponent() {
     );
   }
 
-  if (!data?.tournament) {
+  if (!data?.data?.tournament) {
     return <TournamentNotFound />;
   }
 
-  const tournament = data.tournament;
+  const tournament = data.data.tournament;
   const scheduledDate = tournament.scheduledAt ? new Date(tournament.scheduledAt) : null;
   const formattedDate = scheduledDate ? formatDateToUTC(scheduledDate.toISOString()) : null;
   const formattedTime = scheduledDate ? formatTimeToUTC(scheduledDate.toISOString()) : null;

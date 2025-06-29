@@ -1,3 +1,4 @@
+import { approveWithdrawal, getAdminWithdrawals, rejectWithdrawal, WithdrawalResponse } from '@/api/transaction';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +17,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
-import { approveWithdrawal, getAdminWithdrawals, rejectWithdrawal, WithdrawalResponse } from '@/services/transaction';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Check, X } from 'lucide-react';

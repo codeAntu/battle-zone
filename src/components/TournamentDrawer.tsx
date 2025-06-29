@@ -1,8 +1,8 @@
+import { isParticipated, participateInTournament } from '@/api/tournament';
+import { Tournament as TournamentType } from '@/api/types';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { isParticipated, participateInTournament } from '@/services/tournament';
-import { Tournament as TournamentType } from '@/services/types';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { BadgeIndianRupee, Calendar, Copy, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';

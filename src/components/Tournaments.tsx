@@ -1,4 +1,4 @@
-import { Tournament as TournamentType } from '@/services/types';
+import { Tournament as TournamentType } from '@/api/types';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { ArrowLeft, Calendar, Clock, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
 import TournamentDrawer from './TournamentDrawer';
@@ -26,7 +26,7 @@ export default function Tournaments({ tournaments }: { tournaments: TournamentTy
   }
 
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2  gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
       {tournaments.map((tournament) => (
         <Tournament key={tournament.id} tournament={tournament} />
       ))}

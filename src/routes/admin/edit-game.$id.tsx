@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { GameType, getAdminGameById, updateGame } from '../../services/game';
+import { GameType, getAdminGameById, updateGame } from '../../api/game';
 
 export const Route = createFileRoute('/admin/edit-game/$id')({
   component: RouteComponent,

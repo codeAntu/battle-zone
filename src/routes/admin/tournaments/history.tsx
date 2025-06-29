@@ -1,6 +1,6 @@
+import { getUserTournamentHistory } from '@/api/tournament';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
-import { getUserTournamentHistory } from '@/services/tournament';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 
@@ -34,7 +34,7 @@ function RouteComponent() {
     );
   }
 
-  const tournaments = data?.tournaments || [];
+  const tournaments = data?.data.tournaments || [];
 
   if (tournaments.length === 0) {
     return <div className='flex justify-center p-8'>No tournament history found.</div>;
@@ -62,7 +62,7 @@ function RouteComponent() {
         </TableHeader>
         <TableBody>
           {tournaments.map((tournament, index) => {
-            const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
+            const gameImage = '/games/' + tournament.game.toUpperCase() + '/icon.png';
             const formattedDate = tournament.scheduledAt ? formatDateToUTC(tournament.scheduledAt) : null;
             const formattedTime = tournament.scheduledAt ? formatTimeToUTC(tournament.scheduledAt) : null;
             const updatedDate = formatDateToUTC(tournament.updatedAt);
@@ -74,11 +74,7 @@ function RouteComponent() {
                 <TableCell className='font-medium'>{tournament.name}</TableCell>
                 <TableCell className='text-center'>
                   <div className='flex items-center justify-center gap-2'>
-                    <img
-                      src={gameImage}
-                      alt={tournament.game}
-                      className='h-8 w-8 rounded-lg object-cover'
-                    />
+                    <img src={gameImage} alt={tournament.game} className='h-8 w-8 rounded-lg object-cover' />
                     <span>{tournament.game}</span>
                   </div>
                 </TableCell>

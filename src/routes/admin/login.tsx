@@ -1,10 +1,10 @@
+import { adminLogin, adminRegister, verifyAdmin } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { appData } from '@/conts/data';
-import { adminLogin, adminRegister, verifyAdmin } from '@/services/auth';
 import { useTokenStore } from '@/store/store';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -141,9 +141,9 @@ export function AdminSignInPage() {
         return;
       }
 
-      if (response.token) {
+      if (response.data && response.data.token) {
         setRole('admin');
-        setToken(response.token);
+        setToken(response.data.token);
         toast.success('Verification successful! You are now logged in as admin.');
         navigate({ to: '/admin/tournaments' });
       } else {

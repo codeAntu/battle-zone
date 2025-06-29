@@ -1,10 +1,10 @@
+import { userLogin, userRegister, verifyUser } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { appData } from '@/conts/data';
-import { userLogin, userRegister, verifyUser } from '@/services/auth';
 import { useTokenStore } from '@/store/store';
 import { signupValidator, verifyOtpValidator } from '@/zod/auth';
 import { useMutation } from '@tanstack/react-query';

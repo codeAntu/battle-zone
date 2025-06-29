@@ -1,15 +1,15 @@
+import { depositTransaction } from '@/api/transaction';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { depositTransaction } from '@/services/transaction';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import { Copy, Check } from 'lucide-react';
 
 export const Route = createFileRoute('/user/deposit')({
   component: Deposit,

@@ -1,10 +1,10 @@
+import { createTournament } from '@/api/tournament';
 import { ImageUpload } from '@/components/ImageUpload';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { createTournament } from '@/services/tournament';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { format } from 'date-fns';
@@ -96,7 +96,7 @@ function RouteComponent() {
         duration: 4000,
       });
 
-      const tournamentId = data.tournament.id;
+      const tournamentId = data.data.tournament.id;
       navigate({
         to: `/admin/tournaments/${tournamentId}`,
       });

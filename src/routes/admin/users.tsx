@@ -1,5 +1,5 @@
-import { getUsers } from '@/services/auth';
-import { User } from '@/services/types';
+import { getUsers } from '@/api/auth';
+import { User } from '@/api/types';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { format } from 'date-fns';

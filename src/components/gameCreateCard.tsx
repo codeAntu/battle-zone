@@ -1,4 +1,4 @@
-import { GameType } from '@/services/game';
+import { GameType } from '@/api/game';
 import { Link } from '@tanstack/react-router';
 
 export function GameCreateCard(game: GameType) {
@@ -6,8 +6,8 @@ export function GameCreateCard(game: GameType) {
   const formattedGameName = game.name.toUpperCase();
 
   return (
-    <Link 
-      to='/admin/tournaments/new' 
+    <Link
+      to='/admin/tournaments/new'
       search={{ game: formattedGameName }}
       className='relative overflow-hidden rounded-2xl'
     >

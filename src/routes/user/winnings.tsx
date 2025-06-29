@@ -1,8 +1,8 @@
+import { getUserWinnings } from '@/api/tournament';
+import { Tournament } from '@/api/types';
 import TournamentDrawer from '@/components/TournamentDrawer';
 import { Button } from '@/components/ui/button';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
-import { getUserWinnings } from '@/services/tournament';
-import { Tournament } from '@/services/types';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Trophy } from 'lucide-react';
@@ -95,7 +95,9 @@ function Game({ tournament, amount, date }: { tournament: Tournament; amount: nu
               </span>
             </div>
             <div className='flex flex-wrap items-center gap-2 text-xs text-gray-400'>
-              <span>{formattedDate} {formattedTime}</span>
+              <span>
+                {formattedDate} {formattedTime}
+              </span>
               <span className='font-semibold text-yellow-400'>+{amount} coins won</span>
             </div>
           </div>

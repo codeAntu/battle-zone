@@ -1,8 +1,8 @@
-import { getUserProfile } from '@/services/auth';
+import { getUserProfile } from '@/api/auth';
 import { useTokenStore } from '@/store/store';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { User, Mail, Wallet, LogOut, Shield, Home, CreditCard, Trophy, BarChart3, Gamepad2 } from 'lucide-react';
+import { BarChart3, CreditCard, Gamepad2, Home, LogOut, Mail, Shield, Trophy, User, Wallet } from 'lucide-react';
 
 export const Route = createFileRoute('/user/profile')({
   component: RouteComponent,

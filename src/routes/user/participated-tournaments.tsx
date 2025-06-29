@@ -1,8 +1,8 @@
+import { getParticipatedTournaments } from '@/api/tournament';
+import { Tournament } from '@/api/types';
 import TournamentDrawer from '@/components/TournamentDrawer';
 import { Button } from '@/components/ui/button';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
-import { getParticipatedTournaments } from '@/services/tournament';
-import { Tournament } from '@/services/types';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Trophy } from 'lucide-react';
@@ -33,7 +33,7 @@ function RouteComponent() {
     );
   }
 
-  const tournaments = data?.tournaments || [];
+  const tournaments = data?.data.tournaments || [];
 
   console.log(tournaments);
   console.log(data);
@@ -66,22 +66,17 @@ function RouteComponent() {
 
 function Game({ tournament }: { tournament: Tournament }) {
   const scheduledDate = tournament.scheduledAt ? new Date(tournament.scheduledAt) : new Date(tournament.createdAt);
-  
+
   const formattedDate = formatDateToUTC(scheduledDate.toISOString());
   const formattedTime = formatTimeToUTC(scheduledDate.toISOString());
 
-  const gameImage = "/games/" + tournament.game.toUpperCase() + "/icon.png";
-
+  const gameImage = '/games/' + tournament.game.toUpperCase() + '/icon.png';
 
   return (
     <div className='flex flex-col gap-2'>
       <div className='flex flex-row items-center justify-between rounded-lg border border-gray-700 p-3'>
         <div className='flex items-center'>
-          <img
-            src={gameImage}
-            alt={tournament.game}
-            className='h-12 w-12 rounded-lg object-cover mr-3'
-          />
+          <img src={gameImage} alt={tournament.game} className='mr-3 h-12 w-12 rounded-lg object-cover' />
           <div className='flex flex-col'>
             <p className='font-semibold'>{tournament.name}</p>
             <div className='flex flex-wrap items-center gap-2 text-xs text-gray-400'>
@@ -95,14 +90,8 @@ function Game({ tournament }: { tournament: Tournament }) {
           </div>
         </div>
 
-        <TournamentDrawer
-          data={tournament}
-          viewOnly={true}
-          showCurrency="coins"
-        >
-          <Button
-            className='border-primary text-primary hover:bg-primary rounded-lg border bg-transparent px-3 py-1 text-xs font-semibold hover:text-black transition-colors'
-          >
+        <TournamentDrawer data={tournament} viewOnly={true} showCurrency='coins'>
+          <Button className='border-primary text-primary hover:bg-primary rounded-lg border bg-transparent px-3 py-1 text-xs font-semibold transition-colors hover:text-black'>
             Details
           </Button>
         </TournamentDrawer>

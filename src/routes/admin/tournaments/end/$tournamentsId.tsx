@@ -1,3 +1,5 @@
+import { addUserKillAmount, endTournament, getAdminTournamentsById, getTournamentParticipants } from '@/api/tournament';
+import { Participant as ParticipantType } from '@/api/types';
 import TournamentDrawer from '@/components/TournamentDrawer';
 import {
   AlertDialog,
@@ -14,17 +16,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
-import {
-  addUserKillAmount,
-  endTournament,
-  getAdminTournamentsById,
-  getTournamentParticipants,
-} from '@/services/tournament';
-import { Participant as ParticipantType } from '@/services/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
 import { format } from 'date-fns';
-import { Medal, Search, Trophy, Crosshair } from 'lucide-react';
+import { Crosshair, Medal, Search, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -48,7 +43,7 @@ function RouteComponent() {
   const { data: participants, isLoading: isParticipantsLoading } = useQuery({
     queryKey: ['tournamentParticipants', tournamentsId],
     queryFn: () => getTournamentParticipants(tournamentsId),
-    enabled: !!tournamentData?.tournament,
+    enabled: !!tournamentData?.data.tournament,
   });
 
   const endTournamentMutation = useMutation({
@@ -89,7 +84,7 @@ function RouteComponent() {
     );
   }
 
-  const tournament = tournamentData?.tournament;
+  const tournament = tournamentData?.data.tournament;
 
   if (!tournament) {
     return <div className='p-8 text-center'>Tournament not found</div>;
@@ -97,14 +92,14 @@ function RouteComponent() {
 
   // Filter participants based on search query
   const filteredParticipants =
-    participants?.participants?.filter(
+    participants?.data.participants?.filter(
       (participant) =>
         participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         participant.email.toLowerCase().includes(searchQuery.toLowerCase()),
     ) || [];
 
   // Find the selected winner
-  const winnerParticipant = participants?.participants?.find((p) => p.userId === selectedWinner);
+  const winnerParticipant = participants?.data.participants?.find((p) => p.userId === selectedWinner);
 
   console.log('participants', participants);
 

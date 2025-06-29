@@ -1,5 +1,5 @@
+import { getAllGames } from '@/api/game';
 import { GameCreateCard } from '@/components/gameCreateCard';
-import { getAllGames } from '@/services/game';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 

@@ -1,5 +1,5 @@
+import { GameType, getAllGames } from '@/api/game';
 import GameCard from '@/components/gameCard';
-import { GameType, getAllGames } from '@/services/game';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 // Import Swiper components
@@ -34,7 +34,7 @@ function RouteComponent() {
 
   const images = ['/banner/01.jpg', '/banner/02.jpg', '/banner/03.jpg'];
 
-  const allGames = [...(data?.data ?? []), ludoGame];
+  const allGames = [...(data?.data.games ?? []), ludoGame];
 
   return (
     <div className='space-y-4 p-5'>
