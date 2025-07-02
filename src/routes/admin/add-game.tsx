@@ -19,12 +19,12 @@ function RouteComponent() {
       // Validate file type
       const validTypes = ['.zip', '.exe', '.html', '.unity3d'];
       const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-      
+
       if (!validTypes.includes(fileExtension)) {
         setError(`Invalid file type. Supported formats: ${validTypes.join(', ')}`);
         return;
       }
-      
+
       setGameFile(file);
       setError('');
     }
@@ -33,24 +33,24 @@ function RouteComponent() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!gameFile) return;
-    
+
     setIsUploading(true);
     setError('');
     setMessage('');
-    
+
     try {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
       formData.append('gameFile', gameFile);
-      
-      const response = await fetch('http://localhost:3001/api/games/upload', {
+
+      const response = await fetch('/api/games/upload', {
         method: 'POST',
         body: formData,
       });
-      
+
       const result = await response.json();
-      
+
       if (result.success) {
         setMessage('Game uploaded successfully!');
         // Reset form
@@ -129,9 +129,8 @@ function RouteComponent() {
         <button
           type='submit'
           disabled={isUploading || !gameFile}
-          className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 ${
-            isUploading || !gameFile ? 'cursor-not-allowed opacity-50' : ''
-          }`}
+          className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 ${isUploading || !gameFile ? 'cursor-not-allowed opacity-50' : ''
+            }`}
         >
           {isUploading ? 'Uploading...' : 'Upload Game'}
         </button>

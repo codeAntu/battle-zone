@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { appData } from '@/conts/data';
 import { useTokenStore } from '@/store/store';
 import { useNavigate } from '@tanstack/react-router';
-import { LogOut, User, MessageCircle } from 'lucide-react';
+import { LogOut, MessageCircle, User } from 'lucide-react';
 import { useRef } from 'react';
 
 export default function Header() {
@@ -18,13 +18,11 @@ export default function Header() {
         <div className='flex items-center gap-4 px-5 font-semibold whitespace-nowrap'>
           <img src={appData.icon} alt='' className='w-10 rounded-full sm:w-12' />
           <p className=''>{appData.name}</p>
-        </div>
-
-        <div className='flex w-full justify-end sm:gap-4 px-3 text-sm sm:text-base'>
+        </div>        <div className='flex w-full justify-end sm:gap-4 px-3 text-sm sm:text-base'>
           {/* WhatsApp Support Button */}
-          <a 
-            href="https://wa.me/918854812760" 
-            target="_blank" 
+          <a
+            href="https://wa.me/919800211400"
+            target="_blank"
             rel="noopener noreferrer"
             className="flex items-center mr-2 bg-green-600 hover:bg-green-700 transition-colors text-white px-3 py-1.5 rounded-full"
           >

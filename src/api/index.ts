@@ -79,12 +79,3 @@ function handleUnauthenticated() {
   console.log('Unauthenticated', 'Logging out');
   logOut();
 }
-
-// export const citySearch = axios.create({
-//   baseURL: 'https://www.universal-tutorial.com/api/getaccesstoken',
-//   headers: {
-//     Accept: 'application/json',
-//     'api-token': citySearchAPIToken,
-//     'user-email': userEmail,
-//   },
-// })

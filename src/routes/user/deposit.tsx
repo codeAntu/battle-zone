@@ -64,9 +64,8 @@ export function Deposit() {
       }
     },
   });
-
   const handleCopyUpi = () => {
-    navigator.clipboard.writeText('8854812760@okbizaxis');
+    navigator.clipboard.writeText('example@upi');
     setCopied(true);
     toast.success('UPI ID copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
@@ -115,16 +114,14 @@ export function Deposit() {
         <CardContent>
           <CardTitle className='pt-5 pb-3 text-center'>Deposit </CardTitle>
           <div className='flex flex-col items-center'>
-            <p className='mb-1 text-sm font-medium'>Scan QR code to pay directly</p>
-            <div className='rounded-md border bg-white p-3'>
-              <img src='/qr/qr.jpg' alt='Payment QR Code' className='h-48 w-48 object-contain' />
+            <p className='mb-1 text-sm font-medium'>Scan QR code to pay directly</p>            <div className='rounded-md border bg-white p-3'>
+              <img src='/qr/qr.svg' alt='Payment QR Code' className='h-48 w-48 object-contain' />
             </div>
 
-            <div className='w-full mt-4 p-3 bg-slate-100 dark:bg-slate-900 rounded-md flex items-center justify-between'>
-              <div>
-                <p className='text-xs text-gray-500 font-medium'>UPI ID</p>
-                <p className='text-sm font-bold'>8854812760@okbizaxis</p>
-              </div>
+            <div className='w-full mt-4 p-3 bg-slate-100 dark:bg-slate-900 rounded-md flex items-center justify-between'>              <div>
+              <p className='text-xs text-gray-500 font-medium'>UPI ID</p>
+              <p className='text-sm font-bold'>example@upi</p>
+            </div>
               <button
                 onClick={handleCopyUpi}
                 className='p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors'
