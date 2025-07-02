@@ -24,11 +24,43 @@ function RouteComponent() {
 
   return (
     <div className='mx-auto min-h-[80vh] max-w-3xl rounded-lg bg-gray-950 p-3'>
-      <h1 className='mb-5 text-center text-2xl font-bold tracking-wide text-purple-400'>User Profile</h1>
+      <h1 className='mb-5 text-center text-2xl font-bold tracking-wide text-purple-400'>User Profile</h1>      {isLoading && (
+        <div className='space-y-6'>
+          {/* Profile avatar skeleton */}
+          <div className='flex justify-center'>
+            <div className='h-24 w-24 animate-pulse rounded-full bg-muted'></div>
+          </div>
 
-      {isLoading && (
-        <div className='flex justify-center'>
-          <div className='h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500'></div>
+          {/* Profile info skeleton */}
+          <div className='rounded-lg border bg-card p-4'>
+            <div className='space-y-3'>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className='flex items-center gap-3 p-2 rounded-md'>
+                  <div className='h-4 w-4 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-32 animate-pulse rounded bg-muted'></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation skeleton */}
+          <div className='rounded-lg border bg-card p-3'>
+            <div className='h-5 w-32 animate-pulse rounded bg-muted mb-3'></div>
+            <div className='space-y-2'>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className='flex items-center gap-3 p-3 rounded-md'>
+                  <div className='h-4 w-4 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Logout button skeleton */}
+          <div className='rounded-lg border bg-card p-3'>
+            <div className='h-10 w-full animate-pulse rounded bg-muted'></div>
+          </div>
         </div>
       )}
 
@@ -73,9 +105,8 @@ function RouteComponent() {
                   <Shield className='mr-3 h-4 w-4 text-purple-400' />
                   <span className='min-w-16 text-sm font-medium text-gray-400'>Status</span>
                   <span
-                    className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                      data.data.user.isVerified ? 'bg-green-950 text-green-400' : 'bg-red-950 text-red-400'
-                    }`}
+                    className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${data.data.user.isVerified ? 'bg-green-950 text-green-400' : 'bg-red-950 text-red-400'
+                      }`}
                   >
                     {data.data.user.isVerified ? 'Verified' : 'Not Verified'}
                   </span>

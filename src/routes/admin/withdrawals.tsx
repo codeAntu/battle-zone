@@ -212,13 +212,19 @@ function WithdrawalsComponent() {
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                      <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction
+                                      <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>                                      <AlertDialogAction
                                         onClick={() => handleApprove(withdrawal.id)}
                                         className='bg-green-500 hover:bg-green-600'
                                         disabled={approveMutation.isPending}
                                       >
-                                        {approveMutation.isPending ? 'Processing...' : 'Yes, Approve Withdrawal'}
+                                        {approveMutation.isPending ? (
+                                          <div className="flex items-center gap-2">
+                                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                                            Processing...
+                                          </div>
+                                        ) : (
+                                          'Yes, Approve Withdrawal'
+                                        )}
                                       </AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
@@ -260,13 +266,19 @@ function WithdrawalsComponent() {
                                       </div>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                      <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction
+                                      <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>                                      <AlertDialogAction
                                         onClick={() => handleReject(withdrawal.id, rejectionReason)}
                                         className='bg-rose-600 hover:bg-rose-700'
                                         disabled={rejectMutation.isPending || !rejectionReason.trim()}
                                       >
-                                        {rejectMutation.isPending ? 'Processing...' : 'Yes, Reject Withdrawal'}
+                                        {rejectMutation.isPending ? (
+                                          <div className="flex items-center gap-2">
+                                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                                            Processing...
+                                          </div>
+                                        ) : (
+                                          'Yes, Reject Withdrawal'
+                                        )}
                                       </AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>

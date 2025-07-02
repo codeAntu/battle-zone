@@ -1,6 +1,7 @@
 import { isParticipated, participateInTournament } from '@/api/tournament';
 import { Tournament as TournamentType } from '@/api/types';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatDateToUTC, formatTimeToUTC } from '@/lib/utils';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { BadgeIndianRupee, Calendar, Copy, Gamepad2, IndianRupee, Trophy, UserRound } from 'lucide-react';
@@ -143,10 +144,47 @@ export default function TournamentDrawer({
             </span>
           </DialogTitle>
 
-          {/* Tournament Image Section */}
+          {/* Tournament Image Section */}          {/* Show different content based on participation status */}
+          {isLoading ? (
+            // Loading skeleton while checking participation
+            <div className='space-y-4'>
+              {/* Tournament image skeleton */}
+              <div className='mb-3 flex justify-center'>
+                <Skeleton className='h-48 w-full max-w-sm rounded-lg' />
+              </div>
 
-          {/* Show different content based on participation status */}
-          {hasParticipated || viewOnly ? (
+              {/* Tournament info skeleton */}
+              <div className='rounded-lg border border-gray-800 bg-white/5 p-3 sm:p-6'>
+                <div className='space-y-4'>
+                  <div className='grid grid-cols-2 gap-4'>
+                    <div className='space-y-2'>
+                      <Skeleton className='h-4 w-16' />
+                      <Skeleton className='h-5 w-20' />
+                    </div>
+                    <div className='space-y-2'>
+                      <Skeleton className='h-4 w-16' />
+                      <Skeleton className='h-5 w-24' />
+                    </div>
+                  </div>
+                  <div className='space-y-2'>
+                    <Skeleton className='h-4 w-20' />
+                    <Skeleton className='h-12 w-full' />
+                  </div>
+                </div>
+              </div>
+
+              {/* Form skeleton */}
+              <div className='space-y-3'>
+                <Skeleton className='h-4 w-24' />
+                <Skeleton className='h-10 w-full' />
+                <Skeleton className='h-4 w-20' />
+                <Skeleton className='h-10 w-full' />
+                <Skeleton className='h-4 w-16' />
+                <Skeleton className='h-10 w-full' />
+                <Skeleton className='h-10 w-full' />
+              </div>
+            </div>
+          ) : hasParticipated || viewOnly ? (
             <>
               {tournament.image && (
                 <div className='mb-3 flex justify-center overflow-hidden'>
@@ -388,12 +426,15 @@ export default function TournamentDrawer({
                     className='border-gray-800 bg-black text-white placeholder:text-gray-500'
                   />
                   {errors.playerLevel && <p className='text-sm text-red-500'>{errors.playerLevel}</p>}
-                </div>
-
-                <Button type='submit' className='mt-3 w-full sm:mt-4' disabled={isPending}>
-                  {isPending
-                    ? 'Processing...'
-                    : `Participate ( ${currencySymbol}${tournament.entryFee}${currencyLabel} )`}
+                </div>                <Button type='submit' className='mt-3 w-full sm:mt-4' disabled={isPending}>
+                  {isPending ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                      Processing...
+                    </div>
+                  ) : (
+                    `Participate ( ${currencySymbol}${tournament.entryFee}${currencyLabel} )`
+                  )}
                 </Button>
               </form>
             </>

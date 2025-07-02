@@ -69,13 +69,89 @@ function RouteComponent() {
       toast.error((error as Error).message || 'Failed to delete tournament');
     },
   });
-
   console.log(data);
 
   if (isLoading) {
     return (
-      <div className='flex min-h-[50vh] items-center justify-center p-5'>
-        <div className='border-primary h-12 w-12 animate-spin rounded-full border-t-2 border-b-2'></div>
+      <div className='mx-auto max-w-4xl p-3 sm:p-5'>
+        <div className='space-y-6'>
+          {/* Header skeleton */}
+          <div className='space-y-4'>
+            <div className='flex gap-2'>
+              <div className='h-6 w-16 animate-pulse rounded-full bg-muted'></div>
+              <div className='h-6 w-20 animate-pulse rounded-full bg-muted'></div>
+            </div>
+            <div className='h-32 w-full animate-pulse rounded-lg bg-muted'></div>
+            <div className='h-8 w-64 animate-pulse rounded bg-muted'></div>
+            <div className='h-4 w-96 animate-pulse rounded bg-muted'></div>
+          </div>
+
+          {/* Room details skeleton */}
+          <div className='rounded-lg border bg-card p-6'>
+            <div className='flex justify-between items-center mb-4'>
+              <div className='h-6 w-24 animate-pulse rounded bg-muted'></div>
+              <div className='h-9 w-16 animate-pulse rounded bg-muted'></div>
+            </div>
+            <div className='space-y-4'>
+              <div className='flex justify-between items-center'>
+                <div className='space-y-2'>
+                  <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
+                  <div className='h-5 w-32 animate-pulse rounded bg-muted'></div>
+                </div>
+                <div className='h-8 w-8 animate-pulse rounded bg-muted'></div>
+              </div>
+              <div className='flex justify-between items-center'>
+                <div className='space-y-2'>
+                  <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
+                  <div className='h-5 w-28 animate-pulse rounded bg-muted'></div>
+                </div>
+                <div className='h-8 w-8 animate-pulse rounded bg-muted'></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Details grid skeleton */}
+          <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+            <div className='rounded-lg border bg-card p-6'>
+              <div className='h-6 w-40 animate-pulse rounded bg-muted mb-4'></div>
+              <div className='space-y-4'>
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className='flex items-center gap-3'>
+                    <div className='h-5 w-5 animate-pulse rounded bg-muted'></div>
+                    <div className='space-y-1'>
+                      <div className='h-3 w-20 animate-pulse rounded bg-muted'></div>
+                      <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className='rounded-lg border bg-card p-6'>
+              <div className='h-6 w-36 animate-pulse rounded bg-muted mb-4'></div>
+              <div className='space-y-4'>
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className='flex items-center gap-3'>
+                    <div className='h-5 w-5 animate-pulse rounded bg-muted'></div>
+                    <div className='space-y-1'>
+                      <div className='h-3 w-20 animate-pulse rounded bg-muted'></div>
+                      <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Management section skeleton */}
+          <div className='rounded-lg border bg-card p-6'>
+            <div className='h-6 w-48 animate-pulse rounded bg-muted mb-4'></div>
+            <div className='flex gap-3'>
+              <div className='h-10 w-32 animate-pulse rounded bg-muted'></div>
+              <div className='h-10 w-36 animate-pulse rounded bg-muted'></div>
+              <div className='h-10 w-40 animate-pulse rounded bg-muted'></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -111,9 +187,8 @@ function RouteComponent() {
             {tournament.game}
           </span>
           <span
-            className={`rounded-full px-4 py-0.5 text-sm tracking-wider uppercase ${
-              tournamentStatus === 'ONGOING' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
-            }`}
+            className={`rounded-full px-4 py-0.5 text-sm tracking-wider uppercase ${tournamentStatus === 'ONGOING' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
+              }`}
           >
             {tournamentStatus}
           </span>
@@ -406,15 +481,20 @@ function RouteComponent() {
                     className='text-white'
                   >
                     Cancel
-                  </Button>
-                  <Button
+                  </Button>                  <Button
                     onClick={() => deleteTournamentMutation()}
                     disabled={isDeleting || tournament.currentParticipants > 0}
-                    className={`bg-red-500 text-white hover:bg-red-600 ${
-                      tournament.currentParticipants > 0 ? 'cursor-not-allowed opacity-50' : ''
-                    }`}
+                    className={`bg-red-500 text-white hover:bg-red-600 ${tournament.currentParticipants > 0 ? 'cursor-not-allowed opacity-50' : ''
+                      }`}
                   >
-                    {isDeleting ? 'Deleting...' : 'Delete Tournament'}
+                    {isDeleting ? (
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                        Deleting...
+                      </div>
+                    ) : (
+                      'Delete Tournament'
+                    )}
                   </Button>
                 </DialogFooter>
               </DialogContent>

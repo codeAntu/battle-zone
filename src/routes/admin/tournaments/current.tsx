@@ -17,9 +17,30 @@ function RouteComponent() {
   const router = useRouter();
 
   console.log('Admin Current Tournaments:', data?.data.tournaments);
-
   if (isLoading) {
-    return <div className='flex justify-center p-8'>Loading tournaments...</div>;
+    return (
+      <div className='mx-auto max-w-7xl p-4'>
+        <div className='mb-6 text-center'>
+          <div className='h-8 w-64 animate-pulse rounded bg-muted mx-auto'></div>
+        </div>
+        <div className='rounded-lg border bg-card'>
+          <div className='p-4'>
+            <div className='space-y-3'>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className='flex items-center gap-4 p-3 border-b last:border-b-0'>
+                  <div className='h-4 w-8 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-32 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-20 animate-pulse rounded bg-muted'></div>
+                  <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
+                  <div className='h-8 w-16 animate-pulse rounded bg-muted ml-auto'></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!data?.data.tournaments || data.data.tournaments.length === 0) {

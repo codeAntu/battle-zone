@@ -196,10 +196,15 @@ export function Deposit() {
                   <SelectItem value='upi'>UPI Transfer</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <Button type='submit' className='mt-4 w-full' disabled={depositMutation.isPending}>
-              {depositMutation.isPending ? 'Processing...' : 'Process Deposit'}
+            </div>            <Button type='submit' className='mt-4 w-full' disabled={depositMutation.isPending}>
+              {depositMutation.isPending ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                  Processing...
+                </div>
+              ) : (
+                'Process Deposit'
+              )}
             </Button>
           </form>
         </CardContent>

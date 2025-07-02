@@ -1,5 +1,6 @@
 import { GameType, getAllGames } from '@/api/game';
 import GameCard from '@/components/gameCard';
+import { GameCardSkeleton } from '@/components/ui/loading-skeletons';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 // Import Swiper components
@@ -17,11 +18,30 @@ function RouteComponent() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='space-y-4 p-5'>
+        <div>
+          <h1 className='text-2xl font-bold'>Tournaments</h1>
+          <p className='text-sm text-gray-500'>Select a game to view tournaments</p>
+        </div>
+        <div className='grid grid-cols-3 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <GameCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (isError) {
-    return <div>Error loading tournaments.</div>;
+    return (
+      <div className='flex items-center justify-center p-8'>
+        <div className='text-center'>
+          <div className='text-red-500 mb-2'>Error loading tournaments</div>
+          <div className='text-sm text-gray-500'>Please try again later</div>
+        </div>
+      </div>
+    );
   }
 
   const ludoGame: GameType = {

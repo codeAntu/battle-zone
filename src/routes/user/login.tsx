@@ -203,12 +203,17 @@ export function Login() {
           )}
 
           <Error message={error} />
-        </CardContent>
-
-        <CardFooter>
+        </CardContent>        <CardFooter>
           <div className='grid w-full gap-y-4'>
             <Button className='' disabled={isLoginPending || isRegisterPending} onClick={handleSubmit}>
-              {isVerify ? 'Verify' : isSignUp ? 'Create Account' : 'Login'}
+              {isLoginPending || isRegisterPending ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                  {isVerify ? 'Verifying...' : isSignUp ? 'Creating Account...' : 'Logging in...'}
+                </div>
+              ) : (
+                isVerify ? 'Verify' : isSignUp ? 'Create Account' : 'Login'
+              )}
             </Button>
             {isSignUp ? (
               <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-white'>

@@ -245,14 +245,20 @@ export function AdminSignInPage() {
         </CardContent>
 
         <CardFooter>
-          <div className='grid w-full gap-y-4'>
-            <Button
-              className=''
-              disabled={isLoginPending || isRegisterPending || isVerifyPending}
-              onClick={handleSubmit}
-            >
-              {isVerify ? 'Verify' : isSignUp ? 'Create Admin Account' : 'Login as Admin'}
-            </Button>
+          <div className='grid w-full gap-y-4'>            <Button
+            className=''
+            disabled={isLoginPending || isRegisterPending || isVerifyPending}
+            onClick={handleSubmit}
+          >
+            {isLoginPending || isRegisterPending || isVerifyPending ? (
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                {isVerify ? 'Verifying...' : isSignUp ? 'Creating Admin Account...' : 'Logging in...'}
+              </div>
+            ) : (
+              isVerify ? 'Verify' : isSignUp ? 'Create Admin Account' : 'Login as Admin'
+            )}
+          </Button>
             {!isVerify &&
               (isSignUp ? (
                 <Button variant='link' size='sm' onClick={() => setIsSignUp(false)} className='space-x-2 text-white'>
