@@ -209,14 +209,15 @@ function DepositsComponent() {
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>                                    <AlertDialogAction
+                                    <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>{' '}
+                                    <AlertDialogAction
                                       onClick={() => handleApprove(deposit.id)}
                                       className='bg-green-500 hover:bg-green-600'
                                       disabled={approveMutation.isPending}
                                     >
                                       {approveMutation.isPending ? (
-                                        <div className="flex items-center gap-2">
-                                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                                        <div className='flex items-center gap-2'>
+                                          <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
                                           Processing...
                                         </div>
                                       ) : (

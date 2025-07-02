@@ -92,7 +92,6 @@ function RouteComponent() {
             required
           />
         </div>
-
         <div>
           <label htmlFor='description' className='block text-sm font-medium'>
             Game Description
@@ -105,7 +104,6 @@ function RouteComponent() {
             rows={3}
           />
         </div>
-
         <div>
           <label htmlFor='gameFile' className='block text-sm font-medium'>
             Game File
@@ -124,15 +122,17 @@ function RouteComponent() {
               Selected: {gameFile.name} ({(gameFile.size / (1024 * 1024)).toFixed(2)} MB)
             </div>
           )}
-        </div>        <button
+        </div>{' '}
+        <button
           type='submit'
           disabled={isUploading || !gameFile}
-          className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 ${isUploading || !gameFile ? 'cursor-not-allowed opacity-50' : ''
-            }`}
+          className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 ${
+            isUploading || !gameFile ? 'cursor-not-allowed opacity-50' : ''
+          }`}
         >
           {isUploading ? (
-            <div className="flex items-center gap-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+            <div className='flex items-center gap-2'>
+              <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
               Uploading...
             </div>
           ) : (

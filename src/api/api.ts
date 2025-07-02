@@ -16,7 +16,7 @@ const API = {
 
   // game
   gameList: `${BASE_URL}/game/all`,
-  
+
   getUsers: `${BASE_URL}/admin/users`,
 
   // admin games

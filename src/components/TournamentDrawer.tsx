@@ -143,8 +143,7 @@ export default function TournamentDrawer({
               {tournament.isEnded && <span className='ml-2 text-xs text-red-400'>(Ended)</span>}
             </span>
           </DialogTitle>
-
-          {/* Tournament Image Section */}          {/* Show different content based on participation status */}
+          {/* Tournament Image Section */} {/* Show different content based on participation status */}
           {isLoading ? (
             // Loading skeleton while checking participation
             <div className='space-y-4'>
@@ -398,7 +397,6 @@ export default function TournamentDrawer({
                   />
                   {errors.playerUsername && <p className='text-sm text-red-500'>{errors.playerUsername}</p>}
                 </div>
-
                 <div className='space-y-1 sm:space-y-2'>
                   <Label htmlFor='playerUserId' className='text-white'>
                     Player ID
@@ -412,7 +410,6 @@ export default function TournamentDrawer({
                   />
                   {errors.playerUserId && <p className='text-sm text-red-500'>{errors.playerUserId}</p>}
                 </div>
-
                 <div className='space-y-1 sm:space-y-2'>
                   <Label htmlFor='playerLevel' className='text-white'>
                     Player Level (min 30)
@@ -426,10 +423,11 @@ export default function TournamentDrawer({
                     className='border-gray-800 bg-black text-white placeholder:text-gray-500'
                   />
                   {errors.playerLevel && <p className='text-sm text-red-500'>{errors.playerLevel}</p>}
-                </div>                <Button type='submit' className='mt-3 w-full sm:mt-4' disabled={isPending}>
+                </div>{' '}
+                <Button type='submit' className='mt-3 w-full sm:mt-4' disabled={isPending}>
                   {isPending ? (
-                    <div className="flex items-center gap-2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                    <div className='flex items-center gap-2'>
+                      <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
                       Processing...
                     </div>
                   ) : (
@@ -439,7 +437,6 @@ export default function TournamentDrawer({
               </form>
             </>
           )}
-
           {(viewOnly || hasParticipated) && (
             <div className='mt-2 sm:mt-3'>
               <Button

@@ -35,11 +35,34 @@ function Component() {
       navigate({ to: '/login' });
     }
   }, [currentPath, isLoggedIn, role, navigate, isLoginPage]);
-
   return (
     <>
       <div className='flex min-h-[100dvh] flex-col bg-black text-white'>
-        <Toaster position='top-center' reverseOrder={false} />
+        <Toaster
+          position='top-center'
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              background: '#1f2937',
+              color: '#ffffff',
+              border: '1px solid #374151',
+            },
+            success: {
+              style: {
+                background: '#1f2937',
+                color: '#10b981',
+                border: '1px solid #059669',
+              },
+            },
+            error: {
+              style: {
+                background: '#1f2937',
+                color: '#ef4444',
+                border: '1px solid #dc2626',
+              },
+            },
+          }}
+        />
         <Header />
 
         <div className='flex-1 overflow-y-auto pb-16'>

@@ -114,27 +114,24 @@ export function Deposit() {
         <CardContent>
           <CardTitle className='pt-5 pb-3 text-center'>Deposit </CardTitle>
           <div className='flex flex-col items-center'>
-            <p className='mb-1 text-sm font-medium'>Scan QR code to pay directly</p>            <div className='rounded-md border bg-white p-3'>
+            <p className='mb-1 text-sm font-medium'>Scan QR code to pay directly</p>{' '}
+            <div className='rounded-md border bg-white p-3'>
               <img src='/qr/qr.svg' alt='Payment QR Code' className='h-48 w-48 object-contain' />
             </div>
-
-            <div className='w-full mt-4 p-3 bg-slate-100 dark:bg-slate-900 rounded-md flex items-center justify-between'>              <div>
-              <p className='text-xs text-gray-500 font-medium'>UPI ID</p>
-              <p className='text-sm font-bold'>example@upi</p>
-            </div>
+            <div className='mt-4 flex w-full items-center justify-between rounded-md bg-slate-100 p-3 dark:bg-slate-900'>
+              {' '}
+              <div>
+                <p className='text-xs font-medium text-gray-500'>UPI ID</p>
+                <p className='text-sm font-bold'>example@upi</p>
+              </div>
               <button
                 onClick={handleCopyUpi}
-                className='p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors'
+                className='rounded-md p-2 transition-colors hover:bg-slate-200 dark:hover:bg-slate-800'
                 aria-label='Copy UPI ID'
               >
-                {copied ? (
-                  <Check className='h-4 w-4 text-green-500' />
-                ) : (
-                  <Copy className='h-4 w-4' />
-                )}
+                {copied ? <Check className='h-4 w-4 text-green-500' /> : <Copy className='h-4 w-4' />}
               </button>
             </div>
-
             <p className='text-muted-foreground mt-1 text-xs'>Supported methods: UPI, Paytm, GPay</p>
           </div>
 
@@ -159,7 +156,6 @@ export function Deposit() {
               />
               {errors.upiId && <p className='text-sm text-red-500'>{errors.upiId}</p>}
             </div>
-
             <div className='space-y-2'>
               <Label htmlFor='amount'>Amount</Label>
               <Input
@@ -172,7 +168,6 @@ export function Deposit() {
               />
               {errors.amount && <p className='text-sm text-red-500'>{errors.amount}</p>}
             </div>
-
             <div className='space-y-2'>
               <Label htmlFor='transactionId'>Transaction ID</Label>
               <Input
@@ -185,7 +180,6 @@ export function Deposit() {
               />
               {errors.transactionId && <p className='text-sm text-red-500'>{errors.transactionId}</p>}
             </div>
-
             <div className='space-y-2'>
               <Label>Payment Option</Label>
               <Select value={paymentOption} onValueChange={setPaymentOption} disabled={depositMutation.isPending}>
@@ -196,10 +190,11 @@ export function Deposit() {
                   <SelectItem value='upi'>UPI Transfer</SelectItem>
                 </SelectContent>
               </Select>
-            </div>            <Button type='submit' className='mt-4 w-full' disabled={depositMutation.isPending}>
+            </div>{' '}
+            <Button type='submit' className='mt-4 w-full' disabled={depositMutation.isPending}>
               {depositMutation.isPending ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                <div className='flex items-center gap-2'>
+                  <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
                   Processing...
                 </div>
               ) : (

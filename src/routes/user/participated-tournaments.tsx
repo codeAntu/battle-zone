@@ -19,25 +19,25 @@ function RouteComponent() {
   if (isLoading) {
     return (
       <div className='p-5'>
-        <div className='space-y-2 mb-6'>
-          <div className='h-6 w-48 animate-pulse rounded bg-muted'></div>
-          <div className='h-4 w-64 animate-pulse rounded bg-muted'></div>
+        <div className='mb-6 space-y-2'>
+          <div className='bg-muted h-6 w-48 animate-pulse rounded'></div>
+          <div className='bg-muted h-4 w-64 animate-pulse rounded'></div>
         </div>
         <div className='space-y-4'>
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className='rounded-lg border bg-card p-4'>
+            <div key={i} className='bg-card rounded-lg border p-4'>
               <div className='space-y-3'>
-                <div className='flex justify-between items-start'>
+                <div className='flex items-start justify-between'>
                   <div className='space-y-2'>
-                    <div className='h-5 w-32 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-48 animate-pulse rounded bg-muted'></div>
+                    <div className='bg-muted h-5 w-32 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-48 animate-pulse rounded'></div>
                   </div>
-                  <div className='h-6 w-20 animate-pulse rounded bg-muted'></div>
+                  <div className='bg-muted h-6 w-20 animate-pulse rounded'></div>
                 </div>
                 <div className='flex gap-4'>
-                  <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
-                  <div className='h-4 w-20 animate-pulse rounded bg-muted'></div>
-                  <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
+                  <div className='bg-muted h-4 w-24 animate-pulse rounded'></div>
+                  <div className='bg-muted h-4 w-20 animate-pulse rounded'></div>
+                  <div className='bg-muted h-4 w-16 animate-pulse rounded'></div>
                 </div>
               </div>
             </div>

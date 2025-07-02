@@ -117,33 +117,33 @@ function RouteComponent() {
   if (isLoading) {
     return (
       <div className='container mx-auto max-w-lg p-6'>
-        <div className='rounded-lg border bg-card p-6'>
+        <div className='bg-card rounded-lg border p-6'>
           <div className='mb-6 text-center'>
-            <div className='h-6 w-32 animate-pulse rounded bg-muted mx-auto mb-2'></div>
-            <div className='h-4 w-48 animate-pulse rounded bg-muted mx-auto'></div>
+            <div className='bg-muted mx-auto mb-2 h-6 w-32 animate-pulse rounded'></div>
+            <div className='bg-muted mx-auto h-4 w-48 animate-pulse rounded'></div>
           </div>
           <div className='space-y-4'>
             <div className='space-y-2'>
-              <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
-              <div className='h-10 w-full animate-pulse rounded bg-muted'></div>
+              <div className='bg-muted h-4 w-16 animate-pulse rounded'></div>
+              <div className='bg-muted h-10 w-full animate-pulse rounded'></div>
             </div>
             <div className='space-y-2'>
-              <div className='h-4 w-20 animate-pulse rounded bg-muted'></div>
-              <div className='h-24 w-full animate-pulse rounded bg-muted'></div>
+              <div className='bg-muted h-4 w-20 animate-pulse rounded'></div>
+              <div className='bg-muted h-24 w-full animate-pulse rounded'></div>
             </div>
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <div className='h-4 w-12 animate-pulse rounded bg-muted'></div>
-                <div className='h-32 w-full animate-pulse rounded bg-muted'></div>
+                <div className='bg-muted h-4 w-12 animate-pulse rounded'></div>
+                <div className='bg-muted h-32 w-full animate-pulse rounded'></div>
               </div>
               <div className='space-y-2'>
-                <div className='h-4 w-12 animate-pulse rounded bg-muted'></div>
-                <div className='h-32 w-full animate-pulse rounded bg-muted'></div>
+                <div className='bg-muted h-4 w-12 animate-pulse rounded'></div>
+                <div className='bg-muted h-32 w-full animate-pulse rounded'></div>
               </div>
             </div>
             <div className='flex gap-2'>
-              <div className='h-10 w-24 animate-pulse rounded bg-muted'></div>
-              <div className='h-10 w-20 animate-pulse rounded bg-muted'></div>
+              <div className='bg-muted h-10 w-24 animate-pulse rounded'></div>
+              <div className='bg-muted h-10 w-20 animate-pulse rounded'></div>
             </div>
           </div>
         </div>
@@ -246,22 +246,24 @@ function RouteComponent() {
           />
         </div>
 
-        <div className='flex space-x-4'>          <button
-          type='submit'
-          disabled={isSubmitting}
-          className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 ${isSubmitting ? 'cursor-not-allowed opacity-50' : ''
+        <div className='flex space-x-4'>
+          {' '}
+          <button
+            type='submit'
+            disabled={isSubmitting}
+            className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 ${
+              isSubmitting ? 'cursor-not-allowed opacity-50' : ''
             }`}
-        >
-          {isSubmitting ? (
-            <div className="flex items-center gap-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
-              Updating...
-            </div>
-          ) : (
-            'Update Game'
-          )}
-        </button>
-
+          >
+            {isSubmitting ? (
+              <div className='flex items-center gap-2'>
+                <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
+                Updating...
+              </div>
+            ) : (
+              'Update Game'
+            )}
+          </button>
           <button
             type='button'
             onClick={() => navigate({ to: '/admin/games' })}

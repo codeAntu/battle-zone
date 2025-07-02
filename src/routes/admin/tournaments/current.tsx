@@ -21,19 +21,19 @@ function RouteComponent() {
     return (
       <div className='mx-auto max-w-7xl p-4'>
         <div className='mb-6 text-center'>
-          <div className='h-8 w-64 animate-pulse rounded bg-muted mx-auto'></div>
+          <div className='bg-muted mx-auto h-8 w-64 animate-pulse rounded'></div>
         </div>
-        <div className='rounded-lg border bg-card'>
+        <div className='bg-card rounded-lg border'>
           <div className='p-4'>
             <div className='space-y-3'>
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className='flex items-center gap-4 p-3 border-b last:border-b-0'>
-                  <div className='h-4 w-8 animate-pulse rounded bg-muted'></div>
-                  <div className='h-4 w-32 animate-pulse rounded bg-muted'></div>
-                  <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
-                  <div className='h-4 w-20 animate-pulse rounded bg-muted'></div>
-                  <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
-                  <div className='h-8 w-16 animate-pulse rounded bg-muted ml-auto'></div>
+                <div key={i} className='flex items-center gap-4 border-b p-3 last:border-b-0'>
+                  <div className='bg-muted h-4 w-8 animate-pulse rounded'></div>
+                  <div className='bg-muted h-4 w-32 animate-pulse rounded'></div>
+                  <div className='bg-muted h-4 w-24 animate-pulse rounded'></div>
+                  <div className='bg-muted h-4 w-20 animate-pulse rounded'></div>
+                  <div className='bg-muted h-4 w-16 animate-pulse rounded'></div>
+                  <div className='bg-muted ml-auto h-8 w-16 animate-pulse rounded'></div>
                 </div>
               ))}
             </div>

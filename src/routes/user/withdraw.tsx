@@ -104,7 +104,6 @@ export function Withdraw() {
               />
               {errors.upiId && <p className='text-sm text-red-500'>{errors.upiId}</p>}
             </div>
-
             <div className='space-y-2'>
               <Label htmlFor='amount'>Amount</Label>
               <Input
@@ -117,7 +116,6 @@ export function Withdraw() {
               />
               {errors.amount && <p className='text-sm text-red-500'>{errors.amount}</p>}
             </div>
-
             <div className='space-y-2'>
               <Label>Payment Option</Label>
               <Select value={paymentOption} onValueChange={setPaymentOption}>
@@ -128,10 +126,11 @@ export function Withdraw() {
                   <SelectItem value='upi'>UPI Transfer</SelectItem>
                 </SelectContent>
               </Select>
-            </div>            <Button type='submit' className='mt-4 w-full' disabled={withdrawMutation.isPending}>
+            </div>{' '}
+            <Button type='submit' className='mt-4 w-full' disabled={withdrawMutation.isPending}>
               {withdrawMutation.isPending ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                <div className='flex items-center gap-2'>
+                  <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
                   Processing...
                 </div>
               ) : (

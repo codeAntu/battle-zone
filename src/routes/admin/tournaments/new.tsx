@@ -426,20 +426,22 @@ function RouteComponent() {
 
           <div className='text-sm text-gray-500'>* Required fields</div>
 
-          <div className='flex w-full items-center justify-end pb-4'>            <Button
-            type='submit'
-            disabled={isPending}
-            className={`w-full ${isPending ? 'cursor-not-allowed opacity-70' : ''}`}
-          >
-            {isPending ? (
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
-                Creating...
-              </div>
-            ) : (
-              'Create Tournament'
-            )}
-          </Button>
+          <div className='flex w-full items-center justify-end pb-4'>
+            {' '}
+            <Button
+              type='submit'
+              disabled={isPending}
+              className={`w-full ${isPending ? 'cursor-not-allowed opacity-70' : ''}`}
+            >
+              {isPending ? (
+                <div className='flex items-center gap-2'>
+                  <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
+                  Creating...
+                </div>
+              ) : (
+                'Create Tournament'
+              )}
+            </Button>
           </div>
         </form>
       </div>

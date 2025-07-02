@@ -37,7 +37,7 @@ function RouteComponent() {
     return (
       <div className='flex items-center justify-center p-8'>
         <div className='text-center'>
-          <div className='text-red-500 mb-2'>Error loading tournaments</div>
+          <div className='mb-2 text-red-500'>Error loading tournaments</div>
           <div className='text-sm text-gray-500'>Please try again later</div>
         </div>
       </div>

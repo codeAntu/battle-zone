@@ -82,33 +82,33 @@ function RouteComponent() {
           {/* Header skeleton */}
           <div className='space-y-4'>
             <div className='flex gap-2'>
-              <div className='h-6 w-16 animate-pulse rounded-full bg-muted'></div>
-              <div className='h-6 w-20 animate-pulse rounded-full bg-muted'></div>
+              <div className='bg-muted h-6 w-16 animate-pulse rounded-full'></div>
+              <div className='bg-muted h-6 w-20 animate-pulse rounded-full'></div>
             </div>
             <div className='flex items-center justify-between'>
-              <div className='h-8 w-64 animate-pulse rounded bg-muted'></div>
-              <div className='h-10 w-20 animate-pulse rounded bg-muted'></div>
+              <div className='bg-muted h-8 w-64 animate-pulse rounded'></div>
+              <div className='bg-muted h-10 w-20 animate-pulse rounded'></div>
             </div>
           </div>
 
           {/* Content skeleton */}
           <div className='space-y-4'>
-            <div className='h-6 w-48 animate-pulse rounded bg-muted'></div>
-            <div className='h-10 w-full animate-pulse rounded bg-muted'></div>
+            <div className='bg-muted h-6 w-48 animate-pulse rounded'></div>
+            <div className='bg-muted h-10 w-full animate-pulse rounded'></div>
 
             {/* Table skeleton */}
-            <div className='rounded-lg border bg-card p-4'>
+            <div className='bg-card rounded-lg border p-4'>
               <div className='space-y-3'>
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className='flex items-center gap-4 p-3 border-b last:border-b-0'>
-                    <div className='h-4 w-8 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-32 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-48 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-20 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-24 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-16 animate-pulse rounded bg-muted'></div>
-                    <div className='h-4 w-20 animate-pulse rounded bg-muted'></div>
-                    <div className='h-8 w-24 animate-pulse rounded bg-muted ml-auto'></div>
+                  <div key={i} className='flex items-center gap-4 border-b p-3 last:border-b-0'>
+                    <div className='bg-muted h-4 w-8 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-32 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-48 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-20 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-24 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-16 animate-pulse rounded'></div>
+                    <div className='bg-muted h-4 w-20 animate-pulse rounded'></div>
+                    <div className='bg-muted ml-auto h-8 w-24 animate-pulse rounded'></div>
                   </div>
                 ))}
               </div>
@@ -182,7 +182,8 @@ function RouteComponent() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>            <AlertDialogAction
+            <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>{' '}
+            <AlertDialogAction
               className='bg-red-500 text-white hover:bg-red-600'
               onClick={() => {
                 if (selectedWinner) {
@@ -192,8 +193,8 @@ function RouteComponent() {
               disabled={endTournamentMutation.isPending}
             >
               {endTournamentMutation.isPending ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                <div className='flex items-center gap-2'>
+                  <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
                   Ending Tournament...
                 </div>
               ) : (
@@ -527,14 +528,15 @@ function ParticipantRow({
                   </div>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>                  <AlertDialogAction
+                  <AlertDialogCancel className='text-white/80'>Cancel</AlertDialogCancel>{' '}
+                  <AlertDialogAction
                     onClick={handleAddKills}
                     className='bg-blue-500 hover:bg-blue-600'
                     disabled={addKillsMutation.isPending}
                   >
                     {addKillsMutation.isPending ? (
-                      <div className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-b-transparent border-white"></div>
+                      <div className='flex items-center gap-2'>
+                        <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-b-transparent'></div>
                         Recording...
                       </div>
                     ) : (

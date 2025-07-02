@@ -80,7 +80,6 @@ function RouteComponent() {
         <h1 className='text-2xl font-bold'>Game Management</h1>
         <Button onClick={() => router.navigate({ to: '/admin/add-game' })}>Add New Game</Button>
       </div>
-
       {message && (
         <div className='mb-4 rounded border border-green-400 bg-green-100 px-4 py-3 text-green-700'>
           {message}
@@ -89,7 +88,6 @@ function RouteComponent() {
           </button>
         </div>
       )}
-
       {error && (
         <div className='mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700'>
           {error}
@@ -97,20 +95,21 @@ function RouteComponent() {
             &times;
           </button>
         </div>
-      )}      {isLoading ? (
+      )}{' '}
+      {isLoading ? (
         <div className='space-y-4'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className='rounded-lg border bg-card p-4'>
+              <div key={i} className='bg-card rounded-lg border p-4'>
                 <div className='space-y-3'>
-                  <div className='h-32 w-full animate-pulse rounded bg-muted'></div>
+                  <div className='bg-muted h-32 w-full animate-pulse rounded'></div>
                   <div className='space-y-2'>
-                    <div className='h-4 w-3/4 animate-pulse rounded bg-muted'></div>
-                    <div className='h-3 w-1/2 animate-pulse rounded bg-muted'></div>
+                    <div className='bg-muted h-4 w-3/4 animate-pulse rounded'></div>
+                    <div className='bg-muted h-3 w-1/2 animate-pulse rounded'></div>
                   </div>
                   <div className='flex gap-2'>
-                    <div className='h-8 w-16 animate-pulse rounded bg-muted'></div>
-                    <div className='h-8 w-16 animate-pulse rounded bg-muted'></div>
+                    <div className='bg-muted h-8 w-16 animate-pulse rounded'></div>
+                    <div className='bg-muted h-8 w-16 animate-pulse rounded'></div>
                   </div>
                 </div>
               </div>
@@ -175,14 +174,15 @@ function RouteComponent() {
                         className='text-indigo-600 hover:text-indigo-900'
                       >
                         Edit
-                      </Button>                      <Button
+                      </Button>{' '}
+                      <Button
                         onClick={() => openDeleteModal(game.id)}
                         disabled={isDeleting === game.id}
                         className='text-red-600 hover:text-red-900'
                       >
                         {isDeleting === game.id ? (
-                          <div className="flex items-center gap-2">
-                            <div className="h-3 w-3 animate-spin rounded-full border border-b-transparent border-red-600"></div>
+                          <div className='flex items-center gap-2'>
+                            <div className='h-3 w-3 animate-spin rounded-full border border-red-600 border-b-transparent'></div>
                             Deleting...
                           </div>
                         ) : (
@@ -197,7 +197,6 @@ function RouteComponent() {
           </table>
         </div>
       )}
-
       {/* Inline Modal */}
       {showModal && (
         <div className='fixed inset-0 z-50 overflow-y-auto'>
