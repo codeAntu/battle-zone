@@ -1,10 +1,8 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { appData } from '@/conts/data';
 import { useTokenStore } from '@/store/store';
 import { useNavigate } from '@tanstack/react-router';
-import { LogOut, MessageCircle, User } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 import { useRef } from 'react';
 
 export default function Header() {
