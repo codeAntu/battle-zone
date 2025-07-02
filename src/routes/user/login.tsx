@@ -221,6 +221,10 @@ export function Login() {
                 <span className='underline'>Create Account</span>
               </Button>
             )}
+            {/* Add link to admin login page */}
+            <Button variant='link' size='sm' onClick={() => navigate({ to: '/admin/login' })} className='space-x-2 text-blue-500'>
+              <span>Go to Admin Login</span>
+            </Button>
           </div>
         </CardFooter>
       </Card>

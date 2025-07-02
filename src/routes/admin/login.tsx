@@ -261,10 +261,14 @@ export function AdminSignInPage() {
                 </Button>
               ) : (
                 <Button variant='link' size='sm' onClick={() => setIsSignUp(true)} className='space-x-2 text-white'>
-                  <span className=''>Don't have an account?</span>
+                  <span className=''>Don&apos;t have an account?</span>
                   <span className='underline'>Create Admin Account</span>
                 </Button>
               ))}
+            {/* Add link to user login page */}
+            <Button variant='link' size='sm' onClick={() => navigate({ to: '/user/login' })} className='space-x-2 text-blue-500'>
+              <span>Go to User Login</span>
+            </Button>
           </div>
         </CardFooter>
       </Card>
